@@ -1,0 +1,24 @@
+<h1>Listing podcasts</h1>
+<%= will_paginate @podcasts %>
+
+<% @podcasts.each do |podcast| %>
+	<div class="podcast">
+		<h2 class="name"><%= podcast.name %></h2>
+		<a class="siteurl" href="<%= podcast.siteurl %>"><%= podcast.siteurl %></a><br />
+		<a class="itunesurl" href="<%= podcast.itunesurl %>"><%= podcast.itunesurl %></a><br />
+		<a class="feedurl" href="<%= podcast.feedurl %>"><%= podcast.feedurl %></a><br />
+		<span class="category"><%= podcast.category %></span><br />
+		<span class="hosts"><%= podcast.hosts %></span><br />
+		<a class="twitter" href="<%= podcast.twitter %>"><%= podcast.twitter %></a><br />
+		<a class="facebook" href="<%= podcast.facebook %>"><%= podcast.facebook %></a><br />
+		<p class="description"><%= podcast.description %></p>
+		<img class="artwork" src="<%= podcast.artwork %>" /><br />
+		<%= link_to 'Show', podcast %>
+		<%= link_to 'Edit', edit_podcast_path(podcast) %>
+		<%= link_to 'Destroy', podcast, :confirm => 'Are you sure?', :method => :delete %>
+	</div>
+<% end %>
+
+<br />
+
+<%= link_to 'New Podcast', new_podcast_path %>

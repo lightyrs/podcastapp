@@ -1,0 +1,57 @@
+<%= form_for(@podcast) do |f| %>
+  <% if @podcast.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@podcast.errors.count, "error") %> prohibited this podcast from being saved:</h2>
+
+      <ul>
+      <% @podcast.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :siteurl %><br />
+    <%= f.text_field :siteurl %>
+  </div>
+  <div class="field">
+    <%= f.label :itunesurl %><br />
+    <%= f.text_field :itunesurl %>
+  </div>
+  <div class="field">
+    <%= f.label :feedurl %><br />
+    <%= f.text_field :feedurl %>
+  </div>
+  <div class="field">
+    <%= f.label :category %><br />
+    <%= f.text_field :category %>
+  </div>
+  <div class="field">
+    <%= f.label :hosts %><br />
+    <%= f.text_field :hosts %>
+  </div>
+  <div class="field">
+    <%= f.label :twitter %><br />
+    <%= f.text_field :twitter %>
+  </div>
+  <div class="field">
+    <%= f.label :facebook %><br />
+    <%= f.text_field :facebook %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :artwork %><br />
+    <%= f.text_field :artwork %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

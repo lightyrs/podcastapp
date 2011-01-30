@@ -1,0 +1,55 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @podcast.name %>
+</p>
+
+<p>
+  <b>Siteurl:</b>
+  <%= @podcast.siteurl %>
+</p>
+
+<p>
+  <b>Itunesurl:</b>
+  <%= @podcast.itunesurl %>
+</p>
+
+<p>
+  <b>Feedurl:</b>
+  <%= @podcast.feedurl %>
+</p>
+
+<p>
+  <b>Category:</b>
+  <%= @podcast.category %>
+</p>
+
+<p>
+  <b>Hosts:</b>
+  <%= @podcast.hosts %>
+</p>
+
+<p>
+  <b>Twitter:</b>
+  <%= @podcast.twitter %>
+</p>
+
+<p>
+  <b>Facebook:</b>
+  <%= @podcast.facebook %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @podcast.description %>
+</p>
+
+<p>
+  <b>Artwork:</b>
+  <%= @podcast.artwork %>
+</p>
+
+
+<%= link_to 'Edit', edit_podcast_path(@podcast) %> |
+<%= link_to 'Back', podcasts_path %>
