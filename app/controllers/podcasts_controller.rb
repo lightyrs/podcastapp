@@ -9,6 +9,18 @@ class PodcastsController < ApplicationController
       format.xml  { render :xml => @podcasts }
     end
   end
+  
+  def search
+    @search = Sunspot.search(Podcast) do
+      keywords(params[:q])
+      paginate(:page => params[:page])
+    end
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @podcasts }
+    end
+  end
 
   # GET /podcasts/1
   # GET /podcasts/1.xml

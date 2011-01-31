@@ -15,6 +15,10 @@ class Podcast < ActiveRecord::Base
   cattr_reader :per_page
   @@per_page = 50
   
+  searchable do
+    text :name
+  end
+  
   def self.itunes_top_rss
     
     # create the top 300 url

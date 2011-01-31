@@ -1,0 +1,10 @@
+<h1>Listing podcasts</h1>
+<%= will_paginate(@search.hits) %>
+
+<div class="results">
+  <% @search.each_hit_with_result do |hit, podcast| -%>
+    <div class="result">
+      <h4><%= link_to podcast.name, podcast %></h4>
+    </div>
+  <% end -%>
+</div>

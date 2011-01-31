@@ -1,5 +1,11 @@
 Podcastapp::Application.routes.draw do
-  resources :podcasts
+  
+  # podcast routes
+  resources :podcasts do
+    collection do
+      get 'search'
+    end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
