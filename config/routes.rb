@@ -6,6 +6,9 @@ Podcastapp::Application.routes.draw do
       get 'search'
     end
   end
+  
+  # named route for podcast search
+  match 'search', :to => 'podcasts#search'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

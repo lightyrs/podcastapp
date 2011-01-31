@@ -16,6 +16,8 @@ class PodcastsController < ApplicationController
       paginate(:page => params[:page])
     end
     
+    @result_count = @search.total
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @podcasts }
