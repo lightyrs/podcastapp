@@ -4,6 +4,7 @@ gem 'rails', '3.0.1'
 
 # HTML/XML Parsing
 gem 'nokogiri'
+gem 'mechanize'
 gem 'imasquerade'
 
 # Pagination
