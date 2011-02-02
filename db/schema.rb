@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110201011445) do
+ActiveRecord::Schema.define(:version => 20110129005250) do
 
   create_table "podcasts", :force => true do |t|
     t.string   "name"
@@ -25,8 +25,6 @@ ActiveRecord::Schema.define(:version => 20110201011445) do
     t.datetime "updated_at"
     t.string   "artwork"
     t.string   "siteurl"
-    t.string   "itunes_rating"
-    t.integer  "itunes_rating_count"
   end
 
   add_index "podcasts", ["name"], :name => "index_podcasts_on_name", :unique => true

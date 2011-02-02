@@ -124,28 +124,6 @@ class Podcast < ActiveRecord::Base
     end
   end
   
-
-  # scrape the podcast rating from the itunes doc
-  # TODO Combine rating_discovery with site_discovery to minimize requests
-  
-  def self.rating_discovery
-    podcast = Podcast.where("itunesurl IS NOT ?", nil)
-    podcast.each do | pod |
-      begin
-        itunes_doc = Nokogiri.HTML(open(pod.itunesurl))
-        rating = itunes_doc.search("div.rating").attribute("aria-label").value
-        rating_count = itunes_doc.search("div.rating span.rating-count").text
-        Podcast.find(pod.id).update_attributes(
-          :itunes_rating => rating,
-          :itunes_rating_count => rating_count
-        )
-        puts "#{rating} : #{rating_count}"
-      rescue Exception => ex
-        puts "An error of type #{ex.class} happened, message is #{ex.message}"
-      end
-    end
-  end  
-  
   
   # discover the podcast feed using imasquerade
   
@@ -166,6 +144,7 @@ class Podcast < ActiveRecord::Base
 
   # scrape the podcast twitter and facebook urls from the site doc
   # TODO Handle Redirects with Mechanize or OPEN-URI
+  # TODO Handle exceptions
   
   def self.social_discovery
     podcast = Podcast.where("siteurl IS NOT ?", nil)
