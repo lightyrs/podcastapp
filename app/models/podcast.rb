@@ -90,7 +90,7 @@ class Podcast < ActiveRecord::Base
       elsif (!podcast[0].name.nil?)
         begin
           puts "updating"
-          Podcast.find(podcast[0].id).update_attributes(
+          podcast.update_attributes(
             :itunesurl => entry.xpath("./link/@href").text,
             :category => entry.xpath("./category/@term").text,
             :hosts => entry.xpath("./artist").text,
@@ -111,12 +111,12 @@ class Podcast < ActiveRecord::Base
   # scrape the podcast site url from the itunes doc
   
   def self.site_discovery
-    podcast = Podcast.find(:all, :conditions => {:siteurl => nil})
+    podcast = Podcast.find(:all)
     podcast.each do | pod |
       begin
         itunes_doc = Nokogiri.HTML(open(pod.itunesurl))
         site_url = itunes_doc.xpath('//div[@id="left-stack"]/div[@metrics-loc="Titledbox_Links"]/ul/li[1]/a')
-        Podcast.find(pod.id).update_attributes(:siteurl => site_url.attribute("href").to_s)
+        pod.update_attributes(:siteurl => site_url.attribute("href").to_s)
         puts site_url.attribute("href").to_s
       rescue Exception => ex
         puts "An error of type #{ex.class} happened, message is #{ex.message}"
@@ -133,7 +133,7 @@ class Podcast < ActiveRecord::Base
       begin
         itunes_uri = pod.itunesurl
         feed_url = Imasquerade::Extractor.parse_itunes_uri(itunes_uri)
-        Podcast.find(pod.id).update_attributes(:feedurl => feed_url)
+        pod.update_attributes(:feedurl => feed_url)
         puts "#{feed_url}"
       rescue Exception => ex
         puts "An error of type #{ex.class} happened, message is #{ex.message}"
@@ -143,23 +143,45 @@ class Podcast < ActiveRecord::Base
   
 
   # scrape the podcast twitter and facebook urls from the site doc
-  # TODO Handle Redirects with Mechanize or OPEN-URI
-  # TODO Handle exceptions
+  # TODO Append http://, Follow Redirects, Facebook iframe urls
   
   def self.social_discovery
     podcast = Podcast.where("siteurl IS NOT ?", nil)
     podcast.each do | pod |
       begin
-        pod_site = pod.siteurl
+        if pod.siteurl.include? 'http://'
+          pod_site = pod.siteurl
+        else
+          pod_site = pod.siteurl.insert 0, "http://"
+        end
+        puts "POD: #{pod_site}"
         begin
-          pod_doc = Nokogiri.HTML(open(pod_site))
-          twitter_url = pod_doc.search('a').find {|link| link['href'].include? 'twitter.com/'}.attribute('href').to_s
-          facebook_url = pod_doc.search('a').find {|link| link['href'].include? 'facebook.com/'}.attribute('href').to_s
-          puts "#{twitter_url}" + "#{facebook_url}"
+          unless pod_site.include? '.rss' || '.xml'
+            pod_doc = Nokogiri.HTML(open(pod_site))
+            begin
+              twitter_url = pod_doc.search('a').find {|link| link['href'].include? 'twitter.com/' unless link['href'].include? 'status'}
+              if twitter_url != nil
+                twitter_url = twitter_url.attribute('href').to_s
+              end
+            rescue Exception => ex
+              twitter_url = nil
+            end
+            begin
+              facebook_url = pod_doc.search('a').find {|link| link['href'].include? 'facebook.com/' unless link['href'].include? 'share'}
+              if facebook_url != nil
+                facebook_url = facebook_url.attribute('href').to_s
+              end
+            rescue Exception => ex
+              facebook_url = nil
+            end
+            puts "#{twitter_url}" + "#{facebook_url}"
+          end
         rescue Exception => ex
           puts "An error of type #{ex.class} happened, message is #{ex.message}"
         end
-        Podcast.find(pod.id).update_attributes(:twitter => twitter_url, :facebook => facebook_url)
+        unless pod_site.include? '.rss' || '.xml'
+          pod.update_attributes(:twitter => twitter_url, :facebook => facebook_url)
+        end
       rescue Exception => ex
         puts "An error of type #{ex.class} happened, message is #{ex.message}"
       end
