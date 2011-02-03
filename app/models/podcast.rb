@@ -19,19 +19,22 @@ class Podcast < ActiveRecord::Base
     text :name
   end
   
+  # define a custom logger  
+  def self.podcast_logger
+    @@podcast_logger ||= Logger.new("#{RAILS_ROOT}/log/podcast_cron.log")
+  end
+  
+  # create the top 300 url      
   def self.itunes_top_rss
-    
-    # create the top 300 url
     itunes_url = "http://itunes.apple.com/us/rss/toppodcasts/limit=300/explicit=true/xml"
     itunes_doc = Nokogiri.HTML(open(itunes_url))
     
-    # scrape that url=
+    # scrape that url
     Podcast.scrape_from_itunes(itunes_doc)    
   end
   
+  # podcast genres from itunes
   def self.itunes_genre_rss
-  
-    # podcast genres from itunes
     itunes_genre_codes = {}
     
       itunes_genre_codes['arts'] = "1301"
@@ -60,20 +63,17 @@ class Podcast < ActiveRecord::Base
       # scrape that url
       Podcast.scrape_from_itunes(itunes_doc)  
     end
-  end
-  
+  end 
   
   # parse the returned xml
   # if the podcast exists, update attributes
   # otherwise, create a new podcast
-
   def self.scrape_from_itunes(itunes_doc)
     itunes_doc.xpath('//feed/entry').map do |entry|
       new_name = entry.xpath("./name").text
       podcast = Podcast.find(:all, :conditions => {:name => new_name})
       if (podcast == [])
         begin
-          puts "creating"
           podcast = Podcast.new(
             :name => entry.xpath("./name").text,
             :itunesurl => entry.xpath("./link/@href").text,
@@ -83,14 +83,14 @@ class Podcast < ActiveRecord::Base
             :artwork => entry.xpath("./image[@height='170']").text  
           )
           podcast.save
-          puts "New Podcast: #{podcast[0].name}"
+          puts "New Podcast: #{podcast.name}"
+          Podcast.podcast_logger.info("New Podcast: #{podcast.name}")
         rescue Exception => ex
           puts "An error of type #{ex.class} happened, message is #{ex.message}"
         end
       elsif (!podcast[0].name.nil?)
         begin
-          puts "updating"
-          podcast.update_attributes(
+          Podcast.find(podcast[0].id).update_attributes(
             :itunesurl => entry.xpath("./link/@href").text,
             :category => entry.xpath("./category/@term").text,
             :hosts => entry.xpath("./artist").text,
@@ -98,6 +98,7 @@ class Podcast < ActiveRecord::Base
             :artwork => entry.xpath("./image[@height='170']").text            
           )
           puts "Update Podcast: #{podcast[0].name}"
+          Podcast.podcast_logger.info("Update Podcast: #{podcast[0].name}")
         rescue Exception => ex
           puts "An error of type #{ex.class} happened, message is #{ex.message}"
         end
@@ -105,11 +106,9 @@ class Podcast < ActiveRecord::Base
         puts "Exception"
       end
     end
-  end
+  end  
   
-  
-  # scrape the podcast site url from the itunes doc
-  
+  # scrape the podcast site url from the itunes doc  
   def self.site_discovery
     podcast = Podcast.find(:all)
     podcast.each do | pod |
@@ -118,15 +117,14 @@ class Podcast < ActiveRecord::Base
         site_url = itunes_doc.xpath('//div[@id="left-stack"]/div[@metrics-loc="Titledbox_Links"]/ul/li[1]/a')
         pod.update_attributes(:siteurl => site_url.attribute("href").to_s)
         puts site_url.attribute("href").to_s
+        Podcast.podcast_logger.info(site_url.attribute("href").to_s)
       rescue Exception => ex
         puts "An error of type #{ex.class} happened, message is #{ex.message}"
       end
     end
-  end
-  
+  end  
   
   # discover the podcast feed using imasquerade
-  
   def self.feed_discovery
     podcast = Podcast.where("itunesurl IS NOT ?", nil)
     podcast.each do | pod |
@@ -135,16 +133,15 @@ class Podcast < ActiveRecord::Base
         feed_url = Imasquerade::Extractor.parse_itunes_uri(itunes_uri)
         pod.update_attributes(:feedurl => feed_url)
         puts "#{feed_url}"
+        Podcast.podcast_logger.info("#{feed_url}")
       rescue Exception => ex
         puts "An error of type #{ex.class} happened, message is #{ex.message}"
       end
     end
-  end
-  
+  end  
 
   # scrape the podcast twitter and facebook urls from the site doc
-  # TODO Append http://, Follow Redirects, Facebook iframe urls
-  
+  # TODO Piers Morgan issue, Follow Redirects, Facebook iframe urls 
   def self.social_discovery
     podcast = Podcast.where("siteurl IS NOT ?", nil)
     podcast.each do | pod |
@@ -154,7 +151,6 @@ class Podcast < ActiveRecord::Base
         else
           pod_site = pod.siteurl.insert 0, "http://"
         end
-        puts "POD: #{pod_site}"
         begin
           unless pod_site.include? '.rss' || '.xml'
             pod_doc = Nokogiri.HTML(open(pod_site))
@@ -175,6 +171,7 @@ class Podcast < ActiveRecord::Base
               facebook_url = nil
             end
             puts "#{twitter_url}" + "#{facebook_url}"
+            Podcast.podcast_logger.info("#{twitter_url}" + "#{facebook_url}")
           end
         rescue Exception => ex
           puts "An error of type #{ex.class} happened, message is #{ex.message}"
@@ -187,5 +184,4 @@ class Podcast < ActiveRecord::Base
       end
     end    
   end
-  
 end

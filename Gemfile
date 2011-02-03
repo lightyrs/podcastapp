@@ -2,6 +2,9 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.0.1'
 
+# Scheduled Jobs
+gem 'whenever'
+
 # HTML/XML Parsing
 gem 'nokogiri'
 gem 'mechanize'
