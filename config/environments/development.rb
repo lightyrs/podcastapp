@@ -22,7 +22,10 @@ Podcastapp::Application.configure do
 
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
-  
+
+  # Set log level
+  config.log_level = :warn
+
   # Rotate logs
   config.logger = Logger.new("#{::Rails.root.to_s}/log/#{ENV['RAILS_ENV']}.log", 50, 1048576)
 end

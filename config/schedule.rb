@@ -16,11 +16,10 @@
 # every 4.days do
 #   runner "AnotherModel.prune_old_records"
 # end
-
+#
 # Learn more: http://github.com/javan/whenever
 
 set :environment, "development"
-set :output, "#{path}/log/podcast_cron.log"
 
 # Scrape podcasts and aggregate data once per week
 every :wednesday, :at => '2:00 am' do

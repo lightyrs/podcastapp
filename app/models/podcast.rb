@@ -21,7 +21,7 @@ class Podcast < ActiveRecord::Base
   
   # define a custom logger  
   def self.podcast_logger
-    @@podcast_logger ||= Logger.new("#{RAILS_ROOT}/log/podcast_cron.log")
+    @@podcast_logger ||= Logger.new("#{RAILS_ROOT}/log/podcast_cron.log", 50, 1048576)
   end
   
   # create the top 300 url      
@@ -145,6 +145,7 @@ class Podcast < ActiveRecord::Base
   def self.social_discovery
     podcast = Podcast.where("siteurl IS NOT ?", nil)
     podcast.each do | pod |
+      puts "#{pod.name}"
       begin
         if pod.siteurl.include? 'http://'
           pod_site = pod.siteurl
@@ -155,7 +156,7 @@ class Podcast < ActiveRecord::Base
           unless pod_site.include? '.rss' || '.xml'
             pod_doc = Nokogiri.HTML(open(pod_site))
             begin
-              twitter_url = pod_doc.search('a').find {|link| link['href'].include? 'twitter.com/' unless link['href'].include? 'status'}
+              twitter_url = pod_doc.search('a').find {|link| link['href'].include? 'twitter.com/' unless link['href'] =~ /share|status/i}
               if twitter_url != nil
                 twitter_url = twitter_url.attribute('href').to_s
               end
@@ -163,7 +164,7 @@ class Podcast < ActiveRecord::Base
               twitter_url = nil
             end
             begin
-              facebook_url = pod_doc.search('a').find {|link| link['href'].include? 'facebook.com/' unless link['href'].include? 'share'}
+              facebook_url = pod_doc.search('a').find {|link| link['href'].include? 'facebook.com/' unless link['href'] =~ /share|event./i}
               if facebook_url != nil
                 facebook_url = facebook_url.attribute('href').to_s
               end
