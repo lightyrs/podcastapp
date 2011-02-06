@@ -141,48 +141,57 @@ class Podcast < ActiveRecord::Base
   end  
 
   # scrape the podcast twitter and facebook urls from the site doc
-  # TODO Piers Morgan issue, Follow Redirects, Facebook iframe urls 
+  # TODO Follow Redirects, Facebook iframe urls 
   def self.social_discovery
     podcast = Podcast.where("siteurl IS NOT ?", nil)
     podcast.each do | pod |
       puts "#{pod.name}"
-      begin
+      begin 
+        # Make sure the url is readable by open-uri
         if pod.siteurl.include? 'http://'
           pod_site = pod.siteurl
         else
           pod_site = pod.siteurl.insert 0, "http://"
         end
-        begin
-          unless pod_site.include? '.rss' || '.xml'
-            pod_doc = Nokogiri.HTML(open(pod_site))
-            begin
-              twitter_url = pod_doc.search('a').find {|link| link['href'].include? 'twitter.com/' unless link['href'] =~ /share|status/i}
-              if twitter_url != nil
-                twitter_url = twitter_url.attribute('href').to_s
-              end
+ 
+        # Skip all of this if we're dealing with a feed
+        unless pod_site.downcase =~ /.rss|.xml|libsyn/i
+          pod_doc = Nokogiri.HTML(open(pod_site))
+          pod_name_fragment = pod.name.split(" ")[0].to_s
+          doc_links = pod_doc.css('a')
+          
+          begin
+            begin         
+              twitter_url = doc_links.find {|link| link['href'] =~ /twitter.com\// and link['href'].match(/#{pod_name_fragment}/i).to_s != "" unless link['href'] =~ /share|status/i}.attribute('href').to_s 
             rescue Exception => ex
-              twitter_url = nil
-            end
-            begin
-              facebook_url = pod_doc.search('a').find {|link| link['href'].include? 'facebook.com/' unless link['href'] =~ /share|event./i}
-              if facebook_url != nil
-                facebook_url = facebook_url.attribute('href').to_s
+              if doc_links.find {|link| link['href'] =~ /twitter.com\// unless link['href'] =~ /share|status/i}.nil?
+                twitter_url = nil
+              else       
+                twitter_url = doc_links.find {|link| link['href'] =~ /twitter.com\// unless link['href'] =~ /share|status/i}.attribute('href').to_s
               end
-            rescue Exception => ex
-              facebook_url = nil
             end
-            puts "#{twitter_url}" + "#{facebook_url}"
-            Podcast.podcast_logger.info("#{twitter_url}" + "#{facebook_url}")
+
+            begin    
+              facebook_url = doc_links.find {|link| link['href'] =~ /facebook.com\// and link['href'].match(/#{pod_name_fragment}/i).to_s != "" unless link['href'] =~ /share|.event/i}.attribute('href').to_s
+            rescue Exception => ex
+              if doc_links.find {|link| link['href'] =~ /facebook.com\// unless link['href'] =~ /share|.event/i}.nil?
+                facebook_url = nil
+              else       
+                facebook_url = doc_links.find {|link| link['href'] =~ /facebook.com\// unless link['href'] =~ /share|.event/i}.attribute('href').to_s
+              end
+            end
+          rescue Exception => ex
+            puts "ANTISOCIAL"
+          ensure
+            pod.update_attributes(:twitter => twitter_url, :facebook => facebook_url)            
           end
-        rescue Exception => ex
-          puts "An error of type #{ex.class} happened, message is #{ex.message}"
-        end
-        unless pod_site.include? '.rss' || '.xml'
-          pod.update_attributes(:twitter => twitter_url, :facebook => facebook_url)
+          
+          puts "#{twitter_url}" + "#{facebook_url}"
+          Podcast.podcast_logger.info("#{twitter_url}" + "#{facebook_url}")
         end
       rescue Exception => ex
-        puts "An error of type #{ex.class} happened, message is #{ex.message}"
+        puts "FINAL EXCEPTION: #{ex.class} + #{ex.message}"
       end
-    end    
+    end  
   end
 end
