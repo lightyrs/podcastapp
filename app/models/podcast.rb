@@ -21,7 +21,7 @@ class Podcast < ActiveRecord::Base
   
   # define a custom logger  
   def self.podcast_logger
-    @@podcast_logger ||= Logger.new("#{RAILS_ROOT}/log/podcast_cron.log", 50, 1048576)
+    @@podcast_logger ||= Logger.new("#{RAILS_ROOT}/log/podcast_cron.log", 5, 524288)
   end
   
   # create the top 300 url      
@@ -141,7 +141,7 @@ class Podcast < ActiveRecord::Base
   end  
 
   # scrape the podcast twitter and facebook urls from the site doc
-  # TODO Follow Redirects, Facebook iframe urls 
+  # TODO Handle Nokogiri Errno:: Errors, Facebook iframe urls 
   def self.social_discovery
     podcast = Podcast.where("siteurl IS NOT ?", nil)
     podcast.each do | pod |
