@@ -160,6 +160,9 @@ class Podcast < ActiveRecord::Base
           pod_name_fragment = pod.name.split(" ")[0].to_s
           doc_links = pod_doc.css('a')
           
+          # If a social url contains part of the podcast name, grab that
+          # If not, grab the first one you find within our conditions
+          # Give Nokogiri some room to breathe with pessimistic exception handling
           begin
             begin         
               twitter_url = doc_links.find {|link| link['href'] =~ /twitter.com\// and link['href'].match(/#{pod_name_fragment}/i).to_s != "" unless link['href'] =~ /share|status/i}.attribute('href').to_s 
