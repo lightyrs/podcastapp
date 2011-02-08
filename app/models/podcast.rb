@@ -158,6 +158,9 @@ class Podcast < ActiveRecord::Base
         unless pod_site.downcase =~ /.rss|.xml|libsyn/i
           pod_doc = Nokogiri.HTML(open(pod_site))
           pod_name_fragment = pod.name.split(" ")[0].to_s
+          if pod_name_fragment.downcase == "the"
+            pod_name_fragment = pod.name.split(" ")[1].to_s unless pod.name.split(" ")[1].to_s.nil?
+          end
           doc_links = pod_doc.css('a')
           
           # If a social url contains part of the podcast name, grab that
