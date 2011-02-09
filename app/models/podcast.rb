@@ -43,7 +43,7 @@ class Podcast < ActiveRecord::Base
       itunes_genre_codes['education'] = "1304"
       itunes_genre_codes['games_hobbies'] = "1323"
       itunes_genre_codes['goverment_organization'] = "1325"
-      itunes_genre_codes['health '] = "1307"
+      itunes_genre_codes['health'] = "1307"
       itunes_genre_codes['kids_family'] = "1305"
       itunes_genre_codes['music'] = "1310"
       itunes_genre_codes['news_politics'] = "1311"
@@ -109,8 +109,14 @@ class Podcast < ActiveRecord::Base
   end  
   
   # scrape the podcast site url from the itunes doc  
-  def self.site_discovery
-    podcast = Podcast.find(:all)
+  def self.site_discovery(options = {})
+    new_podcasts_only = options[:new_podcasts_only] || false
+    if new_podcasts_only
+      podcast = Podcast.find(:all, :conditions => ['created_at > ?', Time.now - 24.hours])
+      Podcast.podcast_logger.info("#{podcast.count}")
+    else
+      podcast = Podcast.find(:all)
+    end
     podcast.each do | pod |
       begin
         itunes_doc = Nokogiri.HTML(open(pod.itunesurl))
@@ -125,8 +131,14 @@ class Podcast < ActiveRecord::Base
   end  
   
   # discover the podcast feed using imasquerade
-  def self.feed_discovery
-    podcast = Podcast.where("itunesurl IS NOT ?", nil)
+  def self.feed_discovery(options = {})
+    new_podcasts_only = options[:new_podcasts_only] || false
+    if new_podcasts_only
+      podcast = Podcast.find(:all, :conditions => ['created_at > ? and itunesurl IS NOT ?', Time.now - 24.hours, nil])
+      Podcast.podcast_logger.info("#{podcast.count}")
+    else
+      podcast = Podcast.where("itunesurl IS NOT ?", nil)
+    end
     podcast.each do | pod |
       begin
         itunes_uri = pod.itunesurl
@@ -142,8 +154,14 @@ class Podcast < ActiveRecord::Base
 
   # scrape the podcast twitter and facebook urls from the site doc
   # TODO Handle Nokogiri Errno:: Errors, Facebook iframe urls 
-  def self.social_discovery
-    podcast = Podcast.where("siteurl IS NOT ?", nil)
+  def self.social_discovery(options = {})
+    new_podcasts_only = options[:new_podcasts_only] || false
+    if new_podcasts_only
+      podcast = Podcast.find(:all, :conditions => ['created_at > ? and siteurl IS NOT ?', Time.now - 24.hours, nil])
+      Podcast.podcast_logger.info("#{podcast.count}")
+    else
+      podcast = Podcast.where("siteurl IS NOT ?", nil)
+    end
     podcast.each do | pod |
       puts "#{pod.name}"
       begin 

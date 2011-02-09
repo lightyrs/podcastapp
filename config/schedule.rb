@@ -21,12 +21,12 @@
 
 set :environment, "development"
 
-# Scrape podcasts and aggregate data twice per week
-
-every :tuesday, :at => '2:00 am' do
-  rake "podcast:generate_inventory"
+# Scrape podcasts but only update new podcasts
+every :wednesday, :at => '2:00 am' do
+  rake 'podcast:generate_inventory["new"]'
 end
 
-every :friday, :at => '10:28 pm' do
+# Scrape and update all podcasts
+every :saturday, :at => '10:28 pm' do
   rake "podcast:generate_inventory"
 end
