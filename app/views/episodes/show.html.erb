@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Title:</b>
+  <%= @episode.title %>
+</p>
+
+<p>
+  <b>Shownotes:</b>
+  <%= @episode.shownotes %>
+</p>
+
+<p>
+  <b>Url:</b>
+  <%= @episode.url %>
+</p>
+
+<p>
+  <b>Filename:</b>
+  <%= @episode.filename %>
+</p>
+
+<p>
+  <b>Filetype:</b>
+  <%= @episode.filetype %>
+</p>
+
+<p>
+  <b>Size:</b>
+  <%= @episode.size %>
+</p>
+
+<p>
+  <b>Duration:</b>
+  <%= @episode.duration %>
+</p>
+
+
+<%= link_to 'Edit', edit_episode_path(@episode) %> |
+<%= link_to 'Back', episodes_path %>

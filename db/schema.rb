@@ -10,7 +10,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110129005250) do
+ActiveRecord::Schema.define(:version => 20110210005056) do
+
+  create_table "episodes", :force => true do |t|
+    t.string   "title"
+    t.text     "shownotes"
+    t.string   "url"
+    t.string   "filename"
+    t.string   "filetype"
+    t.string   "size"
+    t.string   "duration"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "podcast_id"
+    t.string   "date_published"
+  end
+
+  add_index "episodes", ["title"], :name => "index_episodes_on_title", :unique => true
 
   create_table "podcasts", :force => true do |t|
     t.string   "name"
