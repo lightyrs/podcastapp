@@ -21,21 +21,21 @@ class Podcast < ActiveRecord::Base
     text :name
   end
   
-  # define a custom logger  
+  # Define a custom logger  
   def self.podcast_logger
-    @@podcast_logger ||= Logger.new("#{RAILS_ROOT}/log/podcast_cron.log", 5, 524288)
+    @@podcast_logger ||= Logger.new("#{RAILS_ROOT}/log/podcast_cron.log", 3, 524288)
   end
   
-  # create the top 300 url      
+  # Create the top 300 url      
   def self.itunes_top_rss
     itunes_url = "http://itunes.apple.com/us/rss/toppodcasts/limit=300/explicit=true/xml"
     itunes_doc = Nokogiri.HTML(open(itunes_url))
     
-    # scrape that url
+    # Scrape that url
     Podcast.scrape_from_itunes(itunes_doc)    
   end
   
-  # podcast genres from itunes
+  # Podcast genres from itunes
   def self.itunes_genre_rss
     itunes_genre_codes = {}
     
@@ -58,18 +58,18 @@ class Podcast < ActiveRecord::Base
 
     itunes_genre_codes.each do |genre, id|
       
-      # create the top 300 url for each genre
+      # Create the top 300 url for each genre
       itunes_url = "http://itunes.apple.com/us/rss/toppodcasts/limit=300/genre=#{id}/explicit=true/xml"
       itunes_doc = Nokogiri.HTML(open(itunes_url))
       
-      # scrape that url
+      # Scrape that url
       Podcast.scrape_from_itunes(itunes_doc)  
     end
   end 
   
-  # parse the returned xml
-  # if the podcast exists, update attributes
-  # otherwise, create a new podcast
+  # Parse the returned xml
+  # If the podcast exists, update attributes
+  # Otherwise, create a new podcast
   def self.scrape_from_itunes(itunes_doc)
     itunes_doc.xpath('//feed/entry').map do |entry|
       new_name = entry.xpath("./name").text
@@ -110,7 +110,7 @@ class Podcast < ActiveRecord::Base
     end
   end  
   
-  # scrape the podcast site url from the itunes doc  
+  # Scrape the podcast site url from the itunes doc  
   def self.site_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
@@ -132,7 +132,7 @@ class Podcast < ActiveRecord::Base
     end
   end  
   
-  # discover the podcast feed using imasquerade
+  # Discover the podcast feed using imasquerade
   def self.feed_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
@@ -154,7 +154,7 @@ class Podcast < ActiveRecord::Base
     end
   end  
 
-  # scrape the podcast twitter and facebook urls from the site doc
+  # Scrape the podcast twitter and facebook urls from the site doc
   # TODO Handle Nokogiri Errno:: Errors, Facebook iframe urls 
   def self.social_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
@@ -164,6 +164,7 @@ class Podcast < ActiveRecord::Base
     else
       podcast = Podcast.where("siteurl IS NOT ?", nil)
     end
+    
     podcast.each do | pod |
       puts "#{pod.name}"
       begin 
@@ -208,6 +209,7 @@ class Podcast < ActiveRecord::Base
             end
           rescue Exception => ex
             puts "ANTISOCIAL"
+          # Ensure that the urls gets saved regardless of what else happens
           ensure
             pod.update_attributes(:twitter => twitter_url, :facebook => facebook_url)            
           end

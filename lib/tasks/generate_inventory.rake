@@ -9,10 +9,10 @@ namespace :podcast do
   
   desc "Scrape the Top 300 Podcasts from iTunes"
   task :itunes_top_300, [:scope] => :environment do |t,args|
-    if args[:scope] == "new"
-      Podcast.podcast_logger.info("NEW_PODCASTS_ONLY")
-    end
     Podcast.podcast_logger.info("BEGIN: #{Time.now}")
+    if args[:scope] == "new"
+      Podcast.podcast_logger.info("NEW PODCASTS ONLY")
+    end
     Podcast.itunes_top_rss
   end
 

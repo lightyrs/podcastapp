@@ -7,7 +7,6 @@ gem 'whenever'
 
 # HTML/XML Parsing
 gem 'nokogiri'
-gem 'mechanize'
 gem 'imasquerade'
 
 # Pagination
@@ -15,7 +14,6 @@ gem "will_paginate", "~> 3.0.pre2"
 
 # Full-Text Search
 gem 'sunspot_rails', '1.2.rc4'
-
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

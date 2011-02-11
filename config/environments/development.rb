@@ -27,7 +27,7 @@ Podcastapp::Application.configure do
   config.log_level = :warn
 
   # Rotate logs
-  config.logger = Logger.new("#{::Rails.root.to_s}/log/#{ENV['RAILS_ENV']}.log", 10, 524288)
+  config.logger = Logger.new("#{::Rails.root.to_s}/log/#{ENV['RAILS_ENV']}.log", 3, 524288)
   config.logger = Logger.new("#{::Rails.root.to_s}/log/sunspot-solr-development.log", 3, 524288)
 end
 
