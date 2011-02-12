@@ -23,11 +23,7 @@ Podcastapp::Application.configure do
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
 
-  # Set log level
-  config.log_level = :warn
-
-  # Rotate logs
+  # Rotate Logs
   config.logger = Logger.new("#{::Rails.root.to_s}/log/#{ENV['RAILS_ENV']}.log", 3, 524288)
-  config.logger = Logger.new("#{::Rails.root.to_s}/log/sunspot-solr-development.log", 3, 524288)
 end
 
