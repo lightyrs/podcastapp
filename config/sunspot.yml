@@ -2,16 +2,16 @@ production:
   solr:
     hostname: localhost
     port: 8983
-    log_level: SEVERE
+    log_level: OFF
 
 development:
   solr:
     hostname: localhost
     port: 8982
-    log_level: SEVERE
+    log_level: OFF
 
 test:
   solr:
     hostname: localhost
     port: 8981
-    log_level: SEVERE
+    log_level: OFF
