@@ -102,7 +102,7 @@ class Episode < ActiveRecord::Base
           rescue Exception => ex
             puts "An error of type #{ex.class} happened, message is #{ex.message}"
           end        
-        elsif (!episode.title.nil?)
+        elsif (!episode[0].title.nil?)
           begin
             Episode.find(episode[0].id).update_attributes(
               :shownotes => episode_shownotes,

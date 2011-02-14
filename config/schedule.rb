@@ -28,11 +28,11 @@ every 1.day, :at => '11:00 pm' do
 end
 
 # Scrape podcasts but only update new podcasts (and don't send local mail)
-every [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday], :at => '1:00 am' do
+every [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday], :at => '12:30 am' do
   rake 'podcast:generate_inventory["new"] &> /dev/null'
 end
 
 # Scrape and update all podcasts (and don't send local mail)
-every :sunday, :at => '1:00 am' do
+every :sunday, :at => '12:30 am' do
   rake "podcast:generate_inventory &> /dev/null" 
 end
