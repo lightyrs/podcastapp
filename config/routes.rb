@@ -1,12 +1,12 @@
 Podcastapp::Application.routes.draw do
-  
+
   resources :episodes
 
-  # podcast routes
   resources :podcasts do
     collection do
       get 'search'
     end
+    resources :episodes
   end
   
   # named route for podcast search
