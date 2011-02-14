@@ -110,22 +110,22 @@ class Podcast < ActiveRecord::Base
     end
   end  
   
-  # Scrape the podcast site url from the itunes doc  
+  # Scrape the podcast site url from the itunes doc
+  # TODO: Make this faster
   def self.site_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
-      podcast = Podcast.find(:all, :conditions => ['created_at > ?', Time.now - 24.hours])
+      podcast = Podcast.find(:all, :select => 'itunesurl, name', :conditions => ['created_at > ?', Time.now - 24.hours])
       Podcast.podcast_logger.info("#{podcast.count}")
     else
-      podcast = Podcast.find(:all)
+      podcast = Podcast.find(:all, :select => 'itunesurl, name')
     end
     podcast.each do | pod |
       begin
-        itunes_doc = Nokogiri.HTML(open(pod.itunesurl))
-        site_url = itunes_doc.xpath('//div[@id="left-stack"]/div[@metrics-loc="Titledbox_Links"]/ul/li[1]/a')
-        pod.update_attributes(:siteurl => site_url.attribute("href").to_s)
-        puts site_url.attribute("href").to_s
-        Podcast.podcast_logger.info(site_url.attribute("href").to_s)
+        site_url = Nokogiri.HTML(open(pod.itunesurl)).xpath("//a[text()='Podcast Website']/@href").text
+        pod.update_attributes(:siteurl => site_url)
+        puts "#{site_url}"
+        Podcast.podcast_logger.info(site_url)
       rescue Exception => ex
         puts "An error of type #{ex.class} happened, message is #{ex.message}"
       end
@@ -136,10 +136,10 @@ class Podcast < ActiveRecord::Base
   def self.feed_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
-      podcast = Podcast.find(:all, :conditions => ['created_at > ? and itunesurl IS NOT ?', Time.now - 24.hours, nil])
+      podcast = Podcast.find(:all, :select => 'itunesurl, name', :conditions => ['created_at > ? and itunesurl IS NOT ?', Time.now - 24.hours, nil])
       Podcast.podcast_logger.info("#{podcast.count}")
     else
-      podcast = Podcast.where("itunesurl IS NOT ?", nil)
+      podcast = Podcast.find(:all, :select => 'itunesurl, name', :conditions => ['itunesurl IS NOT ?', nil])
     end
     podcast.each do | pod |
       begin
@@ -159,10 +159,10 @@ class Podcast < ActiveRecord::Base
   def self.social_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
-      podcast = Podcast.find(:all, :conditions => ['created_at > ? and siteurl IS NOT ?', Time.now - 24.hours, nil])
+      podcast = Podcast.find(:all, :select => 'siteurl, name', :conditions => ['created_at > ? and siteurl IS NOT ?', Time.now - 24.hours, nil])
       Podcast.podcast_logger.info("#{podcast.count}")
     else
-      podcast = Podcast.where("siteurl IS NOT ?", nil)
+      podcast = Podcast.find(:all, :select => 'siteurl, name', :conditions => ['siteurl IS NOT ?', nil])
     end
     
     podcast.each do | pod |
