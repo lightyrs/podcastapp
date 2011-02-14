@@ -115,10 +115,10 @@ class Podcast < ActiveRecord::Base
   def self.site_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
-      podcast = Podcast.find(:all, :select => 'itunesurl, name', :conditions => ['created_at > ?', Time.now - 24.hours])
+      podcast = Podcast.find(:all, :select => 'id, itunesurl, name', :conditions => ['created_at > ?', Time.now - 24.hours])
       Podcast.podcast_logger.info("#{podcast.count}")
     else
-      podcast = Podcast.find(:all, :select => 'itunesurl, name')
+      podcast = Podcast.find(:all, :select => 'id, itunesurl, name')
     end
     podcast.each do | pod |
       begin
@@ -136,10 +136,10 @@ class Podcast < ActiveRecord::Base
   def self.feed_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
-      podcast = Podcast.find(:all, :select => 'itunesurl, name', :conditions => ['created_at > ? and itunesurl IS NOT ?', Time.now - 24.hours, nil])
+      podcast = Podcast.find(:all, :select => 'id, itunesurl, name', :conditions => ['created_at > ? and itunesurl IS NOT ?', Time.now - 24.hours, nil])
       Podcast.podcast_logger.info("#{podcast.count}")
     else
-      podcast = Podcast.find(:all, :select => 'itunesurl, name', :conditions => ['itunesurl IS NOT ?', nil])
+      podcast = Podcast.find(:all, :select => 'id, itunesurl, name', :conditions => ['itunesurl IS NOT ?', nil])
     end
     podcast.each do | pod |
       begin
@@ -159,10 +159,10 @@ class Podcast < ActiveRecord::Base
   def self.social_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
-      podcast = Podcast.find(:all, :select => 'siteurl, name', :conditions => ['created_at > ? and siteurl IS NOT ?', Time.now - 24.hours, nil])
+      podcast = Podcast.find(:all, :select => 'id, siteurl, name', :conditions => ['created_at > ? and siteurl IS NOT ?', Time.now - 24.hours, nil])
       Podcast.podcast_logger.info("#{podcast.count}")
     else
-      podcast = Podcast.find(:all, :select => 'siteurl, name', :conditions => ['siteurl IS NOT ?', nil])
+      podcast = Podcast.find(:all, :select => 'id, siteurl, name', :conditions => ['siteurl IS NOT ?', nil])
     end
     
     podcast.each do | pod |
