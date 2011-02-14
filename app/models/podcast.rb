@@ -111,7 +111,6 @@ class Podcast < ActiveRecord::Base
   end  
   
   # Scrape the podcast site url from the itunes doc
-  # TODO: Make this faster
   def self.site_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
@@ -221,5 +220,11 @@ class Podcast < ActiveRecord::Base
         puts "FINAL EXCEPTION: #{ex.class} + #{ex.message}"
       end
     end  
+  end
+  
+  # Fetch podcast episodes
+  def self.fetch_episodes
+    podcasts = Podcast.find(:all, :select => 'id', :conditions => ['feedurl IS NOT ?', nil])
+    podcasts.each{|podcast| Episode.fetch_podcast_episodes(podcast.id)}
   end
 end
