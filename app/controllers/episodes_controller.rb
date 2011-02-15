@@ -2,11 +2,10 @@ class EpisodesController < ApplicationController
   # GET /episodes
   # GET /episodes.xml
   def index
-    # Fetch any new episodes before rendering the view
-    Episode.fetch_podcast_episodes(params[:podcast_id])
+    @podcast = params[:podcast_id]
     
     # Find all podcast episodes and sort by date descending
-    @episodes = Episode.find(:all, :conditions => ["podcast_id = ?", params[:podcast_id]]).sort {|a, b| 
+    @episodes = Episode.find(:all, :conditions => ["podcast_id = ?", @podcast]).sort {|a, b| 
       b.date_published.to_time <=> a.date_published.to_time
     }
 

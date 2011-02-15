@@ -20,13 +20,15 @@ class Episode < ActiveRecord::Base
   end
   
   # Fetch the latest episodes for the podcast
-  def self.fetch_podcast_episodes(podcast)
+  def self.fetch_podcast_episodes(podcast, options = {})
+    new_episodes_only = options[:new_episodes_only] || false
+    
     @podcast = Podcast.find(podcast)
     @feed = @podcast.feedurl
     puts "#{@feed}"
     
     begin
-      @doc = Nokogiri.XML(open(@feed))
+      @doc = Nokogiri.XML(open(@feed)).remove_namespaces!
       @episodes = @doc.xpath("//item")
     rescue Exception => ex
       puts "#{ex.class}:#{ex.message}"
@@ -38,9 +40,9 @@ class Episode < ActiveRecord::Base
         episode_title = episode.xpath("./title").text
     
         # Let's grab the most robust shownotes we can find
-        episode_shownotes_summary = episode.xpath("./itunes:summary").text
+        episode_shownotes_summary = episode.xpath("./summary").text
         episode_shownotes_description = episode.xpath("./description").text
-        episode_shownotes_subtitle = episode.xpath("./itunes:subtitle").text
+        episode_shownotes_subtitle = episode.xpath("./subtitle").text
     
         length = {}
         length["summary"] = episode_shownotes_summary.scan(/[\w-][\w.]+/).size
@@ -75,15 +77,15 @@ class Episode < ActiveRecord::Base
         episode_file_size = (episode_file_size.to_f / 1048576.0).round(1).to_s + " MB"
 
         # Episode Duration
-        episode_duration = episode.xpath("./itunes:duration").text
+        episode_duration = episode.xpath("./duration").text
     
         unless episode_duration.include? ":"
           episode_duration = Time.at(episode_duration.to_i).gmtime.strftime("%R:%S")
         end
         
-        episode = Episode.find(:all, :conditions => {:title => episode_title})
+        episode = Podcast.find(@podcast).episodes.find(:all, :conditions => {:title => episode_title})
         
-        if episode == []
+        if (episode == [])
           begin
             episode = Episode.new(
               :podcast_id => @podcast.id,
@@ -101,10 +103,10 @@ class Episode < ActiveRecord::Base
             Episode.episode_logger.info("New Episode: #{episode.title}")
           rescue Exception => ex
             puts "An error of type #{ex.class} happened, message is #{ex.message}"
-          end        
+          end     
         elsif (!episode[0].title.nil?)
           begin
-            Episode.find(episode[0].id).update_attributes(
+            Podcast.find(@podcast).episodes.find(episode[0].id).update_attributes(
               :shownotes => episode_shownotes,
               :date_published => episode_pub_date,
               :filename => episode_file_name,
