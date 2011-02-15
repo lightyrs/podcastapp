@@ -59,5 +59,6 @@ namespace :podcast do
   task :generate_inventory, [:scope] => :social_discovery do |t,args|
     Podcast.podcast_logger.info("Successful Rake")
     Podcast.podcast_logger.info("END #{Time.now}")
+    Rake::Task['maintenance:daily'].invoke
   end
 end

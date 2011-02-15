@@ -38,9 +38,9 @@ class Episode < ActiveRecord::Base
         episode_title = episode.xpath("./title").text
     
         # Let's grab the most robust shownotes we can find
-        episode_shownotes_summary = episode.xpath("./itunes:summary").text.gsub(/<\/?[^>]*>/, "")
-        episode_shownotes_description = episode.xpath("./description").text.gsub(/<\/?[^>]*>/, "")
-        episode_shownotes_subtitle = episode.xpath("./itunes:subtitle").text.gsub(/<\/?[^>]*>/, "")
+        episode_shownotes_summary = episode.xpath("./itunes:summary").text
+        episode_shownotes_description = episode.xpath("./description").text
+        episode_shownotes_subtitle = episode.xpath("./itunes:subtitle").text
     
         length = {}
         length["summary"] = episode_shownotes_summary.scan(/[\w-][\w.]+/).size
