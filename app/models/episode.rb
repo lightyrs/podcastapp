@@ -30,7 +30,7 @@ class Episode < ActiveRecord::Base
     begin
       @doc = Nokogiri.XML(open(@feed)).remove_namespaces!
       @episodes = @doc.xpath("//item")
-    rescue Exception => ex
+    rescue StandardError => ex
       puts "#{ex.class}:#{ex.message}"
     end
     
@@ -63,17 +63,27 @@ class Episode < ActiveRecord::Base
         # Episode publish date
         episode_pub_date = episode.xpath("./pubDate").text
 
-        # Episode file name
-        episode_file_name = episode.xpath("./enclosure/@url").text.split("/").last
-
         # Episode url
         episode_url = episode.xpath("./enclosure/@url").text
+        
+        if episode_url.nil?
+          episode_url = episode.xpath("./content/@url").text
+        end
 
         # Episode file type
         episode_file_type = episode.xpath("./enclosure/@type").text
+        
+        if episode_file_type.nil?
+          episode_file_type = episode.xpath("./content/@type").text
+        end        
 
         # Episode file size
         episode_file_size = episode.xpath("./enclosure/@length").text
+        
+        if episode_file_size.nil?
+          episode_file_size = episode.xpath("./content/@filesize").text
+        end        
+        
         episode_file_size = (episode_file_size.to_f / 1048576.0).round(1).to_s + " MB"
 
         # Episode Duration
@@ -101,7 +111,7 @@ class Episode < ActiveRecord::Base
             episode.save
             puts "New Episode: #{episode.title}"
             Episode.episode_logger.info("New Episode: #{episode.title}")
-          rescue Exception => ex
+          rescue StandardError => ex
             puts "An error of type #{ex.class} happened, message is #{ex.message}"
           end     
         elsif (!episode[0].title.nil?)
@@ -117,11 +127,11 @@ class Episode < ActiveRecord::Base
             )
             puts "Update Episode: #{episode[0].title}"
             Episode.episode_logger.info("Update Episode: #{episode[0].title}")
-          rescue Exception => ex
+          rescue StandardError => ex
             puts "An error of type #{ex.class} happened, message is #{ex.message}"
           end          
         end
-      rescue Exception => ex
+      rescue StandardError => ex
         puts "#{ex.class}:#{ex.message}"
       end
     end

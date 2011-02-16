@@ -87,7 +87,7 @@ class Podcast < ActiveRecord::Base
           podcast.save
           puts "New Podcast: #{podcast.name}"
           Podcast.podcast_logger.info("New Podcast: #{podcast.name}")
-        rescue Exception => ex
+        rescue StandardError => ex
           puts "An error of type #{ex.class} happened, message is #{ex.message}"
         end
       elsif (!podcast[0].name.nil?)
@@ -101,11 +101,11 @@ class Podcast < ActiveRecord::Base
           )
           puts "Update Podcast: #{podcast[0].name}"
           Podcast.podcast_logger.info("Update Podcast: #{podcast[0].name}")
-        rescue Exception => ex
+        rescue StandardError => ex
           puts "An error of type #{ex.class} happened, message is #{ex.message}"
         end
       else
-        puts "Exception"
+        puts "StandardError"
       end
     end
   end  
@@ -125,7 +125,7 @@ class Podcast < ActiveRecord::Base
         pod.update_attributes(:siteurl => site_url)
         puts "#{site_url}"
         Podcast.podcast_logger.info(site_url)
-      rescue Exception => ex
+      rescue StandardError => ex
         puts "An error of type #{ex.class} happened, message is #{ex.message}"
       end
     end
@@ -147,7 +147,7 @@ class Podcast < ActiveRecord::Base
         pod.update_attributes(:feedurl => feed_url)
         puts "#{feed_url}"
         Podcast.podcast_logger.info("#{feed_url}")
-      rescue Exception => ex
+      rescue StandardError => ex
         puts "An error of type #{ex.class} happened, message is #{ex.message}"
       end
     end
@@ -185,41 +185,45 @@ class Podcast < ActiveRecord::Base
           
           # If a social url contains part of the podcast name, grab that
           # If not, grab the first one you find within our conditions
-          # Give Nokogiri some room to breathe with pessimistic exception handling
+          # Give Nokogiri some room to breathe with pessimistic StandardError handling
           begin
-            begin         
-              twitter_url = doc_links.find {|link| link['href'] =~ /twitter.com\// and link['href'].match(/#{pod_name_fragment}/i).to_s != "" unless link['href'] =~ /share|status/i}.attribute('href').to_s 
-            rescue Exception => ex
-              if doc_links.find {|link| link['href'] =~ /twitter.com\// unless link['href'] =~ /share|status/i}.nil?
-                twitter_url = nil
-              else       
-                twitter_url = doc_links.find {|link| link['href'] =~ /twitter.com\// unless link['href'] =~ /share|status/i}.attribute('href').to_s
-              end
-            end
-
-            begin    
-              facebook_url = doc_links.find {|link| link['href'] =~ /facebook.com\// and link['href'].match(/#{pod_name_fragment}/i).to_s != "" unless link['href'] =~ /share|.event/i}.attribute('href').to_s
-            rescue Exception => ex
-              if doc_links.find {|link| link['href'] =~ /facebook.com\// unless link['href'] =~ /share|.event/i}.nil?
-                facebook_url = nil
-              else       
-                facebook_url = doc_links.find {|link| link['href'] =~ /facebook.com\// unless link['href'] =~ /share|.event/i}.attribute('href').to_s
-              end
-            end
-          rescue Exception => ex
+            twitter_url = Podcast.social_relevance(doc_links, "twitter.com", pod_name_fragment, "share|status")
+            facebook_url = Podcast.social_relevance(doc_links, "facebook.com", pod_name_fragment, "share|.event|placement=")
+          rescue StandardError => ex
             puts "ANTISOCIAL"
           # Ensure that the urls gets saved regardless of what else happens
           ensure
             pod.update_attributes(:twitter => twitter_url, :facebook => facebook_url)            
-          end
-          
+          end      
+     
           puts "#{twitter_url}" + "#{facebook_url}"
           Podcast.podcast_logger.info("#{twitter_url}" + "#{facebook_url}")
         end
-      rescue Exception => ex
-        puts "FINAL EXCEPTION: #{ex.class} + #{ex.message}"
+      rescue StandardError => ex
+        puts "FINAL StandardError: #{ex.class} + #{ex.message}"
       end
     end  
+  end
+  
+  # If a social url contains part of the podcast name, grab that
+  # If not, grab the first one you find within our conditions
+  # Give Nokogiri some room to breathe with pessimistic StandardError handling  
+  def self.social_relevance(doc_links, social_network, pod_name_fragment, regex)
+    begin
+      begin       
+        social_links = doc_links.find {|link| link['href'].match(/#{social_network}/i) and link['href'].match(/#{pod_name_fragment}/i).to_s != "" unless link['href'].match(/#{regex}/i)}.attribute('href').to_s 
+      rescue StandardError => ex
+        if doc_links.find {|link| link['href'].match(/#{social_network}/i) unless link['href'].match(/#{regex}/i)}.nil?
+          social_links = nil
+        else       
+          social_links = doc_links.find {|link| link['href'].match(/#{social_network}/i) unless link['href'].match(/#{regex}/i)}.attribute('href').to_s
+        end
+      end
+    rescue StandardError => ex
+    # Ensure that the urls gets saved regardless of what else happens
+    ensure
+      return social_links.to_s    
+    end
   end
   
   # Fetch podcast episodes

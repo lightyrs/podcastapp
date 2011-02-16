@@ -7,15 +7,8 @@
 
 namespace :podcast do
   
-  desc "Fetch the podcast episodes"
-  task :fetch_episodes => :environment do
-    Episode.episode_logger.info("BEGIN: #{Time.now}")
-    Podcast.fetch_episodes
-    Episode.episode_logger.info("END: #{Time.now}")
-  end  
-  
   desc "Scrape the Top 300 Podcasts from iTunes"
-  task :itunes_top_300, [:scope] => :fetch_episodes do |t,args|
+  task :itunes_top_300, [:scope] => :environment do |t,args|
     Podcast.podcast_logger.info("BEGIN: #{Time.now}")
     if args[:scope] == "new"
       Podcast.podcast_logger.info("NEW PODCASTS ONLY")
@@ -55,8 +48,15 @@ namespace :podcast do
     end
   end
   
+  desc "Fetch the podcast episodes"
+  task :fetch_episodes => :social_discovery do
+    Episode.episode_logger.info("BEGIN: #{Time.now}")
+    Podcast.fetch_episodes
+    Episode.episode_logger.info("END: #{Time.now}")
+  end
+  
   desc "This task runs all of the various scraping methods in the Podcast class"
-  task :generate_inventory, [:scope] => :social_discovery do |t,args|
+  task :generate_inventory, [:scope] => :fetch_episodes do |t,args|
     Podcast.podcast_logger.info("Successful Rake")
     Podcast.podcast_logger.info("END #{Time.now}")
     Rake::Task['maintenance:daily'].invoke
