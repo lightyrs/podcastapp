@@ -20,6 +20,7 @@ namespace :maintenance do
   desc "Daily Maintenance"
   task :daily => :start_sunspot do
     # Invoke the daily maintenance tasks
+    puts `touch tmp/restart.txt`
   end
   
 end
