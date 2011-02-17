@@ -7,7 +7,7 @@
 
 namespace :maintenance do
   
-  desc "Stop Sunspot"
+  desc "Restart Server"
   task :restart_server => :environment do
     puts `touch tmp/restart.txt`
   end
