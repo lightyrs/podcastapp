@@ -22,6 +22,11 @@
 # Set environment to development
 set :environment, "development"
 
+# Run hourly maintenance cron every night
+every 1.hour do
+  rake 'maintenance:hourly &> /dev/null'
+end
+
 # Run daily maintenance cron every night
 every 1.day, :at => '11:00 pm' do
   rake 'maintenance:daily &> /dev/null'

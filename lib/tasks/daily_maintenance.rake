@@ -1,7 +1,7 @@
 ###################################################################################################
 #
 # Rake: maintenance
-# This task runs all of the various scraping methods in the Podcast class
+# This task runs various maintenance tasks once per day
 #
 ###################################################################################################
 
