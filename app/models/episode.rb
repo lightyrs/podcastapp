@@ -20,10 +20,9 @@ class Episode < ActiveRecord::Base
   end
   
   # Fetch the latest episodes for the podcast
-  def self.fetch_podcast_episodes(podcast, options = {})
-    new_episodes_only = options[:new_episodes_only] || false
+  def self.fetch_podcast_episodes(podcast)
     
-    @podcast = Podcast.find(podcast)
+    @podcast = Podcast.find(podcast, :select => 'id, feedurl')
     @feed = @podcast.feedurl
     puts "#{@feed}"
     
@@ -37,12 +36,12 @@ class Episode < ActiveRecord::Base
     @episodes.each do |episode|
       begin
         # Grab the episode title
-        episode_title = episode.xpath("./title").text
+        episode_title = Episode.parse_nodes(episode.at_xpath(".//title"))
     
         # Let's grab the most robust shownotes we can find
-        episode_shownotes_summary = episode.xpath("./summary").text
-        episode_shownotes_description = episode.xpath("./description").text
-        episode_shownotes_subtitle = episode.xpath("./subtitle").text
+        episode_shownotes_summary = Episode.parse_nodes(episode.at_xpath(".//summary"))
+        episode_shownotes_description = Episode.parse_nodes(episode.at_xpath(".//description"))
+        episode_shownotes_subtitle = Episode.parse_nodes(episode.at_xpath(".//subtitle"))
     
         length = {}
         length["summary"] = episode_shownotes_summary.scan(/[\w-][\w.]+/).size
@@ -61,35 +60,35 @@ class Episode < ActiveRecord::Base
         end
 
         # Episode publish date
-        episode_pub_date = episode.xpath("./pubDate").text
+        episode_pub_date = Episode.parse_nodes(episode.at_xpath(".//pubDate"))
 
         # Episode url
-        episode_url = episode.xpath("./enclosure/@url").text
+        episode_url = Episode.parse_nodes(episode.at_xpath(".//enclosure/@url"))
         
         if episode_url.nil?
-          episode_url = episode.xpath("./content/@url").text
+          episode_url = Episode.parse_nodes(episode.at_xpath(".//content/@url"))
         end
 
         # Episode file type
-        episode_file_type = episode.xpath("./enclosure/@type").text
+        episode_file_type = Episode.parse_nodes(episode.at_xpath(".//enclosure/@type"))
         
         if episode_file_type.nil?
-          episode_file_type = episode.xpath("./content/@type").text
+          episode_file_type = Episode.parse_nodes(episode.at_xpath(".//content/@type"))
         end        
 
         # Episode file size
-        episode_file_size = episode.xpath("./enclosure/@length").text
+        episode_file_size = Episode.parse_nodes(episode.at_xpath(".//enclosure/@length"))
         
         if episode_file_size.nil?
-          episode_file_size = episode.xpath("./content/@filesize").text
+          episode_file_size = Episode.parse_nodes(episode.at_xpath(".//content/@filesize"))
         end        
         
         episode_file_size = (episode_file_size.to_f / 1048576.0).round(1).to_s + " MB"
 
         # Episode Duration
-        episode_duration = episode.xpath("./duration").text
+        episode_duration = Episode.parse_nodes(episode.at_xpath(".//duration"))
     
-        unless episode_duration.include? ":"
+        unless episode_duration.nil? or episode_duration.include? ":"
           episode_duration = Time.at(episode_duration.to_i).gmtime.strftime("%R:%S")
         end
         
@@ -102,7 +101,6 @@ class Episode < ActiveRecord::Base
               :title => episode_title,
               :shownotes => episode_shownotes,
               :date_published => episode_pub_date,
-              :filename => episode_file_name,
               :url => episode_url,
               :filetype => episode_file_type,
               :size => episode_file_size,
@@ -119,7 +117,6 @@ class Episode < ActiveRecord::Base
             Podcast.find(@podcast).episodes.find(episode[0].id).update_attributes(
               :shownotes => episode_shownotes,
               :date_published => episode_pub_date,
-              :filename => episode_file_name,
               :url => episode_url,
               :filetype => episode_file_type,
               :size => episode_file_size,
@@ -135,5 +132,10 @@ class Episode < ActiveRecord::Base
         puts "#{ex.class}:#{ex.message}"
       end
     end
+  end
+  
+  def self.parse_nodes(xpath)
+    node_value = xpath.text unless xpath.nil?
+    return node_value
   end
 end
