@@ -36,17 +36,17 @@ class Episode < ActiveRecord::Base
     @episodes.each do |episode|
       begin
         # Grab the episode title
-        episode_title = Episode.parse_nodes(episode.at_xpath(".//title"))
+        episode_title = Episode.parse_nodes(episode.at_xpath("./title"))
     
         # Let's grab the most robust shownotes we can find
-        episode_shownotes_summary = Episode.parse_nodes(episode.at_xpath(".//summary"))
-        episode_shownotes_description = Episode.parse_nodes(episode.at_xpath(".//description"))
-        episode_shownotes_subtitle = Episode.parse_nodes(episode.at_xpath(".//subtitle"))
+        episode_shownotes_summary = Episode.parse_nodes(episode.at_xpath("./summary"))
+        episode_shownotes_description = Episode.parse_nodes(episode.at_xpath("./description"))
+        episode_shownotes_subtitle = Episode.parse_nodes(episode.at_xpath("./subtitle"))
     
         length = {}
-        length["summary"] = episode_shownotes_summary.scan(/[\w-][\w.]+/).size
-        length["description"] = episode_shownotes_description.scan(/[\w-][\w.]+/).size
-        length["subtitle"] = episode_shownotes_subtitle.scan(/[\w-][\w.]+/).size
+        length["summary"] = episode_shownotes_summary.scan(/[\w-][\w.]+/).size unless episode_shownotes_summary.nil?
+        length["description"] = episode_shownotes_description.scan(/[\w-][\w.]+/).size unless episode_shownotes_description.nil?
+        length["subtitle"] = episode_shownotes_subtitle.scan(/[\w-][\w.]+/).size unless episode_shownotes_subtitle.nil?
     
         max_length = length.values.max
         shownotes = length.key(max_length)
@@ -60,33 +60,33 @@ class Episode < ActiveRecord::Base
         end
 
         # Episode publish date
-        episode_pub_date = Episode.parse_nodes(episode.at_xpath(".//pubDate"))
+        episode_pub_date = Episode.parse_nodes(episode.at_xpath("./pubDate"))
 
         # Episode url
-        episode_url = Episode.parse_nodes(episode.at_xpath(".//enclosure/@url"))
+        episode_url = Episode.parse_nodes(episode.at_xpath("./enclosure/@url"))
         
         if episode_url.nil?
-          episode_url = Episode.parse_nodes(episode.at_xpath(".//content/@url"))
+          episode_url = Episode.parse_nodes(episode.at_xpath("./content/@url"))
         end
 
         # Episode file type
-        episode_file_type = Episode.parse_nodes(episode.at_xpath(".//enclosure/@type"))
+        episode_file_type = Episode.parse_nodes(episode.at_xpath("./enclosure/@type"))
         
         if episode_file_type.nil?
-          episode_file_type = Episode.parse_nodes(episode.at_xpath(".//content/@type"))
+          episode_file_type = Episode.parse_nodes(episode.at_xpath("./content/@type"))
         end        
 
         # Episode file size
-        episode_file_size = Episode.parse_nodes(episode.at_xpath(".//enclosure/@length"))
+        episode_file_size = Episode.parse_nodes(episode.at_xpath("./enclosure/@length"))
         
         if episode_file_size.nil?
-          episode_file_size = Episode.parse_nodes(episode.at_xpath(".//content/@filesize"))
+          episode_file_size = Episode.parse_nodes(episode.at_xpath("./content/@filesize"))
         end        
         
         episode_file_size = (episode_file_size.to_f / 1048576.0).round(1).to_s + " MB"
 
         # Episode Duration
-        episode_duration = Episode.parse_nodes(episode.at_xpath(".//duration"))
+        episode_duration = Episode.parse_nodes(episode.at_xpath("./duration"))
     
         unless episode_duration.nil? or episode_duration.include? ":"
           episode_duration = Time.at(episode_duration.to_i).gmtime.strftime("%R:%S")

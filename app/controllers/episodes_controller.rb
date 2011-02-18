@@ -5,8 +5,12 @@ class EpisodesController < ApplicationController
     @podcast = params[:podcast_id]
     
     # Find all podcast episodes and sort by date descending
-    @episodes = Podcast.find(@podcast).episodes.all.sort {|a, b| 
-      b.date_published.to_time <=> a.date_published.to_time
+    @episodes = Podcast.find(@podcast).episodes.all.sort {|a, b|
+      if a.date_published.nil? or b.date_published.nil?
+        b.date_published <=> a.date_published
+      else
+        b.date_published.to_time <=> a.date_published.to_time
+      end
     }
 
     respond_to do |format|
