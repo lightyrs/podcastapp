@@ -31,3 +31,19 @@
 <br />
 
 <%= link_to 'New Episode', new_episode_path %>
+
+<%= javascript_tag do %>
+  podcast = <%= @podcast %>
+  $(function(){  
+    // Fetch new episodes on page load with ajax polling
+    setInterval(function(){
+      $.ajax({
+         type: "GET",
+         url: "http://podcastapp/podcasts/" + podcast + "/episodes",
+         success: function(data){
+           console.log()
+         }
+       });      
+    }, 22700)
+  });
+<% end %>

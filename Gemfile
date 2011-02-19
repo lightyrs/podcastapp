@@ -8,6 +8,9 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 # Scheduled Jobs
 gem 'whenever'
 
+# Background Jobs
+gem 'delayed_job'
+
 # HTML/XML Parsing
 gem 'nokogiri'
 gem 'imasquerade'

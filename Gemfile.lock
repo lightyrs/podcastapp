@@ -33,6 +33,10 @@ GEM
       activesupport (~> 3.0.0)
     builder (2.1.2)
     curb (0.7.10)
+    daemons (1.1.0)
+    delayed_job (2.1.4)
+      activesupport (~> 3.0)
+      daemons
     erubis (2.6.6)
       abstract (>= 1.0.0)
     escape (0.0.4)
@@ -90,6 +94,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  delayed_job
   imasquerade
   nokogiri
   rails (= 3.0.1)

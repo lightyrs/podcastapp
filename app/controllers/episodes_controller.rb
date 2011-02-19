@@ -12,10 +12,14 @@ class EpisodesController < ApplicationController
         b.date_published.to_time <=> a.date_published.to_time
       end
     }
+    
+    # Fetch new episodes in a background task
+    Episode.delay.fetch_podcast_episodes(@podcast)
 
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @episodes }
+      format.js { render :layout => false }
     end
   end
 
