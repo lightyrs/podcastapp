@@ -49,10 +49,14 @@ namespace :podcast do
   end
   
   desc "Fetch the podcast episodes"
-  task :fetch_episodes => :social_discovery do
-    Episode.episode_logger.info("BEGIN: #{Time.now}")
-    Podcast.fetch_episodes
-    Episode.episode_logger.info("END: #{Time.now}")
+  task :fetch_episodes, [:scope] => :social_discovery do |t,args|
+    if args[:scope] == "new"
+      # Do nothing
+    else
+      Episode.episode_logger.info("BEGIN: #{Time.now}")
+      Podcast.fetch_episodes
+      Episode.episode_logger.info("END: #{Time.now}")
+    end
   end
   
   desc "This task runs all of the various scraping methods in the Podcast class"
