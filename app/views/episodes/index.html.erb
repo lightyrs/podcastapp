@@ -1,49 +1,67 @@
 <h1>Listing episodes</h1>
 
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Shownotes</th>
-    <th>Url</th>
-    <th>Filetype</th>
-    <th>Size</th>
-    <th>Duration</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<div id="status"></div>
 
-<% @episodes.each do |episode| %>
-  <tr>
-    <td><%= episode.title %></td>
-    <td><%= episode.shownotes %></td>
-    <td><%= episode.url %></td>
-    <td><%= episode.filetype %></td>
-    <td><%= episode.size %></td>
-    <td><%= episode.duration %></td>
-    <td><%= link_to 'Show', episode %></td>
-    <td><%= link_to 'Edit', edit_episode_path(episode) %></td>
-    <td><%= link_to 'Destroy', episode, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-</table>
+<div id="episodes">
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Shownotes</th>
+      <th>Url</th>
+      <th>Filetype</th>
+      <th>Size</th>
+      <th>Duration</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+
+  <% @episodes.each do |episode| %>
+    <tr>
+      <td><%= episode.title %></td>
+      <td><%= episode.shownotes %></td>
+      <td><%= episode.url %></td>
+      <td><%= episode.filetype %></td>
+      <td><%= episode.size %></td>
+      <td><%= episode.duration %></td>
+      <td><%= link_to 'Show', episode %></td>
+      <td><%= link_to 'Edit', edit_episode_path(episode) %></td>
+      <td><%= link_to 'Destroy', episode, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+  </table>
+</div>
 
 <br />
 
 <%= link_to 'New Episode', new_episode_path %>
 
 <%= javascript_tag do %>
-  podcast = <%= @podcast %>
-  $(function(){  
+  $(function(){
+    podcast = <%= @podcast %>
+    
+    // Suppress useless ReferenceErrors
+    started = ""
+    success = ""
+    error = ""
+    
     // Fetch new episodes on page load with ajax polling
-    setInterval(function(){
+    function fetch_new_episodes() {
+      $("#status").html("<p>Fetching New Episodes</p>");
       $.ajax({
-         type: "GET",
-         url: "http://podcastapp/podcasts/" + podcast + "/episodes",
-         success: function(data){
-           console.log()
-         }
-       });      
-    }, 22700)
+        type: "GET",
+        url: "http://podcastapp/podcasts/" + podcast + "/get_update_status",
+        success: function(data){
+          if (data == "success") {
+            $("#episodes").load("http://podcastapp/podcasts/" + podcast + "/episodes #episodes table", function(){
+              $("#status").html("<p>Episodes Updated</p>");
+            });
+          } else {
+            fetch_new_episodes();
+          }
+        }
+      });      
+    }
+    fetch_new_episodes();
   });
 <% end %>

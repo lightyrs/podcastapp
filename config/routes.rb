@@ -3,15 +3,15 @@ Podcastapp::Application.routes.draw do
   resources :episodes
 
   resources :podcasts do
-    collection do
-      get 'search'
+    member do
+      get 'get_update_status'
     end
     resources :episodes
   end
   
   # named route for podcast search
   match 'search', :to => 'podcasts#search'
-
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

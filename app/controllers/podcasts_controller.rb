@@ -23,6 +23,14 @@ class PodcastsController < ApplicationController
       format.xml  { render :xml => @podcasts }
     end
   end
+  
+  def get_update_status
+    @podcast = Podcast.find(params[:id])
+    
+    respond_to do |format|
+      format.js { render :json => @podcast.episode_update_status }
+    end
+  end
 
   # GET /podcasts/1
   # GET /podcasts/1.xml

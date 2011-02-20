@@ -4,6 +4,9 @@ class EpisodesController < ApplicationController
   def index
     @podcast = params[:podcast_id]
     
+    # Fetch new episodes in a background task
+    Episode.delay.fetch_podcast_episodes(@podcast)
+    
     # Find all podcast episodes and sort by date descending
     @episodes = Podcast.find(@podcast).episodes.all.sort {|a, b|
       if a.date_published.nil? or b.date_published.nil?
@@ -12,9 +15,6 @@ class EpisodesController < ApplicationController
         b.date_published.to_time <=> a.date_published.to_time
       end
     }
-    
-    # Fetch new episodes in a background task
-    Episode.delay.fetch_podcast_episodes(@podcast)
 
     respond_to do |format|
       format.html # index.html.erb

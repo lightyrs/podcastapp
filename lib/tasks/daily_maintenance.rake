@@ -17,8 +17,13 @@ namespace :maintenance do
     Rake::Task['sunspot:solr:start'].invoke
   end
   
+  desc "Reindex Podcasts"
+  task :reindex_podcasts => :start_sunspot do
+    Rake::Task['sunspot:reindex'].invoke
+  end
+  
   desc "Daily Maintenance"
-  task :daily => :start_sunspot do
+  task :daily => :reindex_podcasts do
     # Invoke the daily maintenance tasks
     puts `touch tmp/restart.txt`
   end
