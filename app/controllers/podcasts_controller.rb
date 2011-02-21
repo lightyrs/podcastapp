@@ -24,6 +24,7 @@ class PodcastsController < ApplicationController
     end
   end
   
+  # Return episode update status to ajax request
   def get_update_status
     @podcast = Podcast.find(params[:id])
     
