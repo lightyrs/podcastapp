@@ -60,7 +60,7 @@ class Podcast < ActiveRecord::Base
       
       # Create the top 300 url for each genre
       itunes_url = "http://itunes.apple.com/us/rss/toppodcasts/limit=300/genre=#{id}/explicit=true/xml"
-      itunes_doc = Nokogiri.HTML(open(itunes_url, 'User-Agent' => 'ruby', :read_timeout => 15.00))
+      itunes_doc = Nokogiri.HTML(open(itunes_url, 'User-Agent' => 'ruby'))
       
       # Scrape that url
       Podcast.scrape_from_itunes(itunes_doc)  
@@ -213,8 +213,15 @@ class Podcast < ActiveRecord::Base
   end
   
   # Fetch podcast episodes
-  def self.fetch_episodes
-    podcasts = Podcast.find(:all, :select => 'id', :conditions => ['feedurl IS NOT ?', nil])
+  def self.fetch_episodes(options = {})
+    new_podcasts_only = options[:new_podcasts_only] || false
+    if new_podcasts_only
+      podcasts = Podcast.find(:all, :select => 'id', :conditions => ['created_at > ? and feedurl IS NOT ?', Time.now - 24.hours, nil])
+      Podcast.podcast_logger.info("#{podcasts.count}")
+    else
+      podcasts = Podcast.find(:all, :select => 'id', :conditions => ['feedurl IS NOT ?', nil])
+    end
+
     podcasts.each{|podcast| Episode.fetch_podcast_episodes(podcast.id)}
   end
 end

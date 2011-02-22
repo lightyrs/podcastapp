@@ -29,7 +29,7 @@ class Episode < ActiveRecord::Base
     @podcast.update_attributes :episode_update_status => 'started'
     
     begin
-      @doc = Nokogiri.XML(open(@feed, :read_timeout => 15.00)).remove_namespaces!
+      @doc = Nokogiri.XML(open(@feed, :read_timeout => 25.00)).remove_namespaces!
       @episodes = @doc.xpath("//item")
     rescue StandardError => ex
       puts "#{ex.class}:#{ex.message}"

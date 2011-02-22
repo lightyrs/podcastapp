@@ -33,7 +33,7 @@ namespace :podcast do
   desc "Scrape the podcast twitter and facebook urls from the podcast website"
   task :social_discovery, [:scope] => :site_and_feed_discovery do |t,args|
     if args[:scope] == "new"
-      Podcast.social_discovery(:new_podcasts_only => args[:scope])
+      Podcast.social_discovery(:new_podcasts_only => true)
     else
       Podcast.social_discovery
     end
@@ -41,13 +41,13 @@ namespace :podcast do
   
   desc "Fetch the podcast episodes"
   task :fetch_episodes, [:scope] => :social_discovery do |t,args|
+    Episode.episode_logger.info("BEGIN: #{Time.now}")
     if args[:scope] == "new"
-      # Do nothing
+      Podcast.fetch_episodes(:new_podcasts_only => true)
     else
-      Episode.episode_logger.info("BEGIN: #{Time.now}")
       Podcast.fetch_episodes
-      Episode.episode_logger.info("END: #{Time.now}")
     end
+    Episode.episode_logger.info("END: #{Time.now}")
   end
   
   desc "This task runs all of the various scraping methods in the Podcast class"
