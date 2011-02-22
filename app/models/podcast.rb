@@ -29,7 +29,7 @@ class Podcast < ActiveRecord::Base
   # Create the top 300 url      
   def self.itunes_top_rss
     itunes_url = "http://itunes.apple.com/us/rss/toppodcasts/limit=300/explicit=true/xml"
-    itunes_doc = Nokogiri.HTML(open(itunes_url))
+    itunes_doc = Nokogiri.HTML(open(itunes_url, 'User-Agent' => 'ruby', :read_timeout => 15.00))
     
     # Scrape that url
     Podcast.scrape_from_itunes(itunes_doc)    
@@ -60,7 +60,7 @@ class Podcast < ActiveRecord::Base
       
       # Create the top 300 url for each genre
       itunes_url = "http://itunes.apple.com/us/rss/toppodcasts/limit=300/genre=#{id}/explicit=true/xml"
-      itunes_doc = Nokogiri.HTML(open(itunes_url))
+      itunes_doc = Nokogiri.HTML(open(itunes_url, 'User-Agent' => 'ruby', :read_timeout => 15.00))
       
       # Scrape that url
       Podcast.scrape_from_itunes(itunes_doc)  
@@ -92,7 +92,7 @@ class Podcast < ActiveRecord::Base
         end
       elsif (!podcast[0].name.nil?)
         begin
-          Podcast.find(podcast[0].id).update_attributes(
+          podcast[0].update_attributes(
             :itunesurl => entry.xpath("./link/@href").text,
             :category => entry.xpath("./category/@term").text,
             :hosts => entry.xpath("./artist").text,
@@ -110,8 +110,8 @@ class Podcast < ActiveRecord::Base
     end
   end  
   
-  # Scrape the podcast site url from the itunes doc
-  def self.site_discovery(options = {})
+  # Scrape the podcast site url and feed url from the itunes doc
+  def self.site_and_feed_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
       podcast = Podcast.find(:all, :select => 'id, itunesurl, name', :conditions => ['created_at > ?', Time.now - 24.hours])
@@ -121,29 +121,15 @@ class Podcast < ActiveRecord::Base
     end
     podcast.each do | pod |
       begin
-        site_url = Nokogiri.HTML(open(pod.itunesurl)).xpath("//a[text()='Podcast Website']/@href").text
+        site_url = Nokogiri.HTML(open(pod.itunesurl, 'User-Agent' => 'ruby', :read_timeout => 15.00)).xpath("//a[text()='Podcast Website']/@href").text
         pod.update_attributes(:siteurl => site_url)
         puts "#{site_url}"
         Podcast.podcast_logger.info(site_url)
       rescue StandardError => ex
         puts "An error of type #{ex.class} happened, message is #{ex.message}"
       end
-    end
-  end  
-  
-  # Discover the podcast feed using imasquerade
-  def self.feed_discovery(options = {})
-    new_podcasts_only = options[:new_podcasts_only] || false
-    if new_podcasts_only
-      podcast = Podcast.find(:all, :select => 'id, itunesurl, name', :conditions => ['created_at > ? and itunesurl IS NOT ?', Time.now - 24.hours, nil])
-      Podcast.podcast_logger.info("#{podcast.count}")
-    else
-      podcast = Podcast.find(:all, :select => 'id, itunesurl, name', :conditions => ['itunesurl IS NOT ?', nil])
-    end
-    podcast.each do | pod |
       begin
-        itunes_uri = pod.itunesurl
-        feed_url = Imasquerade::Extractor.parse_itunes_uri(itunes_uri)
+        feed_url = Imasquerade::Extractor.parse_itunes_uri(pod.itunesurl)
         pod.update_attributes(:feedurl => feed_url)
         puts "#{feed_url}"
         Podcast.podcast_logger.info("#{feed_url}")
@@ -158,10 +144,10 @@ class Podcast < ActiveRecord::Base
   def self.social_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
-      podcast = Podcast.find(:all, :select => 'id, siteurl, name', :conditions => ['created_at > ? and siteurl IS NOT ?', Time.now - 24.hours, nil])
+      podcast = Podcast.find(:all, :select => 'id, siteurl, name', :conditions => ['created_at > ?', Time.now - 24.hours])
       Podcast.podcast_logger.info("#{podcast.count}")
     else
-      podcast = Podcast.find(:all, :select => 'id, siteurl, name', :conditions => ['siteurl IS NOT ?', nil])
+      podcast = Podcast.find(:all, :select => 'id, siteurl, name')
     end
     
     podcast.each do | pod |
@@ -176,9 +162,9 @@ class Podcast < ActiveRecord::Base
  
         # Skip all of this if we're dealing with a feed
         unless pod_site.downcase =~ /.rss|.xml|libsyn/i
-          pod_doc = Nokogiri.HTML(open(pod_site))
+          pod_doc = Nokogiri.HTML(open(pod_site, 'User-Agent' => 'ruby', :read_timeout => 15.00))
           pod_name_fragment = pod.name.split(" ")[0].to_s
-          if pod_name_fragment.downcase == "the"
+          if pod_name_fragment.downcase == "the" or pod_name_fragment.downcase == "a"
             pod_name_fragment = pod.name.split(" ")[1].to_s unless pod.name.split(" ")[1].to_s.nil?
           end
           doc_links = pod_doc.css('a')
@@ -191,7 +177,7 @@ class Podcast < ActiveRecord::Base
             facebook_url = Podcast.social_relevance(doc_links, "facebook.com", pod_name_fragment, "share|.event|placement=")
           rescue StandardError => ex
             puts "ANTISOCIAL"
-          # Ensure that the urls gets saved regardless of what else happens
+          # Ensure that the urls get saved regardless of what else happens
           ensure
             pod.update_attributes(:twitter => twitter_url, :facebook => facebook_url)            
           end      
@@ -220,7 +206,7 @@ class Podcast < ActiveRecord::Base
         end
       end
     rescue StandardError => ex
-    # Ensure that the urls gets saved regardless of what else happens
+    # Ensure that the urls get saved regardless of what else happens
     ensure
       return social_links.to_s    
     end

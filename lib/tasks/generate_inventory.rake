@@ -21,26 +21,17 @@ namespace :podcast do
     Podcast.itunes_genre_rss
   end
 
-  desc "Scrape the podcast website url from iTunes Preview"
-  task :site_discovery, [:scope] => :itunes_genres_top_300 do |t,args|
+  desc "Scrape the podcast website url and feed url from iTunes Preview"
+  task :site_and_feed_discovery, [:scope] => :itunes_genres_top_300 do |t,args|
     if args[:scope] == "new"
-      Podcast.site_discovery(:new_podcasts_only => true)
+      Podcast.site_and_feed_discovery(:new_podcasts_only => true)
     else
-      Podcast.site_discovery
-    end
-  end
-
-  desc "Scrape the podcast feed url using imasquerade"
-  task :feed_discovery, [:scope] => :site_discovery do |t,args|
-    if args[:scope] == "new"
-      Podcast.feed_discovery(:new_podcasts_only => args[:scope])
-    else
-      Podcast.feed_discovery
+      Podcast.site_and_feed_discovery
     end
   end
 
   desc "Scrape the podcast twitter and facebook urls from the podcast website"
-  task :social_discovery, [:scope] => :feed_discovery do |t,args|
+  task :social_discovery, [:scope] => :site_and_feed_discovery do |t,args|
     if args[:scope] == "new"
       Podcast.social_discovery(:new_podcasts_only => args[:scope])
     else

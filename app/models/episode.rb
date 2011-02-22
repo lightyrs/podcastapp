@@ -29,7 +29,7 @@ class Episode < ActiveRecord::Base
     @podcast.update_attributes :episode_update_status => 'started'
     
     begin
-      @doc = Nokogiri.XML(open(@feed)).remove_namespaces!
+      @doc = Nokogiri.XML(open(@feed, :read_timeout => 15.00)).remove_namespaces!
       @episodes = @doc.xpath("//item")
     rescue StandardError => ex
       puts "#{ex.class}:#{ex.message}"
@@ -94,7 +94,7 @@ class Episode < ActiveRecord::Base
           episode_duration = Time.at(episode_duration.to_i).gmtime.strftime("%R:%S")
         end
         
-        episode = Podcast.find(@podcast).episodes.find(:all, :conditions => {:title => episode_title})
+        episode = @podcast.episodes.find(:all, :conditions => {:title => episode_title})
         
         if (episode == [])
           begin
@@ -116,7 +116,7 @@ class Episode < ActiveRecord::Base
           end     
         elsif (!episode[0].title.nil?)
           begin
-            Podcast.find(@podcast).episodes.find(episode[0].id).update_attributes(
+            episode[0].update_attributes(
               :shownotes => episode_shownotes,
               :date_published => episode_pub_date,
               :url => episode_url,
