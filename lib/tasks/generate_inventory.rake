@@ -40,18 +40,14 @@ namespace :podcast do
   end
   
   desc "Fetch the podcast episodes"
-  task :fetch_episodes, [:scope] => :social_discovery do |t,args|
+  task :fetch_episodes => :social_discovery do |t,args|
     Episode.episode_logger.info("BEGIN: #{Time.now}")
-    if args[:scope] == "new"
-      Podcast.fetch_episodes(:new_podcasts_only => true)
-    else
-      Podcast.fetch_episodes
-    end
+    Podcast.fetch_episodes
     Episode.episode_logger.info("END: #{Time.now}")
   end
   
   desc "This task runs all of the various scraping methods in the Podcast class"
-  task :generate_inventory, [:scope] => :fetch_episodes do |t,args|
+  task :generate_inventory => :fetch_episodes do |t,args|
     Podcast.podcast_logger.info("Successful Rake")
     Podcast.podcast_logger.info("END #{Time.now}")
     Rake::Task['maintenance:daily'].invoke
