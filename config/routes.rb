@@ -5,6 +5,7 @@ Podcastapp::Application.routes.draw do
   resources :podcasts do
     member do
       get 'get_update_status'
+      get 'reset_update_status'
     end
     resources :episodes
   end

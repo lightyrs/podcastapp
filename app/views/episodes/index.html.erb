@@ -39,12 +39,13 @@
 <%= javascript_tag do %>
   $(function(){
     podcast = <%= @podcast %>
-    
+ 
     // Suppress useless ReferenceErrors
     started = ""
     success = ""
     error = ""
-    
+		reset = ""
+ 
     // Fetch new episodes on page load with ajax polling
     function fetch_new_episodes() {
       $("#status").html("<p>Fetching New Episodes</p>");
@@ -53,8 +54,9 @@
         url: "http://podcastapp/podcasts/" + podcast + "/get_update_status",
         success: function(data){
           if (data == "success") {
-            $("#episodes").load("http://podcastapp/podcasts/" + podcast + "/episodes #episodes table", function(){
+            $("#episodes").load("http://podcastapp/podcasts/" + podcast + "/episodes?reload=true #episodes table", function(){
               $("#status").html("<p>Episodes Updated</p>");
+							$.get("http://podcastapp/podcasts/" + podcast + "/reset_update_status");
             });
           } else {
             fetch_new_episodes();
@@ -62,6 +64,6 @@
         }
       });      
     }
-    fetch_new_episodes();
+	  fetch_new_episodes();
   });
 <% end %>

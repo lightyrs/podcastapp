@@ -27,9 +27,19 @@ class PodcastsController < ApplicationController
   # Return episode update status to ajax request
   def get_update_status
     @podcast = Podcast.find(params[:id])
-    
+
     respond_to do |format|
       format.js { render :json => @podcast.episode_update_status }
+    end
+  end
+  
+  # Reset update status after successful update
+  def reset_update_status
+    @podcast = Podcast.find(params[:id])
+    @podcast.update_attributes :episode_update_status => "reset"
+
+    respond_to do |format|
+      format.js { render :json => "reset" }
     end
   end
 
