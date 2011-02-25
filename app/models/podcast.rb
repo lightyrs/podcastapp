@@ -29,7 +29,7 @@ class Podcast < ActiveRecord::Base
   # Create the top 300 url      
   def self.itunes_top_rss
     itunes_url = "http://itunes.apple.com/us/rss/toppodcasts/limit=300/explicit=true/xml"
-    itunes_doc = Nokogiri.HTML(open(itunes_url, 'User-Agent' => 'ruby', :read_timeout => 15.00))
+    itunes_doc = Nokogiri.HTML(open(itunes_url))
     
     # Scrape that url
     Podcast.scrape_from_itunes(itunes_doc)    
@@ -60,7 +60,7 @@ class Podcast < ActiveRecord::Base
       
       # Create the top 300 url for each genre
       itunes_url = "http://itunes.apple.com/us/rss/toppodcasts/limit=300/genre=#{id}/explicit=true/xml"
-      itunes_doc = Nokogiri.HTML(open(itunes_url, 'User-Agent' => 'ruby'))
+      itunes_doc = Nokogiri.HTML(open(itunes_url))
       
       # Scrape that url
       Podcast.scrape_from_itunes(itunes_doc)  
