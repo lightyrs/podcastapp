@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Mention:</b>
+  <%= @mention.mention %>
+</p>
+
+<p>
+  <b>Network:</b>
+  <%= @mention.network %>
+</p>
+
+<p>
+  <b>Username:</b>
+  <%= @mention.username %>
+</p>
+
+<p>
+  <b>Avatar:</b>
+  <%= @mention.avatar %>
+</p>
+
+<p>
+  <b>Sentiment:</b>
+  <%= @mention.sentiment %>
+</p>
+
+<p>
+  <b>Reputation:</b>
+  <%= @mention.reputation %>
+</p>
+
+
+<%= link_to 'Edit', edit_mention_path(@mention) %> |
+<%= link_to 'Back', mentions_path %>

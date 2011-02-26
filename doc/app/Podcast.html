@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>Class: Podcast</title>
+
+	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
+
+	<script src="./js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+
+</head>
+<body class="class">
+
+	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="./index.html">Home</a>
+          <a href="./index.html#classes">Classes</a>
+          <a href="./index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
+		<div id="file-metadata">
+			<div id="file-list-section" class="section">
+				<h3 class="section-header">In Files</h3>
+				<div class="section-body">
+					<ul>
+					
+						<li><a href="./app/models/podcast_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="app/models/podcast.rb">app/models/podcast.rb</a></li>
+					
+					</ul>
+				</div>
+			</div>
+
+			
+		</div>
+
+		<div id="class-metadata">
+
+			<!-- Parent Class -->
+			
+			<div id="parent-class-section" class="section">
+				<h3 class="section-header">Parent</h3>
+				
+				<p class="link">ActiveRecord::Base</p>
+				
+			</div>
+			
+
+			<!-- Namespace Contents -->
+			
+
+			<!-- Method Quickref -->
+			
+			<div id="method-list-section" class="section">
+				<h3 class="section-header">Methods</h3>
+				<ul class="link-list">
+					
+					<li><a href="#method-c-fetch_episodes">::fetch_episodes</a></li>
+					
+					<li><a href="#method-c-itunes_genre_rss">::itunes_genre_rss</a></li>
+					
+					<li><a href="#method-c-itunes_top_rss">::itunes_top_rss</a></li>
+					
+					<li><a href="#method-c-podcast_logger">::podcast_logger</a></li>
+					
+					<li><a href="#method-c-scrape_from_itunes">::scrape_from_itunes</a></li>
+					
+					<li><a href="#method-c-site_and_feed_discovery">::site_and_feed_discovery</a></li>
+					
+					<li><a href="#method-c-social_discovery">::social_discovery</a></li>
+					
+					<li><a href="#method-c-social_relevance">::social_relevance</a></li>
+					
+				</ul>
+			</div>
+			
+
+			<!-- Included Modules -->
+			
+		</div>
+
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="./images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="./ApplicationController.html">ApplicationController</a></li>
+				
+					<li><a href="./ApplicationHelper.html">ApplicationHelper</a></li>
+				
+					<li><a href="./Episode.html">Episode</a></li>
+				
+					<li><a href="./EpisodesController.html">EpisodesController</a></li>
+				
+					<li><a href="./EpisodesHelper.html">EpisodesHelper</a></li>
+				
+					<li><a href="./Mention.html">Mention</a></li>
+				
+					<li><a href="./MentionsController.html">MentionsController</a></li>
+				
+					<li><a href="./MentionsHelper.html">MentionsHelper</a></li>
+				
+					<li><a href="./Podcast.html">Podcast</a></li>
+				
+					<li><a href="./PodcastsController.html">PodcastsController</a></li>
+				
+					<li><a href="./PodcastsHelper.html">PodcastsHelper</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1 class="class">Podcast</h1>
+
+		<div id="description">
+			
+		</div>
+
+		<!-- Constants -->
+		
+
+		<!-- Attributes -->
+		
+
+		<!-- Methods -->
+		
+		<div id="public-class-method-details" class="method-section section">
+			<h3 class="section-header">Public Class Methods</h3>
+
+		
+			<div id="fetch-episodes-method" class="method-detail ">
+				<a name="method-c-fetch_episodes"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">fetch_episodes</span><span
+						class="method-args">(options = {})</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Fetch podcast episodes.
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="fetch-episodes-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/podcast.rb, line 216</span>
+216:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fetch_episodes</span>(<span class="ruby-identifier">options</span> = {})
+217:     <span class="ruby-identifier">new_podcasts_only</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:new_podcasts_only</span>] <span class="ruby-operator">||</span> <span class="ruby-keyword kw">false</span>
+218:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">new_podcasts_only</span>
+219:       <span class="ruby-identifier">podcasts</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id'</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">'created_at &gt; ? and feedurl IS NOT ?'</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-value">24</span>.<span class="ruby-identifier">hours</span>, <span class="ruby-keyword kw">nil</span>])
+220:       <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">podcast_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;#{podcasts.count}&quot;</span>)
+221:     <span class="ruby-keyword kw">else</span>
+222:       <span class="ruby-identifier">podcasts</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id'</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">'feedurl IS NOT ?'</span>, <span class="ruby-keyword kw">nil</span>])
+223:     <span class="ruby-keyword kw">end</span>
+224: 
+225:     <span class="ruby-identifier">podcasts</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">podcast</span><span class="ruby-operator">|</span> <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">fetch_podcast_episodes</span>(<span class="ruby-identifier">podcast</span>.<span class="ruby-identifier">id</span>)}
+226:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="itunes-genre-rss-method" class="method-detail ">
+				<a name="method-c-itunes_genre_rss"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">itunes_genre_rss</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Generate the iTunes top 300 podcasts url (by genre).
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="itunes-genre-rss-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/podcast.rb, line 39</span>
+39:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">itunes_genre_rss</span>
+40:     <span class="ruby-identifier">itunes_genre_codes</span> = {}
+41:     
+42:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'arts'</span>] = <span class="ruby-value str">&quot;1301&quot;</span>
+43:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'business'</span>] = <span class="ruby-value str">&quot;1321&quot;</span>
+44:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'comedy'</span>] = <span class="ruby-value str">&quot;1303&quot;</span>
+45:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'education'</span>] = <span class="ruby-value str">&quot;1304&quot;</span>
+46:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'games_hobbies'</span>] = <span class="ruby-value str">&quot;1323&quot;</span>
+47:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'goverment_organization'</span>] = <span class="ruby-value str">&quot;1325&quot;</span>
+48:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'health'</span>] = <span class="ruby-value str">&quot;1307&quot;</span>
+49:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'kids_family'</span>] = <span class="ruby-value str">&quot;1305&quot;</span>
+50:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'music'</span>] = <span class="ruby-value str">&quot;1310&quot;</span>
+51:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'news_politics'</span>] = <span class="ruby-value str">&quot;1311&quot;</span>
+52:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'religion_spirituality'</span>] = <span class="ruby-value str">&quot;1314&quot;</span>
+53:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'science_medicine'</span>] = <span class="ruby-value str">&quot;1315&quot;</span>
+54:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'society_culture'</span>] = <span class="ruby-value str">&quot;1324&quot;</span>
+55:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'sports_recreation'</span>] = <span class="ruby-value str">&quot;1316&quot;</span>
+56:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'technology'</span>] = <span class="ruby-value str">&quot;1318&quot;</span>
+57:       <span class="ruby-identifier">itunes_genre_codes</span>[<span class="ruby-value str">'tv_film'</span>] = <span class="ruby-value str">&quot;1309&quot;</span>
+58: 
+59:     <span class="ruby-identifier">itunes_genre_codes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">genre</span>, <span class="ruby-identifier">id</span><span class="ruby-operator">|</span>
+60:       
+61:       <span class="ruby-comment cmt"># Create the top 300 url for each genre</span>
+62:       <span class="ruby-identifier">itunes_url</span> = <span class="ruby-node">&quot;http://itunes.apple.com/us/rss/toppodcasts/limit=300/genre=#{id}/explicit=true/xml&quot;</span>
+63:       <span class="ruby-identifier">itunes_doc</span> = <span class="ruby-constant">Nokogiri</span>.<span class="ruby-constant">HTML</span>(<span class="ruby-identifier">open</span>(<span class="ruby-identifier">itunes_url</span>))
+64:       
+65:       <span class="ruby-comment cmt"># Scrape that url</span>
+66:       <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">scrape_from_itunes</span>(<span class="ruby-identifier">itunes_doc</span>)  
+67:     <span class="ruby-keyword kw">end</span>
+68:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="itunes-top-rss-method" class="method-detail ">
+				<a name="method-c-itunes_top_rss"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">itunes_top_rss</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Generate the iTunes top 300 podcasts url (overall).    
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="itunes-top-rss-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/podcast.rb, line 30</span>
+30:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">itunes_top_rss</span>
+31:     <span class="ruby-identifier">itunes_url</span> = <span class="ruby-value str">&quot;http://itunes.apple.com/us/rss/toppodcasts/limit=300/explicit=true/xml&quot;</span>
+32:     <span class="ruby-identifier">itunes_doc</span> = <span class="ruby-constant">Nokogiri</span>.<span class="ruby-constant">HTML</span>(<span class="ruby-identifier">open</span>(<span class="ruby-identifier">itunes_url</span>))
+33:     
+34:     <span class="ruby-comment cmt"># Scrape that url</span>
+35:     <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">scrape_from_itunes</span>(<span class="ruby-identifier">itunes_doc</span>)    
+36:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="podcast-logger-method" class="method-detail ">
+				<a name="method-c-podcast_logger"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">podcast_logger</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Define a custom logger.
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="podcast-logger-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/podcast.rb, line 25</span>
+25:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">podcast_logger</span>
+26:     <span class="ruby-identifier">@@podcast_logger</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;#{RAILS_ROOT}/log/podcast_cron.log&quot;</span>, <span class="ruby-value">3</span>, <span class="ruby-value">524288</span>)
+27:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="scrape-from-itunes-method" class="method-detail ">
+				<a name="method-c-scrape_from_itunes"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">scrape_from_itunes</span><span
+						class="method-args">(itunes_doc)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Parse the xml returned by iTunes.   If the podcast exists, update
+attributes.   Otherwise, create a new podcast.
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="scrape-from-itunes-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/podcast.rb, line 73</span>
+ 73:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">scrape_from_itunes</span>(<span class="ruby-identifier">itunes_doc</span>)
+ 74:     <span class="ruby-identifier">itunes_doc</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">'//feed/entry'</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">entry</span><span class="ruby-operator">|</span>
+ 75:       <span class="ruby-identifier">new_name</span> = <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;./name&quot;</span>).<span class="ruby-identifier">text</span>
+ 76:       <span class="ruby-identifier">podcast</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">new_name</span>})
+ 77:       <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">podcast</span> <span class="ruby-operator">==</span> [])
+ 78:         <span class="ruby-keyword kw">begin</span>
+ 79:           <span class="ruby-identifier">podcast</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">new</span>(
+ 80:             <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;./name&quot;</span>).<span class="ruby-identifier">text</span>,
+ 81:             <span class="ruby-value">:itunesurl</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;./link/@href&quot;</span>).<span class="ruby-identifier">text</span>,
+ 82:             <span class="ruby-value">:category</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;./category/@term&quot;</span>).<span class="ruby-identifier">text</span>,
+ 83:             <span class="ruby-value">:hosts</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;./artist&quot;</span>).<span class="ruby-identifier">text</span>,
+ 84:             <span class="ruby-value">:description</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;./summary&quot;</span>).<span class="ruby-identifier">text</span>,
+ 85:             <span class="ruby-value">:artwork</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;./image[@height='170']&quot;</span>).<span class="ruby-identifier">text</span>  
+ 86:           )
+ 87:           <span class="ruby-identifier">podcast</span>.<span class="ruby-identifier">save</span>
+ 88:           <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;New Podcast: #{podcast.name}&quot;</span>
+ 89:           <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">podcast_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;New Podcast: #{podcast.name}&quot;</span>)
+ 90:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+ 91:           <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;An error of type #{ex.class} happened, message is #{ex.message}&quot;</span>
+ 92:         <span class="ruby-keyword kw">end</span>
+ 93:       <span class="ruby-keyword kw">elsif</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">podcast</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">name</span>.<span class="ruby-identifier">nil?</span>)
+ 94:         <span class="ruby-keyword kw">begin</span>
+ 95:           <span class="ruby-identifier">podcast</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">update_attributes</span>(
+ 96:             <span class="ruby-value">:itunesurl</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;./link/@href&quot;</span>).<span class="ruby-identifier">text</span>,
+ 97:             <span class="ruby-value">:category</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;./category/@term&quot;</span>).<span class="ruby-identifier">text</span>,
+ 98:             <span class="ruby-value">:hosts</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;./artist&quot;</span>).<span class="ruby-identifier">text</span>,
+ 99:             <span class="ruby-value">:description</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;./summary&quot;</span>).<span class="ruby-identifier">text</span>,
+100:             <span class="ruby-value">:artwork</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;./image[@height='170']&quot;</span>).<span class="ruby-identifier">text</span>            
+101:           )
+102:           <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Update Podcast: #{podcast[0].name}&quot;</span>
+103:           <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">podcast_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;Update Podcast: #{podcast[0].name}&quot;</span>)
+104:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+105:           <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;An error of type #{ex.class} happened, message is #{ex.message}&quot;</span>
+106:         <span class="ruby-keyword kw">end</span>
+107:       <span class="ruby-keyword kw">else</span>
+108:         <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;StandardError&quot;</span>
+109:       <span class="ruby-keyword kw">end</span>
+110:     <span class="ruby-keyword kw">end</span>
+111:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="site-and-feed-discovery-method" class="method-detail ">
+				<a name="method-c-site_and_feed_discovery"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">site_and_feed_discovery</span><span
+						class="method-args">(options = {})</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Scrape the podcast site url and feed url from the iTunes doc.
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="site-and-feed-discovery-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/podcast.rb, line 114</span>
+114:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">site_and_feed_discovery</span>(<span class="ruby-identifier">options</span> = {})
+115:     <span class="ruby-identifier">new_podcasts_only</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:new_podcasts_only</span>] <span class="ruby-operator">||</span> <span class="ruby-keyword kw">false</span>
+116:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">new_podcasts_only</span>
+117:       <span class="ruby-identifier">podcast</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id, itunesurl, name'</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">'created_at &gt; ?'</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-value">24</span>.<span class="ruby-identifier">hours</span>])
+118:       <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">podcast_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;#{podcast.count}&quot;</span>)
+119:     <span class="ruby-keyword kw">else</span>
+120:       <span class="ruby-identifier">podcast</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id, itunesurl, name'</span>)
+121:     <span class="ruby-keyword kw">end</span>
+122:     <span class="ruby-identifier">podcast</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">pod</span> <span class="ruby-operator">|</span>
+123:       <span class="ruby-keyword kw">begin</span>
+124:         <span class="ruby-identifier">site_url</span> = <span class="ruby-constant">Nokogiri</span>.<span class="ruby-constant">HTML</span>(<span class="ruby-identifier">open</span>(<span class="ruby-identifier">pod</span>.<span class="ruby-identifier">itunesurl</span>, <span class="ruby-value str">'User-Agent'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'ruby'</span>, <span class="ruby-value">:timeout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">15</span>)).<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;//a[text()='Podcast Website']/@href&quot;</span>).<span class="ruby-identifier">text</span>
+125:         <span class="ruby-identifier">pod</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-value">:siteurl</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">site_url</span>)
+126:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{site_url}&quot;</span>
+127:         <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">podcast_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-identifier">site_url</span>)
+128:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+129:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;An error of type #{ex.class} happened, message is #{ex.message}&quot;</span>
+130:       <span class="ruby-keyword kw">end</span>
+131:       <span class="ruby-keyword kw">begin</span>
+132:         <span class="ruby-identifier">feed_url</span> = <span class="ruby-constant">Imasquerade</span><span class="ruby-operator">::</span><span class="ruby-constant">Extractor</span>.<span class="ruby-identifier">parse_itunes_uri</span>(<span class="ruby-identifier">pod</span>.<span class="ruby-identifier">itunesurl</span>)
+133:         <span class="ruby-identifier">pod</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-value">:feedurl</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">feed_url</span>)
+134:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{feed_url}&quot;</span>
+135:         <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">podcast_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;#{feed_url}&quot;</span>)
+136:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+137:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;An error of type #{ex.class} happened, message is #{ex.message}&quot;</span>
+138:       <span class="ruby-keyword kw">end</span>
+139:     <span class="ruby-keyword kw">end</span>
+140:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="social-discovery-method" class="method-detail ">
+				<a name="method-c-social_discovery"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">social_discovery</span><span
+						class="method-args">(options = {})</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Scrape the podcast twitter and facebook urls from the site doc.
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="social-discovery-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/podcast.rb, line 143</span>
+143:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">social_discovery</span>(<span class="ruby-identifier">options</span> = {})
+144:     <span class="ruby-identifier">new_podcasts_only</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:new_podcasts_only</span>] <span class="ruby-operator">||</span> <span class="ruby-keyword kw">false</span>
+145:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">new_podcasts_only</span>
+146:       <span class="ruby-identifier">podcast</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id, siteurl, name'</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">'created_at &gt; ?'</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-value">24</span>.<span class="ruby-identifier">hours</span>])
+147:       <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">podcast_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;#{podcast.count}&quot;</span>)
+148:     <span class="ruby-keyword kw">else</span>
+149:       <span class="ruby-identifier">podcast</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id, siteurl, name'</span>)
+150:     <span class="ruby-keyword kw">end</span>
+151:     
+152:     <span class="ruby-comment cmt"># TODO Handle Nokogiri Errno:: Errors</span>
+153:     <span class="ruby-identifier">podcast</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">pod</span> <span class="ruby-operator">|</span>
+154:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{pod.name}&quot;</span>
+155:       <span class="ruby-keyword kw">begin</span> 
+156:         <span class="ruby-comment cmt"># Make sure the url is readable by open-uri</span>
+157:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pod</span>.<span class="ruby-identifier">siteurl</span>.<span class="ruby-identifier">include?</span> <span class="ruby-value str">'http://'</span>
+158:           <span class="ruby-identifier">pod_site</span> = <span class="ruby-identifier">pod</span>.<span class="ruby-identifier">siteurl</span>
+159:         <span class="ruby-keyword kw">else</span>
+160:           <span class="ruby-identifier">pod_site</span> = <span class="ruby-identifier">pod</span>.<span class="ruby-identifier">siteurl</span>.<span class="ruby-identifier">insert</span> <span class="ruby-value">0</span>, <span class="ruby-value str">&quot;http://&quot;</span>
+161:         <span class="ruby-keyword kw">end</span>
+162:  
+163:         <span class="ruby-comment cmt"># Skip all of this if we're dealing with a feed</span>
+164:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">pod_site</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/.rss|.xml|libsyn/</span>
+165:           <span class="ruby-identifier">pod_doc</span> = <span class="ruby-constant">Nokogiri</span>.<span class="ruby-constant">HTML</span>(<span class="ruby-identifier">open</span>(<span class="ruby-identifier">pod_site</span>, <span class="ruby-value str">'User-Agent'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'ruby'</span>, <span class="ruby-value">:timeout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">15</span>))
+166:           <span class="ruby-identifier">pod_name_fragment</span> = <span class="ruby-identifier">pod</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot; &quot;</span>)[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_s</span>
+167:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pod_name_fragment</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;the&quot;</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">pod_name_fragment</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;a&quot;</span>
+168:             <span class="ruby-identifier">pod_name_fragment</span> = <span class="ruby-identifier">pod</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot; &quot;</span>)[<span class="ruby-value">1</span>].<span class="ruby-identifier">to_s</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">pod</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot; &quot;</span>)[<span class="ruby-value">1</span>].<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">nil?</span>
+169:           <span class="ruby-keyword kw">end</span>
+170:           <span class="ruby-identifier">doc_links</span> = <span class="ruby-identifier">pod_doc</span>.<span class="ruby-identifier">css</span>(<span class="ruby-value str">'a'</span>)
+171:           
+172:           <span class="ruby-comment cmt"># If a social url contains part of the podcast name, grab that</span>
+173:           <span class="ruby-comment cmt"># If not, grab the first one you find within our conditions</span>
+174:           <span class="ruby-comment cmt"># Give Nokogiri some room to breathe with pessimistic StandardError handling</span>
+175:           <span class="ruby-keyword kw">begin</span>
+176:             <span class="ruby-identifier">twitter_url</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">social_relevance</span>(<span class="ruby-identifier">doc_links</span>, <span class="ruby-value str">&quot;twitter.com&quot;</span>, <span class="ruby-identifier">pod_name_fragment</span>, <span class="ruby-value str">&quot;share|status&quot;</span>)
+177:             <span class="ruby-identifier">facebook_url</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">social_relevance</span>(<span class="ruby-identifier">doc_links</span>, <span class="ruby-value str">&quot;facebook.com&quot;</span>, <span class="ruby-identifier">pod_name_fragment</span>, <span class="ruby-value str">&quot;share|.event|placement=&quot;</span>)
+178:           <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+179:             <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;ANTISOCIAL&quot;</span>
+180:           <span class="ruby-comment cmt"># Ensure that the urls get saved regardless of what else happens</span>
+181:           <span class="ruby-keyword kw">ensure</span>
+182:             <span class="ruby-identifier">pod</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-value">:twitter</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">twitter_url</span>, <span class="ruby-value">:facebook</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">facebook_url</span>)            
+183:           <span class="ruby-keyword kw">end</span>      
+184:      
+185:           <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{twitter_url}&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;#{facebook_url}&quot;</span>
+186:           <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">podcast_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;#{twitter_url}&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;#{facebook_url}&quot;</span>)
+187:         <span class="ruby-keyword kw">end</span>
+188:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+189:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;FINAL StandardError: #{ex.class} + #{ex.message}&quot;</span>
+190:       <span class="ruby-keyword kw">end</span>
+191:     <span class="ruby-keyword kw">end</span>  
+192:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="social-relevance-method" class="method-detail ">
+				<a name="method-c-social_relevance"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">social_relevance</span><span
+						class="method-args">(doc_links, social_network, pod_name_fragment, regex)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+If a social url contains part of the podcast name, grab that.   If not,
+grab the first one you find within our conditions.   Give Nokogiri some
+room to breathe with pessimistic StandardError handling.  
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="social-relevance-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/podcast.rb, line 197</span>
+197:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">social_relevance</span>(<span class="ruby-identifier">doc_links</span>, <span class="ruby-identifier">social_network</span>, <span class="ruby-identifier">pod_name_fragment</span>, <span class="ruby-identifier">regex</span>)
+198:     <span class="ruby-keyword kw">begin</span>
+199:       <span class="ruby-keyword kw">begin</span>       
+200:         <span class="ruby-identifier">social_links</span> = <span class="ruby-identifier">doc_links</span>.<span class="ruby-identifier">find</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">link</span><span class="ruby-operator">|</span> <span class="ruby-identifier">link</span>[<span class="ruby-value str">'href'</span>].<span class="ruby-identifier">match</span>(<span class="ruby-node">/#{social_network}/</span>) <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">link</span>[<span class="ruby-value str">'href'</span>].<span class="ruby-identifier">match</span>(<span class="ruby-node">/#{pod_name_fragment}/</span>).<span class="ruby-identifier">to_s</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">link</span>[<span class="ruby-value str">'href'</span>].<span class="ruby-identifier">match</span>(<span class="ruby-node">/#{regex}/</span>)}.<span class="ruby-identifier">attribute</span>(<span class="ruby-value str">'href'</span>).<span class="ruby-identifier">to_s</span> 
+201:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+202:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">doc_links</span>.<span class="ruby-identifier">find</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">link</span><span class="ruby-operator">|</span> <span class="ruby-identifier">link</span>[<span class="ruby-value str">'href'</span>].<span class="ruby-identifier">match</span>(<span class="ruby-node">/#{social_network}/</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">link</span>[<span class="ruby-value str">'href'</span>].<span class="ruby-identifier">match</span>(<span class="ruby-node">/#{regex}/</span>)}.<span class="ruby-identifier">nil?</span>
+203:           <span class="ruby-identifier">social_links</span> = <span class="ruby-keyword kw">nil</span>
+204:         <span class="ruby-keyword kw">else</span>       
+205:           <span class="ruby-identifier">social_links</span> = <span class="ruby-identifier">doc_links</span>.<span class="ruby-identifier">find</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">link</span><span class="ruby-operator">|</span> <span class="ruby-identifier">link</span>[<span class="ruby-value str">'href'</span>].<span class="ruby-identifier">match</span>(<span class="ruby-node">/#{social_network}/</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">link</span>[<span class="ruby-value str">'href'</span>].<span class="ruby-identifier">match</span>(<span class="ruby-node">/#{regex}/</span>)}.<span class="ruby-identifier">attribute</span>(<span class="ruby-value str">'href'</span>).<span class="ruby-identifier">to_s</span>
+206:         <span class="ruby-keyword kw">end</span>
+207:       <span class="ruby-keyword kw">end</span>
+208:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+209:     <span class="ruby-comment cmt"># Ensure that the urls get saved regardless of what else happens</span>
+210:     <span class="ruby-keyword kw">ensure</span>
+211:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">social_links</span>.<span class="ruby-identifier">to_s</span>    
+212:     <span class="ruby-keyword kw">end</span>
+213:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+		</div>
+	
+
+	</div>
+
+
+	<div id="rdoc-debugging-section-dump" class="debugging-section">
+	
+		<p>Disabled; run with --debug to generate this.</p>
+	
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+
+</body>
+</html>
+

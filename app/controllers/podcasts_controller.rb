@@ -10,6 +10,7 @@ class PodcastsController < ApplicationController
     end
   end
   
+  # Search podcasts
   def search
     @search = Sunspot.search(Podcast) do
       keywords(params[:q])

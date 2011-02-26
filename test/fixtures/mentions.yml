@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  mention: MyText
+  network: MyString
+  username: MyString
+  avatar: MyString
+  sentiment: 1.5
+  reputation: 1.5
+
+two:
+  mention: MyText
+  network: MyString
+  username: MyString
+  avatar: MyString
+  sentiment: 1.5
+  reputation: 1.5

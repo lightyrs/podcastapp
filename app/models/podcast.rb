@@ -3,14 +3,14 @@
 # Class: Podcast
 #
 ###################################################################################################
-require 'rubygems'
-require 'open-uri'
+require 'curb_openuri'
 require 'nokogiri'
 require 'will_paginate'
 
 class Podcast < ActiveRecord::Base
   
   has_many :episodes, :dependent => :destroy
+  has_many :mentions, :dependent => :destroy
   
   validates_uniqueness_of :name
   
@@ -21,12 +21,12 @@ class Podcast < ActiveRecord::Base
     text :name
   end
   
-  # Define a custom logger  
+  # Define a custom logger.
   def self.podcast_logger
     @@podcast_logger ||= Logger.new("#{RAILS_ROOT}/log/podcast_cron.log", 3, 524288)
   end
   
-  # Create the top 300 url      
+  # Generate the iTunes top 300 podcasts url (overall).    
   def self.itunes_top_rss
     itunes_url = "http://itunes.apple.com/us/rss/toppodcasts/limit=300/explicit=true/xml"
     itunes_doc = Nokogiri.HTML(open(itunes_url))
@@ -35,7 +35,7 @@ class Podcast < ActiveRecord::Base
     Podcast.scrape_from_itunes(itunes_doc)    
   end
   
-  # Podcast genres from itunes
+  # Generate the iTunes top 300 podcasts url (by genre).
   def self.itunes_genre_rss
     itunes_genre_codes = {}
     
@@ -67,9 +67,9 @@ class Podcast < ActiveRecord::Base
     end
   end 
   
-  # Parse the returned xml
-  # If the podcast exists, update attributes
-  # Otherwise, create a new podcast
+  # Parse the xml returned by iTunes.  
+  # If the podcast exists, update attributes.  
+  # Otherwise, create a new podcast.
   def self.scrape_from_itunes(itunes_doc)
     itunes_doc.xpath('//feed/entry').map do |entry|
       new_name = entry.xpath("./name").text
@@ -110,7 +110,7 @@ class Podcast < ActiveRecord::Base
     end
   end  
   
-  # Scrape the podcast site url and feed url from the itunes doc
+  # Scrape the podcast site url and feed url from the iTunes doc.
   def self.site_and_feed_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
@@ -121,7 +121,7 @@ class Podcast < ActiveRecord::Base
     end
     podcast.each do | pod |
       begin
-        site_url = Nokogiri.HTML(open(pod.itunesurl, 'User-Agent' => 'ruby', :read_timeout => 15.00)).xpath("//a[text()='Podcast Website']/@href").text
+        site_url = Nokogiri.HTML(open(pod.itunesurl, 'User-Agent' => 'ruby', :timeout => 15)).xpath("//a[text()='Podcast Website']/@href").text
         pod.update_attributes(:siteurl => site_url)
         puts "#{site_url}"
         Podcast.podcast_logger.info(site_url)
@@ -139,8 +139,7 @@ class Podcast < ActiveRecord::Base
     end
   end  
 
-  # Scrape the podcast twitter and facebook urls from the site doc
-  # TODO Handle Nokogiri Errno:: Errors, Facebook iframe urls 
+  # Scrape the podcast twitter and facebook urls from the site doc.
   def self.social_discovery(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
@@ -150,6 +149,7 @@ class Podcast < ActiveRecord::Base
       podcast = Podcast.find(:all, :select => 'id, siteurl, name')
     end
     
+    # TODO Handle Nokogiri Errno:: Errors
     podcast.each do | pod |
       puts "#{pod.name}"
       begin 
@@ -162,7 +162,7 @@ class Podcast < ActiveRecord::Base
  
         # Skip all of this if we're dealing with a feed
         unless pod_site.downcase =~ /.rss|.xml|libsyn/i
-          pod_doc = Nokogiri.HTML(open(pod_site, 'User-Agent' => 'ruby', :read_timeout => 15.00))
+          pod_doc = Nokogiri.HTML(open(pod_site, 'User-Agent' => 'ruby', :timeout => 15))
           pod_name_fragment = pod.name.split(" ")[0].to_s
           if pod_name_fragment.downcase == "the" or pod_name_fragment.downcase == "a"
             pod_name_fragment = pod.name.split(" ")[1].to_s unless pod.name.split(" ")[1].to_s.nil?
@@ -191,9 +191,9 @@ class Podcast < ActiveRecord::Base
     end  
   end
   
-  # If a social url contains part of the podcast name, grab that
-  # If not, grab the first one you find within our conditions
-  # Give Nokogiri some room to breathe with pessimistic StandardError handling  
+  # If a social url contains part of the podcast name, grab that.  
+  # If not, grab the first one you find within our conditions.  
+  # Give Nokogiri some room to breathe with pessimistic StandardError handling.  
   def self.social_relevance(doc_links, social_network, pod_name_fragment, regex)
     begin
       begin       
@@ -212,7 +212,7 @@ class Podcast < ActiveRecord::Base
     end
   end
   
-  # Fetch podcast episodes
+  # Fetch podcast episodes.
   def self.fetch_episodes(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only

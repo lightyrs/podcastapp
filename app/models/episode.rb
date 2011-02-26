@@ -3,8 +3,7 @@
 # Class: Episode
 #
 ###################################################################################################
-require 'rubygems'
-require 'open-uri'
+require 'curb_openuri'
 require 'nokogiri'
 require 'will_paginate'
 
@@ -14,12 +13,12 @@ class Episode < ActiveRecord::Base
   
   validates_uniqueness_of :title, :scope => :podcast_id
 
-  # Define a custom logger  
+  # Define a custom logger.
   def self.episode_logger
     @@episode_logger ||= Logger.new("#{RAILS_ROOT}/log/episode_cron.log", 3, 524288)
   end
   
-  # Fetch the latest episodes for the podcast
+  # Fetch the latest episodes for the podcast.
   def self.fetch_podcast_episodes(podcast)
     
     @podcast = Podcast.find(podcast, :select => 'id, name, feedurl')
@@ -29,7 +28,7 @@ class Episode < ActiveRecord::Base
     @podcast.update_attributes :episode_update_status => 'started'
     
     begin
-      @doc = Nokogiri.XML(open(@feed, :read_timeout => 25.00)).remove_namespaces!
+      @doc = Nokogiri.XML(open(@feed, :timeout => 25)).remove_namespaces!
       @episodes = @doc.xpath("//item")
     rescue StandardError => ex
       puts "#{ex.class}:#{ex.message}"
@@ -138,6 +137,7 @@ class Episode < ActiveRecord::Base
     @podcast.update_attributes :episode_update_status => 'success'
   end
   
+  # Return the text of the xpath result.
   def self.parse_nodes(xpath)
     node_value = xpath.text unless xpath.nil?
     return node_value

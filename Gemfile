@@ -11,15 +11,24 @@ gem 'whenever'
 # Background Jobs
 gem 'delayed_job'
 
+# HTTP Requests
+gem 'curb-openuri'
+
 # HTML/XML Parsing
 gem 'nokogiri'
 gem 'imasquerade'
 
 # Pagination
-gem "will_paginate", "~> 3.0.pre2"
+gem 'will_paginate', '3.0.pre2'
 
 # Full-Text Search
 gem 'sunspot_rails', '1.2'
+
+# Facebook
+gem 'koala', '1.0.0.beta'
+
+# Twitter
+gem 'twitter'
 
 ####################################################################
 
