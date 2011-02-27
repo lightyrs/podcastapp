@@ -5,6 +5,9 @@ gem 'rails', '3.0.1'
 # SQLite
 gem 'sqlite3-ruby', :require => 'sqlite3'
 
+# irb Enhancements
+gem 'awesome_print'
+
 # Scheduled Jobs
 gem 'whenever'
 
