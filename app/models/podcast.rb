@@ -197,12 +197,12 @@ class Podcast < ActiveRecord::Base
   def self.social_relevance(doc_links, social_network, pod_name_fragment, regex)
     begin
       begin       
-        social_links = doc_links.find {|link| link['href'].match(/#{social_network}/i) and link['href'].match(/#{pod_name_fragment}/i).to_s != "" unless link['href'].match(/#{regex}/i)}.attribute('href').to_s 
+        social_links = doc_links.find {|link| link['href'].to_s.match(/#{social_network}/i) and link['href'].to_s.match(/#{pod_name_fragment}/i).to_s != "" unless link['href'].to_s.match(/#{regex}/i)}.attribute('href').to_s 
       rescue StandardError => ex
-        if doc_links.find {|link| link['href'].match(/#{social_network}/i) unless link['href'].match(/#{regex}/i)}.nil?
+        if doc_links.find {|link| link['href'].to_s.match(/#{social_network}/i) unless link['href'].to_s.match(/#{regex}/i)}.nil?
           social_links = nil
         else       
-          social_links = doc_links.find {|link| link['href'].match(/#{social_network}/i) unless link['href'].match(/#{regex}/i)}.attribute('href').to_s
+          social_links = doc_links.find {|link| link['href'].to_s.match(/#{social_network}/i) unless link['href'].to_s.match(/#{regex}/i)}.attribute('href').to_s
         end
       end
     rescue StandardError => ex
