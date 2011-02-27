@@ -31,10 +31,14 @@ namespace :maintenance do
     sleep 3
   end
   
+  desc "Restart Server"
+  task :restart_server => :generate_docs do
+    `touch tmp/restart.txt`
+  end
+  
   desc "Daily Maintenance"
-  task :daily => :generate_docs do
-    # Invoke the daily maintenance tasks
-    puts `touch tmp/restart.txt`
+  task :daily => :restart_server do
+    Rake::Task['initialize:all'].invoke
   end
   
 end

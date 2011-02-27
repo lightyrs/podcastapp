@@ -19,8 +19,7 @@ class Episode < ActiveRecord::Base
   end
   
   # Fetch the latest episodes for the podcast.
-  def self.fetch_podcast_episodes(podcast)
-    
+  def self.fetch_podcast_episodes(podcast)   
     @podcast = Podcast.find(podcast, :select => 'id, name, feedurl')
     @feed = @podcast.feedurl
     puts "#{@feed}"
@@ -28,7 +27,7 @@ class Episode < ActiveRecord::Base
     @podcast.update_attributes :episode_update_status => 'started'
     
     begin
-      @doc = Nokogiri.XML(open(@feed, :timeout => 25)).remove_namespaces!
+      @doc = Nokogiri.XML(open(@feed, 'User-Agent' => 'ruby', :timeout => 25, :max_redirects => 10)).remove_namespaces!
       @episodes = @doc.xpath("//item")
     rescue StandardError => ex
       puts "#{ex.class}:#{ex.message}"

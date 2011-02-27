@@ -121,7 +121,7 @@ class Podcast < ActiveRecord::Base
     end
     podcast.each do | pod |
       begin
-        site_url = Nokogiri.HTML(open(pod.itunesurl, 'User-Agent' => 'ruby', :timeout => 15)).xpath("//a[text()='Podcast Website']/@href").text
+        site_url = Nokogiri.HTML(open(pod.itunesurl, 'User-Agent' => 'ruby', :timeout => 15, :max_redirects => 10)).xpath("//a[text()='Podcast Website']/@href").text
         pod.update_attributes(:siteurl => site_url)
         puts "#{site_url}"
         Podcast.podcast_logger.info(site_url)
@@ -162,16 +162,16 @@ class Podcast < ActiveRecord::Base
  
         # Skip all of this if we're dealing with a feed
         unless pod_site.downcase =~ /.rss|.xml|libsyn/i
-          pod_doc = Nokogiri.HTML(open(pod_site, 'User-Agent' => 'ruby', :timeout => 15))
+          pod_doc = Nokogiri.HTML(open(pod_site, 'User-Agent' => 'ruby', :timeout => 15, :max_redirects => 10))
           pod_name_fragment = pod.name.split(" ")[0].to_s
           if pod_name_fragment.downcase == "the" or pod_name_fragment.downcase == "a"
             pod_name_fragment = pod.name.split(" ")[1].to_s unless pod.name.split(" ")[1].to_s.nil?
           end
           doc_links = pod_doc.css('a')
           
-          # If a social url contains part of the podcast name, grab that
-          # If not, grab the first one you find within our conditions
-          # Give Nokogiri some room to breathe with pessimistic StandardError handling
+          # If a social url contains part of the podcast name, grab that.  
+          # If not, grab the first one you find within our conditions.  
+          # Give Nokogiri some room to breathe with pessimistic StandardError handling.
           begin
             twitter_url = Podcast.social_relevance(doc_links, "twitter.com", pod_name_fragment, "share|status")
             facebook_url = Podcast.social_relevance(doc_links, "facebook.com", pod_name_fragment, "share|.event|placement=")
