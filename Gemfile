@@ -15,7 +15,7 @@ gem 'whenever'
 gem 'delayed_job'
 
 # HTTP Requests
-gem 'curb-openuri'
+gem 'httparty'
 
 # HTML/XML Parsing
 gem 'nokogiri'

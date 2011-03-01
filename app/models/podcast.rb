@@ -3,8 +3,8 @@
 # Class: Podcast
 #
 ###################################################################################################
-require 'curb_openuri'
 require 'nokogiri'
+require 'httparty'
 require 'will_paginate'
 
 class Podcast < ActiveRecord::Base
@@ -29,7 +29,7 @@ class Podcast < ActiveRecord::Base
   # Generate the iTunes top 300 podcasts url (overall).    
   def self.itunes_top_rss
     itunes_url = "http://itunes.apple.com/us/rss/toppodcasts/limit=300/explicit=true/xml"
-    itunes_doc = Nokogiri.HTML(open(itunes_url))
+    itunes_doc = Nokogiri.HTML(HTTParty.get(itunes_url, :format => :html))
     
     # Scrape that url
     Podcast.scrape_from_itunes(itunes_doc)    
@@ -60,7 +60,7 @@ class Podcast < ActiveRecord::Base
       
       # Create the top 300 url for each genre
       itunes_url = "http://itunes.apple.com/us/rss/toppodcasts/limit=300/genre=#{id}/explicit=true/xml"
-      itunes_doc = Nokogiri.HTML(open(itunes_url))
+      itunes_doc = Nokogiri.HTML(HTTParty.get(itunes_url, :format => :html))
       
       # Scrape that url
       Podcast.scrape_from_itunes(itunes_doc)  
@@ -121,7 +121,7 @@ class Podcast < ActiveRecord::Base
     end
     podcast.each do | pod |
       begin
-        site_url = Nokogiri.HTML(open(pod.itunesurl, 'User-Agent' => 'ruby', :timeout => 15, :max_redirects => 10)).xpath("//a[text()='Podcast Website']/@href").text
+        site_url = Nokogiri.HTML(HTTParty.get(pod.itunesurl, 'User-Agent' => 'ruby', :timeout => 15, :limit => 10)).xpath("//a[text()='Podcast Website']/@href").text
         pod.update_attributes(:siteurl => site_url)
         puts "#{site_url}"
         Podcast.podcast_logger.info(site_url)
@@ -162,7 +162,7 @@ class Podcast < ActiveRecord::Base
  
         # Skip all of this if we're dealing with a feed
         unless pod_site.downcase =~ /.rss|.xml|libsyn/i
-          pod_doc = Nokogiri.HTML(open(pod_site, 'User-Agent' => 'ruby', :timeout => 15, :max_redirects => 10))
+          pod_doc = Nokogiri.HTML(HTTParty.get(pod_site, 'User-Agent' => 'ruby', :timeout => 15, :limit => 10))
           pod_name_fragment = pod.name.split(" ")[0].to_s
           if pod_name_fragment.downcase == "the" or pod_name_fragment.downcase == "a"
             pod_name_fragment = pod.name.split(" ")[1].to_s unless pod.name.split(" ")[1].to_s.nil?

@@ -3,8 +3,8 @@
 # Class: Episode
 #
 ###################################################################################################
-require 'curb_openuri'
 require 'nokogiri'
+require 'httparty'
 require 'will_paginate'
 
 class Episode < ActiveRecord::Base
@@ -27,7 +27,7 @@ class Episode < ActiveRecord::Base
     @podcast.update_attributes :episode_update_status => 'started'
     
     begin
-      @doc = Nokogiri.XML(open(@feed, 'User-Agent' => 'ruby', :timeout => 25, :max_redirects => 10)).remove_namespaces!
+      @doc = Nokogiri.XML(HTTParty.get(@feed, 'User-Agent' => 'ruby', :format => :html, :timeout => 15, :limit => 10)).remove_namespaces!
       @episodes = @doc.xpath("//item")
     rescue StandardError => ex
       puts "#{ex.class}:#{ex.message}"
