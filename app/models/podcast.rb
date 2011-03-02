@@ -153,7 +153,7 @@ class Podcast < ActiveRecord::Base
     podcast.each do | pod |
       puts "#{pod.name}"
       begin 
-        # Make sure the url is readable by open-uri
+        # Make sure the url is readable by httparty
         if pod.siteurl.include? 'http://'
           pod_site = pod.siteurl
         else
@@ -162,7 +162,13 @@ class Podcast < ActiveRecord::Base
  
         # Skip all of this if we're dealing with a feed
         unless pod_site.downcase =~ /.rss|.xml|libsyn/i
-          pod_doc = Nokogiri.HTML(HTTParty.get(pod_site, 'User-Agent' => 'ruby', :timeout => 15, :limit => 10))
+          begin
+            pod_doc = Nokogiri.HTML(HTTParty.get(pod_site, 'User-Agent' => 'ruby', :timeout => 15, :limit => 10))
+          rescue HTTParty::UnsupportedURIScheme => ex
+            dir = ex.message.split("'")[1]
+            pod_site = "http://" + pod_site.split("/")[2] + dir
+            pod_doc = Nokogiri.HTML(HTTParty.get(pod_site, 'User-Agent' => 'ruby', :timeout => 15, :limit => 10))
+          end
           pod_name_fragment = pod.name.split(" ")[0].to_s
           if pod_name_fragment.downcase == "the" or pod_name_fragment.downcase == "a"
             pod_name_fragment = pod.name.split(" ")[1].to_s unless pod.name.split(" ")[1].to_s.nil?
@@ -175,8 +181,6 @@ class Podcast < ActiveRecord::Base
           begin
             twitter_url = Podcast.social_relevance(doc_links, "twitter.com", pod_name_fragment, "share|status")
             facebook_url = Podcast.social_relevance(doc_links, "facebook.com", pod_name_fragment, "share|.event|placement=")
-          rescue StandardError => ex
-            puts "ANTISOCIAL"
           # Ensure that the urls get saved regardless of what else happens
           ensure
             pod.update_attributes(:twitter => twitter_url, :facebook => facebook_url)            
@@ -206,7 +210,7 @@ class Podcast < ActiveRecord::Base
         end
       end
     rescue StandardError => ex
-    # Ensure that the urls get saved regardless of what else happens
+      # Ensure that the urls get saved regardless of what else happens
     ensure
       return social_links.to_s    
     end
