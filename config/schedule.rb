@@ -23,16 +23,16 @@
 set :environment, "development"
 
 # Run daily maintenance cron every night
-every 1.day, :at => '11:00 pm' do
-  rake 'maintenance:daily &> /dev/null'
-end
+#every 1.day, :at => '11:00 pm' do
+#  rake 'maintenance:daily &> /dev/null'
+#end
 
 # Scrape podcasts but only update new podcasts (and don't send local mail)
-every [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday], :at => '12:30 am' do
-  rake 'podcast:generate_inventory["new"] &> /dev/null'
-end
+#every [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday], :at => '12:30 am' do
+#  rake 'podcast:generate_inventory["new"] &> /dev/null'
+#end
 
 # Scrape and update all podcasts (and don't send local mail)
-every :sunday, :at => '12:30 am' do
-  rake "podcast:generate_inventory &> /dev/null" 
-end
+#every :sunday, :at => '12:30 am' do
+#  rake "podcast:generate_inventory &> /dev/null" 
+#end

@@ -32,6 +32,7 @@ gem 'koala', '1.0.0.beta'
 
 # Twitter
 gem 'twitter'
+gem 'tweetstream'
 
 ####################################################################
 

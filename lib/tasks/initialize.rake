@@ -27,9 +27,18 @@ namespace :initialize do
       puts "#{ex.class}"
     end
   end
+  
+  desc "Start Mentions Cron"
+  task :start_mentions_cron => :start_delayed_job do
+    begin
+      `rake mentions:firehose["podcast-podcasts-podcasting"]`
+    rescue => ex
+      puts "#{ex.class}"
+    end
+  end
 
   desc "Initialize All"
-  task :all => :start_delayed_job do
+  task :all => :start_mentions_cron do
     puts "All Dependencies Initialized"
   end
   

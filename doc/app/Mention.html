@@ -71,6 +71,8 @@
 					
 					<li><a href="#method-c-mention_logger">::mention_logger</a></li>
 					
+					<li><a href="#method-c-tweetfeel">::tweetfeel</a></li>
+					
 				</ul>
 			</div>
 			
@@ -178,10 +180,59 @@ Define a custom logger.
 					<div class="method-source-code"
 						id="mention-logger-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/models/mention.rb, line 14</span>
-14:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">mention_logger</span>
-15:     <span class="ruby-identifier">@@mention_logger</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;#{RAILS_ROOT}/log/mention_cron.log&quot;</span>, <span class="ruby-value">3</span>, <span class="ruby-value">524288</span>)
-16:   <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File app/models/mention.rb, line 16</span>
+16:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">mention_logger</span>
+17:     <span class="ruby-identifier">@@mention_logger</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;#{RAILS_ROOT}/log/mention_cron.log&quot;</span>, <span class="ruby-value">3</span>, <span class="ruby-value">524288</span>)
+18:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="tweetfeel-method" class="method-detail ">
+				<a name="method-c-tweetfeel"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">tweetfeel</span><span
+						class="method-args">(podcast, query)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="tweetfeel-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/mention.rb, line 20</span>
+20:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tweetfeel</span>(<span class="ruby-identifier">podcast</span>, <span class="ruby-identifier">query</span>)
+21:     <span class="ruby-identifier">api_key</span> = <span class="ruby-value str">&quot;SElZYChiRn7riNKYfR7vL-DAPMwG_l8I&quot;</span>
+22:     
+23:     <span class="ruby-comment cmt"># The TweetFeel API is accessed using HTTP GET requests to the following URL:</span>
+24:     <span class="ruby-identifier">api_url</span> = <span class="ruby-node">&quot;http://svc.webservius.com/v1/tweetFeel/tfapi?wsvKey=#{api_key}&amp;keyword=#{CGI::escape(query)}&amp;type=all&amp;maxresults=1500&quot;</span>
+25:     
+26:     <span class="ruby-keyword kw">begin</span>
+27:       <span class="ruby-identifier">score</span> = <span class="ruby-constant">HTTParty</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">api_url</span>)[<span class="ruby-value str">'score'</span>].<span class="ruby-identifier">to_f</span>
+28:     
+29:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">score</span> <span class="ruby-operator">==</span> <span class="ruby-value">0.0</span>
+30:         <span class="ruby-identifier">podcast</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-value">:sentiment</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">score</span>)
+31:       <span class="ruby-keyword kw">end</span>
+32:       
+33:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{score}&quot;</span>
+34:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span>
+35:       <span class="ruby-comment cmt"># Save us</span>
+36:     <span class="ruby-keyword kw">end</span>
+37:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>

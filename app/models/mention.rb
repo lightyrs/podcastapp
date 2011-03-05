@@ -5,6 +5,9 @@
 ###################################################################################################
 require 'koala'
 require 'twitter'
+require 'tweetstream'
+require 'nokogiri'
+require 'httparty'
 
 class Mention < ActiveRecord::Base
   
@@ -12,19 +15,24 @@ class Mention < ActiveRecord::Base
 
   # Define a custom logger. 
   def self.mention_logger
-    @@mention_logger ||= Logger.new("#{RAILS_ROOT}/log/mention_cron.log", 3, 524288)
+    @@mention_logger ||= Logger.new("#{RAILS_ROOT}/log/cron/mention_cron.log", 3, 524288)
   end
   
-  def self.twitter_search(text, reply)
-    # Initialize a Twitter search
-    search = Twitter::Search.new
-
-    # Find recent tweets using the given params
-    search.containing(text).to(reply).result_type("recent").per_page(3).each do |r|
-      puts "#{r.from_user}: #{r.text}"
+  # Twitter sentiment analysis with the tweetfeel api.
+  def self.tweetfeel(podcast, query)
+    api_key = "SElZYChiRn7riNKYfR7vL-DAPMwG_l8I"
+    
+    # The TweetFeel API is accessed using HTTP GET requests to the following URL:
+    api_url = "http://svc.webservius.com/v1/tweetFeel/tfapi?wsvKey=#{api_key}&keyword=#{CGI::escape(query)}&type=all&maxresults=1500"
+    
+    begin
+      score = HTTParty.get(api_url)['score'].to_f   
+      unless score == 0.0
+        podcast.update_attributes(:sentiment => score)
+      end      
+      puts "#{score}"
+    rescue StandardError
+      # Save us
     end
-
-    # Clear the search
-    search.clear
   end
 end

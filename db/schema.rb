@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110226015220) do
+ActiveRecord::Schema.define(:version => 20110303052936) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(:version => 20110226015220) do
     t.string   "artwork"
     t.string   "siteurl"
     t.string   "episode_update_status"
+    t.float    "sentiment"
   end
 
   add_index "podcasts", ["name"], :name => "index_podcasts_on_name", :unique => true

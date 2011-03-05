@@ -15,7 +15,7 @@ class Episode < ActiveRecord::Base
 
   # Define a custom logger.
   def self.episode_logger
-    @@episode_logger ||= Logger.new("#{RAILS_ROOT}/log/episode_cron.log", 3, 524288)
+    @@episode_logger ||= Logger.new("#{RAILS_ROOT}/log/cron/episode_cron.log", 3, 524288)
   end
   
   # Fetch the latest episodes for the podcast.

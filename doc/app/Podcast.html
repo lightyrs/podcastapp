@@ -71,6 +71,8 @@
 					
 					<li><a href="#method-c-fetch_episodes">::fetch_episodes</a></li>
 					
+					<li><a href="#method-c-gather_sentiment">::gather_sentiment</a></li>
+					
 					<li><a href="#method-c-itunes_genre_rss">::itunes_genre_rss</a></li>
 					
 					<li><a href="#method-c-itunes_top_rss">::itunes_top_rss</a></li>
@@ -204,6 +206,52 @@ Fetch podcast episodes.
 228: 
 229:     <span class="ruby-identifier">podcasts</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">podcast</span><span class="ruby-operator">|</span> <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">fetch_podcast_episodes</span>(<span class="ruby-identifier">podcast</span>.<span class="ruby-identifier">id</span>)}
 230:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="gather-sentiment-method" class="method-detail ">
+				<a name="method-c-gather_sentiment"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">gather_sentiment</span><span
+						class="method-args">(options = {})</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Gather sentiment
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="gather-sentiment-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/podcast.rb, line 233</span>
+233:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gather_sentiment</span>(<span class="ruby-identifier">options</span> = {})
+234:     <span class="ruby-identifier">new_podcasts_only</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:new_podcasts_only</span>] <span class="ruby-operator">||</span> <span class="ruby-keyword kw">false</span>
+235:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">new_podcasts_only</span>
+236:       <span class="ruby-identifier">podcasts</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">'id'</span>,<span class="ruby-value str">'name'</span>], <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">'created_at &gt; ?'</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-value">24</span>.<span class="ruby-identifier">hours</span>])
+237:     <span class="ruby-keyword kw">else</span>
+238:       <span class="ruby-identifier">podcasts</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">'id'</span>,<span class="ruby-value str">'name'</span>])
+239:     <span class="ruby-keyword kw">end</span>
+240: 
+241:     <span class="ruby-identifier">podcasts</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">podcast</span><span class="ruby-operator">|</span>
+242:       <span class="ruby-constant">Mention</span>.<span class="ruby-identifier">tweetfeel</span>(<span class="ruby-identifier">podcast</span>, <span class="ruby-identifier">podcast</span>.<span class="ruby-identifier">name</span>)
+243:       <span class="ruby-identifier">sleep</span> <span class="ruby-value">18</span>
+244:     <span class="ruby-keyword kw">end</span>   
+245:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -519,7 +567,7 @@ Scrape the podcast twitter and facebook urls from the site doc.
 150:     <span class="ruby-keyword kw">end</span>
 151:     
 152:     <span class="ruby-comment cmt"># TODO Handle Nokogiri Errno:: Errors</span>
-153:     <span class="ruby-identifier">podcast</span>.<span class="ruby-identifier">reverse_each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">pod</span> <span class="ruby-operator">|</span>
+153:     <span class="ruby-identifier">podcast</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">pod</span> <span class="ruby-operator">|</span>
 154:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{pod.name}&quot;</span>
 155:       <span class="ruby-keyword kw">begin</span> 
 156:         <span class="ruby-comment cmt"># Make sure the url is readable by httparty</span>

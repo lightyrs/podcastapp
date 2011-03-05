@@ -23,7 +23,7 @@ class Podcast < ActiveRecord::Base
   
   # Define a custom logger.
   def self.podcast_logger
-    @@podcast_logger ||= Logger.new("#{RAILS_ROOT}/log/podcast_cron.log", 3, 524288)
+    @@podcast_logger ||= Logger.new("#{RAILS_ROOT}/log/cron/podcast_cron.log", 3, 524288)
   end
   
   # Generate the iTunes top 300 podcasts url (overall).    
@@ -227,5 +227,20 @@ class Podcast < ActiveRecord::Base
     end
 
     podcasts.each{|podcast| Episode.fetch_podcast_episodes(podcast.id)}
+  end
+  
+  # Gather sentiment
+  def self.gather_sentiment(options = {})
+    new_podcasts_only = options[:new_podcasts_only] || false
+    if new_podcasts_only
+      podcasts = Podcast.find(:all, :select => ['id','name'], :conditions => ['created_at > ?', Time.now - 24.hours])
+    else
+      podcasts = Podcast.find(:all, :select => ['id','name'])
+    end
+
+    podcasts.each do |podcast|
+      Mention.tweetfeel(podcast, podcast.name)
+      sleep 18
+    end   
   end
 end
