@@ -1,0 +1,25 @@
+###################################################################################################
+#
+# script/facebook
+# This script spawns a daemon that collects facebook mentions filtered by the given params
+#
+###################################################################################################
+require 'httparty'
+
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+
+# Request search data from facebook at regular intervals
+until Time.now == "3011-03-06 18:00:06 -0500" do
+  begin
+    search_doc = HTTParty.get("https://graph.facebook.com/search?q=podcast&type=post&limit=500")
+    result = search_doc['data'].map{ |data| data["message"] }.compact
+  
+    # Append the array of statuses to a local file. Create one if the file doesn't exist.
+    current = Time.now.to_s.slice(0..13).gsub(":", "").gsub(" ", "_") + ".log"
+    File.open("#{RAILS_ROOT}/log/facebook/#{current}", 'a') {|f| f.write(result.each {|x| print x})}
+  
+    sleep 3600
+  rescue StandardError => ex
+    # Save us
+  end
+end

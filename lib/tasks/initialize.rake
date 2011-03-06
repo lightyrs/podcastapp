@@ -28,8 +28,8 @@ namespace :initialize do
     end
   end
   
-  desc "Start Mentions Cron"
-  task :start_mentions_cron => :start_delayed_job do
+  desc "Start Twitter Daemon"
+  task :start_twitter_daemon => :start_delayed_job do
     begin
       `rake mentions:firehose["podcast-podcasts-podcasting"]`
     rescue => ex
@@ -38,7 +38,7 @@ namespace :initialize do
   end
 
   desc "Initialize All"
-  task :all => :start_mentions_cron do
+  task :all => :start_twitter_daemon do
     puts "All Dependencies Initialized"
   end
   

@@ -10,7 +10,7 @@ namespace :mentions do
   desc "Start twitter daemon"
   task :firehose, [:filters] => :environment do |t,args|
     filters = args[:filters].gsub("-", ",")
-    `ruby script/mentions start #{filters}`
+    `ruby script/twitter start #{filters}`
   end
   
 end

@@ -130,6 +130,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  daemons
   delayed_job
   httparty
   imasquerade

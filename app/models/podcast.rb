@@ -202,18 +202,60 @@ class Podcast < ActiveRecord::Base
     begin
       begin       
         social_links = doc_links.find {|link| link['href'].to_s.match(/#{social_network}/i) and link['href'].to_s.match(/#{pod_name_fragment}/i).to_s != "" unless link['href'].to_s.match(/#{regex}/i)}.attribute('href').to_s 
-      rescue StandardError => ex
+      rescue StandardError
         if doc_links.find {|link| link['href'].to_s.match(/#{social_network}/i) unless link['href'].to_s.match(/#{regex}/i)}.nil?
           social_links = nil
         else       
           social_links = doc_links.find {|link| link['href'].to_s.match(/#{social_network}/i) unless link['href'].to_s.match(/#{regex}/i)}.attribute('href').to_s
         end
       end
-    rescue StandardError => ex
+    rescue StandardError
       # Ensure that the urls get saved regardless of what else happens
     ensure
       return social_links.to_s    
     end
+  end
+  
+  # Fetch twitter handle from twitter url
+  def self.fetch_twitter_handle(options = {})
+    new_podcasts_only = options[:new_podcasts_only] || false
+    if new_podcasts_only
+      podcast = Podcast.find(:all, :select => 'id, twitter, name', :conditions => ['created_at > ? AND twitter IS NOT ?', Time.now - 24.hours, ''])
+      Podcast.podcast_logger.info("#{podcast.count}")
+    else
+      podcast = Podcast.find(:all, :select => 'id, twitter, name', :conditions => ['twitter IS NOT ?', ''])
+    end
+    
+    podcast.each do | pod |
+      begin
+        pod_twitter = pod.twitter.gsub("#!/","")
+        # Make sure the url is readable by httparty
+        unless pod_twitter.include? 'http://'
+          pod_twitter = pod_twitter.insert 0, "http://"
+        end
+        unless pod_twitter.include? "search?q="
+          puts "#{pod_twitter}"
+          Podcast.podcast_logger.info("#{pod_twitter}")
+          twitter_doc = Nokogiri.XML(HTTParty.get(pod_twitter, 'User-Agent' => 'ruby', :timeout => 15, :limit => 10))
+          
+          handle = "@" + twitter_doc.search(".screen-name").first.text
+          if handle.nil? or handle == "@"
+            handle = "@" + twitter_doc.search("h2")[1].text.strip
+          end
+          if handle.nil? or handle == "@"
+            handle = "@" + twitter_doc.at_css("h2").text.split("@")[1].gsub(".","")
+          end
+        end
+      rescue StandardError => ex
+        puts "#{ex.class}: #{ex.message}"
+      ensure
+        unless handle.nil? or handle == "@"
+          pod.update_attributes :twitter_handle => handle
+          puts "#{handle}"
+          Podcast.podcast_logger.info("#{handle}")
+        end
+      end
+    end  
   end
   
   # Fetch podcast episodes.
@@ -232,8 +274,12 @@ class Podcast < ActiveRecord::Base
   # Gather sentiment
   def self.gather_sentiment(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
+    without_sentiment = options[:without_sentiment] || false
+    
     if new_podcasts_only
       podcasts = Podcast.find(:all, :select => ['id','name'], :conditions => ['created_at > ?', Time.now - 24.hours])
+    elsif without_sentiment
+      podcasts = Podcast.find(:all, :select => ['id','name'], :conditions => ['sentiment IS ?', nil])
     else
       podcasts = Podcast.find(:all, :select => ['id','name'])
     end

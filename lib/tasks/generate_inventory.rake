@@ -39,8 +39,17 @@ namespace :podcast do
     end
   end
   
+  desc "Scrape the twitter handle from the podcast twitter url"
+  task :twitter_handle_discovery, [:scope] => :social_discovery do |t,args|
+    if args[:scope] == "new"
+      Podcast.fetch_twitter_handle(:new_podcasts_only => true)
+    else
+      Podcast.fetch_twitter_handle
+    end    
+  end
+  
   desc "Fetch the podcast episodes"
-  task :fetch_episodes, [:scope] => :social_discovery do |t,args|
+  task :fetch_episodes, [:scope] => :twitter_handle_discovery do |t,args|
     Episode.episode_logger.info("BEGIN: #{Time.now}")
     Podcast.fetch_episodes
     Episode.episode_logger.info("END: #{Time.now}")

@@ -14,10 +14,13 @@ gem 'whenever'
 # Background Jobs
 gem 'delayed_job'
 
+# Daemons
+gem 'daemons'
+
 # HTTP Requests
 gem 'httparty'
 
-# HTML/XML Parsing
+# HTML/XML/JSON Parsing
 gem 'nokogiri'
 gem 'imasquerade'
 

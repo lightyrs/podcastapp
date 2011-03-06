@@ -35,4 +35,27 @@ class Mention < ActiveRecord::Base
       # Save us
     end
   end
+  
+  def self.twitter_engine
+    collection = Podcast.find(:all, :select => 'id, name', :conditions => ["id between ? and ?", 0, 400])
+    query = collection.map { |q|
+      name = q.name[0..24]
+      length = name.split(" ").length - 2
+      name = name.split(" ")[0..length].join(" ")
+      unless name.include? "podcast"
+        name + " podcast"
+      end
+    }
+    puts "#{query}"
+    
+    # Open up a twitter firehose with our query
+    TweetStream::Client.new('theMTA', 'matt22').on_error do |message|
+      puts "#{message}"
+    end.track(query.join(",")) do |status|
+      # Append the tweet to a local file. Create one if the file doesn't exist.
+      current = Time.now.to_s.slice(0..13).gsub(":", "").gsub(" ", "_") + ".log"
+      File.open("#{RAILS_ROOT}/log/twitter/mentions/#{current}", 'a') {|f| f.write(status.text + "\n") }
+      puts "#{status.text}"
+    end    
+  end
 end
