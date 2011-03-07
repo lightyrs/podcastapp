@@ -10,10 +10,14 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'envi
 
 query = ARGV[1].to_s
 
+if query.nil? || query.empty?
+  query = 'podcast, podcasts, podcaster, podcasters'
+end
+
 # Open up a twitter firehose with optional tracking terms
 TweetStream::Daemon.new('theMTA', 'matt22', "twitter_firehose").track(query) do |status|
   # Append the tweet to a local file. Create one if the file doesn't exist.
   current = Time.now.to_s.slice(0..13).gsub(":", "").gsub(" ", "_") + ".log"
-  File.open("#{RAILS_ROOT}/log/twitter/#{current}", 'a') {|f| f.write(status.text + "\n") }
+  File.open("#{RAILS_ROOT}/log/twitter/#{current}", 'a') {|f| f.write("CX3NP47VNND:  " + status.text.gsub("\n", " ") + "\n") }
   puts "#{status.text}"
 end

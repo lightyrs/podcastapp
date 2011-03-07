@@ -14,10 +14,13 @@ until Time.now == "3011-03-06 18:00:06 -0500" do
     search_doc = HTTParty.get("https://graph.facebook.com/search?q=podcast&type=post&limit=500")
     result = search_doc['data'].map{ |data| data["message"] }.compact
   
-    # Append the array of statuses to a local file. Create one if the file doesn't exist.
-    current = Time.now.to_s.slice(0..13).gsub(":", "").gsub(" ", "_") + ".log"
-    File.open("#{RAILS_ROOT}/log/facebook/#{current}", 'a') {|f| f.write(result.each {|x| print x})}
+    result.each do |message|
+      # Append the array of statuses to a local file. Create one if the file doesn't exist.
+      current = Time.now.to_s.slice(0..13).gsub(":", "").gsub(" ", "_") + ".log"
+      File.open("#{RAILS_ROOT}/log/facebook/#{current}", 'a') {|f| f.write("CX3NP47VNND:  " + message.gsub("\n", " ") + "\n")}
+    end
   
+    # Chill out
     sleep 3600
   rescue StandardError => ex
     # Save us

@@ -6,4 +6,6 @@
 ###################################################################################################
 require 'daemons'
 
-Daemons.run('script/facebook')
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+
+Daemons.run('script/facebook', {:dir_mode => :normal, :dir => "#{RAILS_ROOT}/tmp/pids"})
