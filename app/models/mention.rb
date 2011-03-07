@@ -43,11 +43,11 @@ class Mention < ActiveRecord::Base
     logs = twitter_logs.concat(facebook_logs)
     
     mentions = Mention.mentions_array_builder(logs)
-    Mention.filter_mentions(mentions.uniq)
+    Mention.filter_mentions(mentions)
   end
   
   # Prepare the array of mentions for parsing
-  def self.mentions_array_builder(logs) 
+  def self.mentions_array_builder(logs)
     decoder = "CX3NP47VNND:  "
     
     raw = []
@@ -93,9 +93,23 @@ class Mention < ActiveRecord::Base
           end
         end
       rescue StandardError => ex
-        puts "#{ex.class}: #{ex.massage}"
+        puts "#{ex.class}: #{ex.message}"
       end
     end
+  end
+  
+  # Destroy old logs
+  def self.maintain_log_dir
+    twitter_logs = Mention.get_recursive_file_list("#{RAILS_ROOT}/log/twitter")
+    facebook_logs = Mention.get_recursive_file_list("#{RAILS_ROOT}/log/facebook")
+    logs = twitter_logs.concat(facebook_logs)
+    
+    logs.each do |log|
+      log_date = log.split("/").last[0..9].to_time
+      if log_date < (Time.now - 72.hours)
+        File.delete(log)
+      end
+    end    
   end
   
   # Crawl the log directory and return a list of all files

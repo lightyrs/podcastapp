@@ -37,6 +37,9 @@ gem 'koala', '1.0.0.beta'
 gem 'twitter'
 gem 'tweetstream'
 
+# Bayesian Classification
+gem 'kitop-classifier', :git => 'git://github.com/logankoester/classifier.git'
+
 ####################################################################
 
 # Bundle edge Rails instead:

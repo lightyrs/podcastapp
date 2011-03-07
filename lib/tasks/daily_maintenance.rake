@@ -34,10 +34,16 @@ namespace :maintenance do
   desc "Restart Server"
   task :restart_server => :generate_docs do
     `touch tmp/restart.txt`
+    sleep 3
+  end
+  
+  desc "Maintain Log Directories"
+  task :maintain_log_dir => :restart_server do
+    Mention.maintain_log_dir
   end
   
   desc "Daily Maintenance"
-  task :daily => :restart_server do
+  task :daily => :maintain_log_dir do
     Rake::Task['initialize:all'].invoke
   end
   
