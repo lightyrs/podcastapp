@@ -8,6 +8,8 @@ require 'twitter'
 require 'tweetstream'
 require 'nokogiri'
 require 'httparty'
+require 'classifier'
+require 'madeleine'
 
 class Mention < ActiveRecord::Base
   
@@ -19,18 +21,18 @@ class Mention < ActiveRecord::Base
   end
   
   # Twitter sentiment analysis with the tweetfeel api.
-  def self.tweetfeel(podcast, query)
+  def self.tweetfeel(query)
     api_key = "SElZYChiRn7riNKYfR7vL-DAPMwG_l8I"
     
     # The TweetFeel API is accessed using HTTP GET requests to the following URL:
     api_url = "http://svc.webservius.com/v1/tweetFeel/tfapi?wsvKey=#{api_key}&keyword=#{CGI::escape(query)}&type=all&maxresults=1500"
     
     begin
-      score = HTTParty.get(api_url)['score'].to_f   
-      unless score == 0.0
-        podcast.update_attributes(:sentiment => score)
-      end      
-      puts "#{score}"
+      tweets = HTTParty.get(api_url)["tweets"]
+      # Filter positive tweets
+      tweets.each do |tweet| 
+        tweet["tweet"]
+      end
     rescue StandardError
       # Save us
     end
@@ -58,7 +60,7 @@ class Mention < ActiveRecord::Base
         network = "twitter"
       end
       File.open(log, "r").each do |line|
-        raw << line.gsub(decoder, "").strip.insert(0, "#" + network + "# ")
+        raw << line.gsub(decoder, "").strip.insert(0, ")))" + network + ")))")
       end
     end
     raw = raw.split(decoder)[0]
@@ -80,7 +82,7 @@ class Mention < ActiveRecord::Base
     
         mentions.each do |mention|
           if mention.downcase.include? "#{pod_name}"
-            mention = mention.split("#")
+            mention = mention.split(")))")
             network = mention[1]
             
             Mention.create(
@@ -96,6 +98,33 @@ class Mention < ActiveRecord::Base
         puts "#{ex.class}: #{ex.message}"
       end
     end
+  end
+  
+  # Train our classifier to recognize various sentiments
+  def self.train_classifier(sample)
+    m = SnapshotMadeleine.new("log/bayes_data") {
+        Classifier::Bayes.new :categories => ['positive', 'negative']
+    }
+    tweets = Mention.tweetfeel(sample).map{ |s| s["type"] + s["tweet"] }
+    tweets.each do |tweet|
+      type = tweet[0..2]
+      if type == "pos"
+        m.system.train_positive "#{tweet[3..100000]}"
+        puts "POSITIVE: #{tweet[3..100000]}"
+      elsif type == "neg"
+        m.system.train_negative "#{tweet[3..100000]}"
+        puts "NEGATIVE: #{tweet[3..100000]}"
+      end  
+    end
+    m.take_snapshot
+  end
+  
+  # Classify
+  def self.classify(sample)
+    m = SnapshotMadeleine.new("log/bayes_data") {
+        Classifier::Bayes.new :categories => ['positive', 'negative']
+    }
+    m.system.classify "#{sample}"
   end
   
   # Destroy old logs

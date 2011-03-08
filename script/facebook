@@ -11,7 +11,12 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'envi
 # Request search data from facebook at regular intervals
 until Time.now == "3011-03-06 18:00:06 -0500" do
   begin
-    search_doc = HTTParty.get("https://graph.facebook.com/search?q=podcast&type=post&limit=500")
+    # Get mentions from the last hour
+    since = (Time.now - 1.hour).to_s
+    # Format time like php strtotime
+    since =  since[0..9] + "T" + since[11..18] + since[20..22] + ":" + since[23..24]
+    
+    search_doc = HTTParty.get("https://graph.facebook.com/search?since=#{since}&q=podcast&type=post&limit=500")
     result = search_doc['data'].map{ |data| data["message"] }.compact
   
     decoder = "CX3NP47VNND:  "

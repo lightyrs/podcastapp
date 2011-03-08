@@ -39,6 +39,7 @@ gem 'tweetstream'
 
 # Bayesian Classification
 gem 'kitop-classifier', :git => 'git://github.com/logankoester/classifier.git'
+gem 'madeleine'
 
 ####################################################################
 
