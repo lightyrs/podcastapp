@@ -31,14 +31,23 @@ namespace :initialize do
   desc "Start Twitter Daemon"
   task :start_twitter_daemon => :start_delayed_job do
     begin
-      `rake mentions:firehose["podcast-podcasts-podcasting"]`
+      Rake::Task['mentions:twitter'].invoke
+    rescue => ex
+      puts "#{ex.class}"
+    end
+  end
+  
+  desc "Start Facebook Daemon"
+  task :start_facebook_daemon => :start_twitter_daemon do
+    begin
+      Rake::Task['mentions:facebook'].invoke
     rescue => ex
       puts "#{ex.class}"
     end
   end
 
   desc "Initialize All"
-  task :all => :start_twitter_daemon do
+  task :all => :start_facebook_daemon do
     puts "All Dependencies Initialized"
   end
   

@@ -59,9 +59,10 @@ class Mention < ActiveRecord::Base
       elsif log.include? "twitter"
         network = "twitter"
       end
-      File.open(log, "r").each do |line|
+      f = File.open(log, "r").each do |line|
         raw << line.gsub(decoder, "").strip.insert(0, ")))" + network + ")))")
       end
+      File.delete(f)
     end
     raw = raw.split(decoder)[0]
   end
@@ -73,26 +74,45 @@ class Mention < ActiveRecord::Base
     podcasts.each do |pod|
       begin
         pod_name = pod.name[0..30]
+        pod_words = pod_name.split(" ")
+        name_length = pod_words.length
+        
+        # Make sure we only get relevant results
+        unless name_length == 1 or pod_name.length < 4 or pod_name == "podcast"
+          unless name_length == 2 and pod_words[1] == "podcast"
+            unless name_length == 2 and pod_words[0].length < 5 and pod_words[0].include? "ast"
+              search_by_name = true
+            end
+          end
+        end
+        
         if pod_name.length < 30
           pod_name = pod_name.downcase
         else
           length = pod_name.split(" ").length - 2
           pod_name = pod_name.split(" ")[0..length].join(" ").downcase
         end
-    
+        
+        # Filter and create
         mentions.each do |mention|
-          if mention.downcase.include? "#{pod_name}"
-            mention = mention.split(")))")
-            network = mention[1]
-            
-            Mention.create(
-              :mention => mention[2],
-              :network => network,
-              :podcast_id => pod.id
-            )
-            puts "#{mention[2]}"
-            sleep(0.0500)
+          if search_by_name == true
+            if mention.downcase.include? "#{pod_name}" or mention.downcase.include? "#{pod.twitter_handle}"
+              mention = mention.split(")))")
+              network = mention[1]
+            end
+          else
+            if mention.downcase.include? "#{pod.twitter_handle}"
+              mention = mention.split(")))")
+              network = mention[1]
+            end
           end
+          Mention.create(
+            :mention => mention[2],
+            :network => network,
+            :podcast_id => pod.id
+          )
+          puts "#{mention[2]}"
+          sleep(0.0500)
         end
       rescue StandardError => ex
         puts "#{ex.class}: #{ex.message}"
@@ -114,7 +134,7 @@ class Mention < ActiveRecord::Base
       elsif type == "neg"
         m.system.train_negative "#{tweet[3..100000]}"
         puts "NEGATIVE: #{tweet[3..100000]}"
-      end  
+      end
     end
     m.take_snapshot
   end
@@ -125,20 +145,6 @@ class Mention < ActiveRecord::Base
         Classifier::Bayes.new :categories => ['positive', 'negative']
     }
     m.system.classify "#{sample}"
-  end
-  
-  # Destroy old logs
-  def self.maintain_log_dir
-    twitter_logs = Mention.get_recursive_file_list("#{RAILS_ROOT}/log/twitter")
-    facebook_logs = Mention.get_recursive_file_list("#{RAILS_ROOT}/log/facebook")
-    logs = twitter_logs.concat(facebook_logs)
-    
-    logs.each do |log|
-      log_date = log.split("/").last[0..9].to_time
-      if log_date < (Time.now - 72.hours)
-        File.delete(log)
-      end
-    end    
   end
   
   # Crawl the log directory and return a list of all files

@@ -37,13 +37,8 @@ namespace :maintenance do
     sleep 3
   end
   
-  desc "Maintain Log Directories"
-  task :maintain_log_dir => :restart_server do
-    Mention.maintain_log_dir
-  end
-  
   desc "Daily Maintenance"
-  task :daily => :maintain_log_dir do
+  task :daily => :restart_server do
     Rake::Task['initialize:all'].invoke
   end
   
