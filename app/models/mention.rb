@@ -69,22 +69,11 @@ class Mention < ActiveRecord::Base
   
   # Find mentions of specific podcasts
   def self.filter_mentions(mentions)
-    podcasts = Podcast.find(:all, :select => ["id, name"], :conditions => ["name IS NOT ?", nil])
+    podcasts = Podcast.find(:all, :select => ["id, name, twitter_handle"], :conditions => ["name IS NOT ?", nil])
   
     podcasts.each do |pod|
       begin
-        pod_name = pod.name[0..30]
-        pod_words = pod_name.split(" ")
-        name_length = pod_words.length
-        
-        # Make sure we only get relevant results
-        unless name_length == 1 or pod_name.length < 4 or pod_name == "podcast"
-          unless name_length == 2 and pod_words[1] == "podcast"
-            unless name_length == 2 and pod_words[0].length < 5 and pod_words[0].include? "ast"
-              search_by_name = true
-            end
-          end
-        end
+        pod_name = pod.name[0..30]        
         
         if pod_name.length < 30
           pod_name = pod_name.downcase
@@ -93,31 +82,67 @@ class Mention < ActiveRecord::Base
           pod_name = pod_name.split(" ")[0..length].join(" ").downcase
         end
         
-        # Filter and create
-        mentions.each do |mention|
-          if search_by_name == true
-            if mention.downcase.include? "#{pod_name}" or mention.downcase.include? "#{pod.twitter_handle}"
-              mention = mention.split(")))")
-              network = mention[1]
+        pod_words = pod_name.split(" ")
+        name_length = pod_words.length
+        
+        podcast = pod.id
+        
+        # Make sure we only get relevant results
+        if name_length == 1 or pod_name.length < 6 or pod_name == "podcast"
+          if name_length == 2 and pod_words[0].length < 5 and pod_words[1] == "podcast"
+            if name_length == 2 and pod_words[0].length < 5 and pod_words[0].include? "ast"
+              search_by_name = false
+            else
+              search_by_name = false
             end
           else
+            search_by_name = false         
+          end
+        else
+          search_by_name = true          
+        end
+        
+        if pod.twitter_handle.nil? or pod.twitter_handle == ""
+          search_by_handle = false
+        else
+          search_by_handle = true
+        end
+        
+        # Filter and create
+        mentions.each do |mention|
+          if search_by_name == true and search_by_handle == true
+            if mention.downcase.include? "#{pod_name}"
+              Mention.create_mention(mention, podcast)
+            elsif mention.downcase.include? "#{pod.twitter_handle}"
+              Mention.create_mention(mention, podcast)              
+            end
+          elsif search_by_name == false and search_by_handle == true
             if mention.downcase.include? "#{pod.twitter_handle}"
-              mention = mention.split(")))")
-              network = mention[1]
+              Mention.create_mention(mention, podcast)
+            end
+          elsif search_by_name == true and search_by_handle == false
+            if mention.downcase.include? "#{pod_name}"
+              Mention.create_mention(mention, podcast)
             end
           end
-          Mention.create(
-            :mention => mention[2],
-            :network => network,
-            :podcast_id => pod.id
-          )
-          puts "#{mention[2]}"
-          sleep(0.0500)
         end
       rescue StandardError => ex
         puts "#{ex.class}: #{ex.message}"
       end
     end
+  end
+  
+  def self.create_mention(mention, podcast)
+    mention = mention.split(")))")
+    network = mention[1]
+    
+    Mention.create(
+      :mention => mention[2],
+      :network => network,
+      :podcast_id => podcast
+    )
+    puts "#{mention[2]}"
+    sleep(0.0500)    
   end
   
   # Train our classifier to recognize various sentiments
