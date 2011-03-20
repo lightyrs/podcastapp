@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110306195143) do
+ActiveRecord::Schema.define(:version => 20110320065025) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -42,20 +42,6 @@ ActiveRecord::Schema.define(:version => 20110306195143) do
 
   add_index "episodes", ["title", "podcast_id"], :name => "index_episodes_on_title_and_podcast_id", :unique => true
 
-  create_table "mentions", :force => true do |t|
-    t.text     "mention"
-    t.string   "network"
-    t.string   "username"
-    t.string   "avatar"
-    t.float    "sentiment"
-    t.float    "reputation"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "podcast_id"
-    t.string   "location"
-    t.datetime "date_and_time"
-  end
-
   create_table "podcasts", :force => true do |t|
     t.string   "name"
     t.string   "itunesurl"
@@ -70,7 +56,6 @@ ActiveRecord::Schema.define(:version => 20110306195143) do
     t.string   "artwork"
     t.string   "siteurl"
     t.string   "episode_update_status"
-    t.float    "sentiment"
     t.string   "twitter_handle"
   end
 

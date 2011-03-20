@@ -27,27 +27,9 @@ namespace :initialize do
       puts "#{ex.class}"
     end
   end
-  
-  desc "Start Twitter Daemon"
-  task :start_twitter_daemon => :start_delayed_job do
-    begin
-      Rake::Task['mentions:twitter'].invoke
-    rescue => ex
-      puts "#{ex.class}"
-    end
-  end
-  
-  desc "Start Facebook Daemon"
-  task :start_facebook_daemon => :start_twitter_daemon do
-    begin
-      Rake::Task['mentions:facebook'].invoke
-    rescue => ex
-      puts "#{ex.class}"
-    end
-  end
 
   desc "Initialize All"
-  task :all => :start_facebook_daemon do
+  task :all => :start_delayed_job do
     puts "All Dependencies Initialized"
   end
   

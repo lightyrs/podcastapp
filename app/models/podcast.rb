@@ -282,23 +282,4 @@ class Podcast < ActiveRecord::Base
 
     podcasts.each{|podcast| Episode.fetch_podcast_episodes(podcast.id)}
   end
-  
-  # Gather sentiment
-  def self.gather_sentiment(options = {})
-    new_podcasts_only = options[:new_podcasts_only] || false
-    without_sentiment = options[:without_sentiment] || false
-    
-    if new_podcasts_only
-      podcasts = Podcast.find(:all, :select => ['id','name'], :conditions => ['created_at > ?', Time.now - 24.hours])
-    elsif without_sentiment
-      podcasts = Podcast.find(:all, :select => ['id','name'], :conditions => ['sentiment IS ?', nil])
-    else
-      podcasts = Podcast.find(:all, :select => ['id','name'])
-    end
-
-    podcasts.each do |podcast|
-      Mention.tweetfeel(podcast, podcast.name)
-      sleep 17
-    end   
-  end
 end
