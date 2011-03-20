@@ -1,7 +1,7 @@
 <div class="search">
-	<%= form_tag(search_path, :method => "get") do %>
+	<%= form_tag(search_path, :method => "get") do |f| %>
 	  <%= label_tag(:q, "Search for:") %>
-	  <%= text_field_tag(:q) %>
+	  <%= autocomplete_field_tag 'q', '', autocomplete_podcast_name_podcasts_path, :size => 50 %>
 	  <%= submit_tag("Search") %>
 	<% end %>
 </div>

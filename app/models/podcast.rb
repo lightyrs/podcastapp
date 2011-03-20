@@ -73,10 +73,10 @@ class Podcast < ActiveRecord::Base
   def self.scrape_from_itunes(itunes_doc)
     itunes_doc.xpath('//feed/entry').map do |entry|
       new_name = entry.xpath("./name").text
-      podcast = Podcast.find(:all, :conditions => {:name => new_name})
+      podcast = Podcast.find_all_by_name(new_name)
       if (podcast == [])
         begin
-          podcast = Podcast.new(
+          podcast = Podcast.create(
             :name => entry.xpath("./name").text,
             :itunesurl => entry.xpath("./link/@href").text,
             :category => entry.xpath("./category/@term").text,
@@ -84,23 +84,25 @@ class Podcast < ActiveRecord::Base
             :description => entry.xpath("./summary").text,
             :artwork => entry.xpath("./image[@height='170']").text  
           )
-          podcast.save
           puts "New Podcast: #{podcast.name}"
           Podcast.podcast_logger.info("New Podcast: #{podcast.name}")
         rescue StandardError => ex
           puts "An error of type #{ex.class} happened, message is #{ex.message}"
         end
-      elsif (!podcast[0].name.nil?)
+      elsif (!podcast[0].nil?)
         begin
-          podcast[0].update_attributes(
-            :itunesurl => entry.xpath("./link/@href").text,
-            :category => entry.xpath("./category/@term").text,
-            :hosts => entry.xpath("./artist").text,
-            :description => entry.xpath("./summary").text,
-            :artwork => entry.xpath("./image[@height='170']").text            
-          )
-          puts "Update Podcast: #{podcast[0].name}"
-          Podcast.podcast_logger.info("Update Podcast: #{podcast[0].name}")
+          pod = podcast[0]
+          pod.itunesurl = entry.xpath("./link/@href").text
+          pod.category = entry.xpath("./category/@term").text
+          pod.hosts = entry.xpath("./artist").text
+          pod.description = entry.xpath("./summary").text
+          pod.artwork = entry.xpath("./image[@height='170']").text
+          
+          if pod.changed?
+            pod.save      
+            puts "Update Podcast: #{pod.name}"
+            Podcast.podcast_logger.info("Update Podcast: #{pod.name}")
+          end
         rescue StandardError => ex
           puts "An error of type #{ex.class} happened, message is #{ex.message}"
         end
@@ -121,18 +123,18 @@ class Podcast < ActiveRecord::Base
     end
     podcast.each do | pod |
       begin
-        site_url = Nokogiri.HTML(HTTParty.get(pod.itunesurl, 'User-Agent' => 'ruby', :timeout => 15, :limit => 10)).xpath("//a[text()='Podcast Website']/@href").text
-        pod.update_attributes(:siteurl => site_url)
-        puts "#{site_url}"
-        Podcast.podcast_logger.info(site_url)
-      rescue StandardError => ex
-        puts "An error of type #{ex.class} happened, message is #{ex.message}"
-      end
-      begin
-        feed_url = Imasquerade::Extractor.parse_itunes_uri(pod.itunesurl)
-        pod.update_attributes(:feedurl => feed_url)
-        puts "#{feed_url}"
-        Podcast.podcast_logger.info("#{feed_url}")
+        url_hash = Imasquerade::Extractor.parse_itunes_uri(pod.itunesurl)
+        
+        pod.feedurl = url_hash["feedurl"]
+        pod.siteurl = url_hash["siteurl"]
+        
+        if pod.changed?
+          pod.save
+          puts "#{pod.feedurl}"
+          puts "#{pod.siteurl}"
+          Podcast.podcast_logger.info("#{pod.feedurl}")
+          Podcast.podcast_logger.info("#{pod.siteurl}")
+        end
       rescue StandardError => ex
         puts "An error of type #{ex.class} happened, message is #{ex.message}"
       end
@@ -183,11 +185,17 @@ class Podcast < ActiveRecord::Base
             facebook_url = Podcast.social_relevance(doc_links, "facebook.com", pod_name_fragment, "share|.event|placement=")
           # Ensure that the urls get saved regardless of what else happens
           ensure
-            pod.update_attributes(:twitter => twitter_url, :facebook => facebook_url)            
-          end      
-     
-          puts "#{twitter_url}" + "#{facebook_url}"
-          Podcast.podcast_logger.info("#{twitter_url}" + "#{facebook_url}")
+            pod.twitter = twitter_url
+            pod.facebook = facebook_url
+            
+            if pod.changed?
+              pod.save
+              puts "#{twitter_url}"
+              puts "#{facebook_url}"
+              Podcast.podcast_logger.info("#{twitter_url}")
+              Podcast.podcast_logger.info("#{facebook_url}")
+            end
+          end
         end
       rescue StandardError => ex
         puts "FINAL StandardError: #{ex.class} + #{ex.message}"
@@ -250,9 +258,13 @@ class Podcast < ActiveRecord::Base
         puts "#{ex.class}: #{ex.message}"
       ensure
         unless handle.nil? or handle == "@"
-          pod.update_attributes :twitter_handle => handle
-          puts "#{handle}"
-          Podcast.podcast_logger.info("#{handle}")
+          pod.twitter_handle = handle
+          
+          if pod.changed?
+            pod.save
+            puts "#{handle}"
+            Podcast.podcast_logger.info("#{handle}")
+          end
         end
       end
     end  
@@ -286,7 +298,7 @@ class Podcast < ActiveRecord::Base
 
     podcasts.each do |podcast|
       Mention.tweetfeel(podcast, podcast.name)
-      sleep 18
+      sleep 17
     end   
   end
 end

@@ -10,6 +10,7 @@ Podcastapp::Application.routes.draw do
       get 'reset_update_status'
     end
     resources :episodes
+    get :autocomplete_podcast_name, :on => :collection
   end
   
   # named route for podcast search

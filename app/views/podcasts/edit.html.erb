@@ -2,5 +2,7 @@
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @podcast %> |
-<%= link_to 'Back', podcasts_path %>
+<div class="buttons">
+	<%= link_to 'Show', @podcast, {:class => "button"} %>
+	<%= link_to 'Back', podcasts_path, {:class => "button"} %>
+</div>

@@ -1,0 +1,13 @@
+body {
+	background-color: #DADADA;
+}
+
+#container {
+	background: white;
+	border-radius: 24px 24px;
+	-moz-border-radius: 24px 24px;
+	-webkit-border-radius: 24px 24px;
+	margin: 40px auto;
+	padding: 40px;
+	width: 880px;
+}

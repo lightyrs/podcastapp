@@ -21,17 +21,25 @@ class Mention < ActiveRecord::Base
   end
   
   # Twitter sentiment analysis with the tweetfeel api.
-  def self.tweetfeel(query)
+  def self.tweetfeel(podcast, query)
     api_key = "SElZYChiRn7riNKYfR7vL-DAPMwG_l8I"
     
     # The TweetFeel API is accessed using HTTP GET requests to the following URL:
     api_url = "http://svc.webservius.com/v1/tweetFeel/tfapi?wsvKey=#{api_key}&keyword=#{CGI::escape(query)}&type=all&maxresults=1500"
     
     begin
-      tweets = HTTParty.get(api_url)["tweets"]
-      # Filter positive tweets
-      tweets.each do |tweet| 
-        tweet["tweet"]
+      doc = HTTParty.get(api_url)
+      if podcast == false
+        tweets = doc["tweets"]
+        tweets.each do |tweet|
+          tweet["tweet"]
+        end
+      else
+        score = doc["score"]
+        unless score == 0 or score == 0.0
+          podcast.update_attributes(:sentiment => score)
+        end
+        puts "#{podcast.name} + #{score}"
       end
     rescue StandardError
       # Save us
@@ -150,7 +158,7 @@ class Mention < ActiveRecord::Base
     m = SnapshotMadeleine.new("log/bayes_data") {
         Classifier::Bayes.new :categories => ['positive', 'negative']
     }
-    tweets = Mention.tweetfeel(sample).map{ |s| s["type"] + s["tweet"] }
+    tweets = Mention.tweetfeel(false, sample).map{ |s| s["type"] + s["tweet"] }
     tweets.each do |tweet|
       type = tweet[0..2]
       if type == "pos"
@@ -164,12 +172,49 @@ class Mention < ActiveRecord::Base
     m.take_snapshot
   end
   
-  # Classify
+  def self.train_positive(sample)
+    m = SnapshotMadeleine.new("log/bayes_data") {
+        Classifier::Bayes.new :categories => ['positive', 'negative']
+    }
+    m.system.train_positive "#{sample}"
+    m.system.train_negative "I hate this annoying immature garbage."
+    
+    m.take_snapshot
+    Mention.classify(sample)
+  end
+  
+  def self.train_negative(sample)
+    m = SnapshotMadeleine.new("log/bayes_data") {
+        Classifier::Bayes.new :categories => ['positive', 'negative']
+    }
+    m.system.train_positive "I love this interesting modern art."
+    m.system.train_negative "#{sample}"
+    
+    m.take_snapshot
+    Mention.classify(sample)
+  end
+  
+  # Classify anything
   def self.classify(sample)
     m = SnapshotMadeleine.new("log/bayes_data") {
         Classifier::Bayes.new :categories => ['positive', 'negative']
     }
     m.system.classify "#{sample}"
+  end
+  
+  # Classify mentions
+  def self.classify_mentions
+    mentions = Mention.find(:all, :select => ["id, mention, sentiment"]) 
+    mentions.each do |mention|
+      sentiment = Mention.classify(mention.mention)    
+      if sentiment == "Positive"
+        mention.sentiment = 1
+      elsif sentiment == "Negative"
+        mention.sentiment = 0
+      end
+      puts mention.sentiment
+      mention.save      
+    end
   end
   
   # Crawl the log directory and return a list of all files

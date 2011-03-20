@@ -1,0 +1,14 @@
+javascripts:
+  common:
+    - public/javascripts/rails.js
+    - public/javascripts/application.js
+    - public/javascripts/jquery.min.js
+    - public/javascripts/jquery-ui.min.js
+    - public/javascripts/autocomplete-rails.js
+
+stylesheets:
+  common:
+    - public/stylesheets/application.css
+    - public/flutie/stylesheets/flutie.css
+    - public/stylesheets/css3buttons/css3buttons.css
+    - public/stylesheets/podcast.css

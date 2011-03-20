@@ -1,0 +1,26 @@
+.pagination {
+	margin-bottom: 40px;
+}
+
+.podcast {
+	margin-bottom: 40px;
+}
+
+.buttons {
+	clear: both;
+}
+
+.meta {
+	float: left;
+	width: 660px;
+	padding-right: 40px;
+}
+
+.artwork {
+	float: left;
+}
+
+body.show .buttons,
+body.edit .buttons {
+	padding-top: 25px;
+}

@@ -1,4 +1,7 @@
 class PodcastsController < ApplicationController
+  
+  autocomplete :podcast, :name
+  
   # GET /podcasts
   # GET /podcasts.xml
   def index

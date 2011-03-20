@@ -8,6 +8,21 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 # irb Enhancements
 gem 'awesome_print'
 
+# Asset Packager
+gem 'jammit'
+
+# jQuery
+gem 'jquery-rails', '>= 0.2.6'
+
+# jQuery UI Autocomplete
+gem 'rails3-jquery-autocomplete'
+
+# Form Helpers
+gem 'formtastic'
+
+# Style Defaults
+gem 'flutie'
+
 # Scheduled Jobs
 gem 'whenever'
 
@@ -22,7 +37,7 @@ gem 'httparty'
 
 # HTML/XML/JSON Parsing
 gem 'nokogiri'
-gem 'imasquerade'
+gem 'imasquerade', :git => 'git://github.com/lightyrs/imasquerade.git'
 
 # Pagination
 gem 'will_paginate', '3.0.pre2'

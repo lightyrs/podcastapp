@@ -184,7 +184,7 @@ Define a custom logger.
 <pre>
     <span class="ruby-comment cmt"># File app/models/episode.rb, line 17</span>
 17:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">episode_logger</span>
-18:     <span class="ruby-identifier">@@episode_logger</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;#{RAILS_ROOT}/log/episode_cron.log&quot;</span>, <span class="ruby-value">3</span>, <span class="ruby-value">524288</span>)
+18:     <span class="ruby-identifier">@@episode_logger</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;#{RAILS_ROOT}/log/cron/episode_cron.log&quot;</span>, <span class="ruby-value">3</span>, <span class="ruby-value">524288</span>)
 19:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
