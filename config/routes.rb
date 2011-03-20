@@ -1,7 +1,5 @@
 Podcastapp::Application.routes.draw do
 
-  resources :mentions
-
   resources :episodes
 
   resources :podcasts do

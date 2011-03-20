@@ -16,7 +16,7 @@
 		<div class="buttons">
 			<%= link_to 'Show', podcast, {:class => "button"} %>
 			<%= link_to 'Edit', edit_podcast_path(podcast), {:class => "button"} %>
-			<%= link_to 'Destroy', podcast, {:class => "button negative"}, :confirm => 'Are you sure?', :method => :delete %>
+			<%= link_to 'Destroy', podcast, :confirm => 'Are you sure?', :method => :delete, :class => "button negative" %>
 		</div>
 	</div>
 <% end %>

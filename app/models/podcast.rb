@@ -10,7 +10,6 @@ require 'will_paginate'
 class Podcast < ActiveRecord::Base
   
   has_many :episodes, :dependent => :destroy
-  has_many :mentions, :dependent => :destroy
   
   validates_uniqueness_of :name
   

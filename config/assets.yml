@@ -1,9 +1,9 @@
 javascripts:
   common:
-    - public/javascripts/rails.js
-    - public/javascripts/application.js
     - public/javascripts/jquery.min.js
     - public/javascripts/jquery-ui.min.js
+    - public/javascripts/rails.js
+    - public/javascripts/application.js
     - public/javascripts/autocomplete-rails.js
 
 stylesheets:
