@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/collectiveidea/delayed_job.git
+  revision: 4513aeea6f6a182a4bb2eff5dfd3f998a23da5ff
+  specs:
+    delayed_job (2.1.4)
+      activesupport (~> 3.0)
+      daemons
+
+GIT
   remote: git://github.com/lightyrs/imasquerade.git
   revision: 76ab1e020950838fba33541d8e04df018ad4efea
   specs:
@@ -45,10 +53,8 @@ GEM
     closure-compiler (1.0.0)
     crack (0.1.8)
     curb (0.7.10)
+    daemon-spawn (0.4.1)
     daemons (1.1.0)
-    delayed_job (2.1.4)
-      activesupport (~> 3.0)
-      daemons
     erubis (2.6.6)
       abstract (>= 1.0.0)
     escape (0.0.4)
@@ -142,8 +148,9 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  daemon-spawn
   daemons
-  delayed_job
+  delayed_job!
   flutie
   formtastic
   httparty

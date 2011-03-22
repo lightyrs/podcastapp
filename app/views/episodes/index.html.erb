@@ -51,12 +51,12 @@
       $("#status").html("<p>Fetching New Episodes</p>");
       $.ajax({
         type: "GET",
-        url: "http://podcastapp/podcasts/" + podcast + "/get_update_status",
+        url: "<%= DOMAIN_NAME %>/podcasts/" + podcast + "/get_update_status",
         success: function(data){
           if (data == "success") {
-            $("#episodes").load("http://podcastapp/podcasts/" + podcast + "/episodes?reload=true #episodes table", function(){
+            $("#episodes").load("<%= DOMAIN_NAME %>/podcasts/" + podcast + "/episodes?reload=true #episodes table", function(){
               $("#status").html("<p>Episodes Updated</p>");
-							$.get("http://podcastapp/podcasts/" + podcast + "/reset_update_status");
+							$.get("<%= DOMAIN_NAME %>/podcasts/" + podcast + "/reset_update_status");
             });
           } else {
             fetch_new_episodes();

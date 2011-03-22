@@ -24,6 +24,6 @@ Podcastapp::Application.configure do
   config.action_dispatch.best_standards_support = :builtin
 
   # Rotate Logs
-  config.logger = Logger.new("#{::Rails.root.to_s}/log/development/#{ENV['RAILS_ENV']}.log", 3, 524288)
+  config.logger = Logger.new("#{::Rails.root.to_s}/log/#{ENV['RAILS_ENV']}.log", 3, 524288)
 end
 

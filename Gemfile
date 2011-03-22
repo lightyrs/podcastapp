@@ -27,10 +27,11 @@ gem 'flutie'
 gem 'whenever'
 
 # Background Jobs
-gem 'delayed_job'
+gem 'delayed_job', :git => 'git://github.com/collectiveidea/delayed_job.git'
 
 # Daemons
 gem 'daemons'
+gem 'daemon-spawn'
 
 # HTTP Requests
 gem 'httparty'

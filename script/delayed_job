@@ -1,5 +1,25 @@
 #!/usr/bin/env ruby
+# -*- ruby -*-
+require 'rubygems'
+require 'daemon_spawn'
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
-require 'delayed/command'
-Delayed::Command.new(ARGV).daemonize
+PODCASTAPP = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+
+class DelayedJobWorker < DaemonSpawn::Base
+  def start(args)
+    ENV['RAILS_ENV'] ||= args.first || 'development'
+    Dir.chdir PODCASTAPP
+    require File.expand_path(File.join('config', 'environment'))
+    
+    Delayed::Worker.new.start
+  end
+
+  def stop
+    system("kill `cat #{PODCASTAPP}/tmp/pids/delayed_job.pid`")
+  end
+end
+
+DelayedJobWorker.spawn!(:log_file => File.join(PODCASTAPP, "log", "delayed_job.log"),
+                        :pid_file => File.join(PODCASTAPP, 'tmp', 'pids', 'delayed_job.pid'),
+                        :sync_log => true,
+                        :working_dir => PODCASTAPP)
