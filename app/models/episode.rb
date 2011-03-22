@@ -96,7 +96,7 @@ class Episode < ActiveRecord::Base
         
         if (episode == [])
           begin
-            episode = Episode.new(
+            episode = Episode.create(
               :podcast_id => @podcast.id,
               :title => episode_title,
               :shownotes => episode_shownotes,
@@ -106,7 +106,6 @@ class Episode < ActiveRecord::Base
               :size => episode_file_size,
               :duration => episode_duration
             )
-            episode.save
             puts "New Episode: #{episode.title}"
             Episode.episode_logger.info("New Episode: #{episode.title}")
           rescue StandardError => ex
@@ -114,16 +113,19 @@ class Episode < ActiveRecord::Base
           end     
         elsif (!episode[0].title.nil?)
           begin
-            episode[0].update_attributes(
-              :shownotes => episode_shownotes,
-              :date_published => episode_pub_date,
-              :url => episode_url,
-              :filetype => episode_file_type,
-              :size => episode_file_size,
-              :duration => episode_duration         
-            )
-            puts "Update Episode: #{episode[0].title}"
-            Episode.episode_logger.info("Update Episode: #{episode[0].title}")
+            ep = episode[0]
+            ep.shownotes = episode_shownotes
+            ep.date_published = episode_pub_date
+            ep.url = episode_url
+            ep.filetype = episode_file_type
+            ep.size = episode_file_size
+            ep.duration = episode_duration
+            
+            if ep.url_changed? or ep.shownotes_changed?
+              ep.save      
+              puts "Update Episode: #{episode[0].title}"
+              Episode.episode_logger.info("Update Episode: #{episode[0].title}")
+            end
           rescue StandardError => ex
             puts "An error of type #{ex.class} happened, message is #{ex.message}"
           end          

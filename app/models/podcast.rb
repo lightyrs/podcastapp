@@ -127,7 +127,7 @@ class Podcast < ActiveRecord::Base
         pod.feedurl = url_hash["feedurl"]
         pod.siteurl = url_hash["siteurl"]
         
-        if pod.changed?
+        if pod.feedurl_changed? or pod.siteurl_changed?
           pod.save
           puts "#{pod.feedurl}"
           puts "#{pod.siteurl}"
@@ -187,7 +187,7 @@ class Podcast < ActiveRecord::Base
             pod.twitter = twitter_url
             pod.facebook = facebook_url
             
-            if pod.changed?
+            if pod.twitter_changed? or pod.facebook_changed?
               pod.save
               puts "#{twitter_url}"
               puts "#{facebook_url}"
@@ -259,7 +259,7 @@ class Podcast < ActiveRecord::Base
         unless handle.nil? or handle == "@"
           pod.twitter_handle = handle
           
-          if pod.changed?
+          if pod.twitter_handle_changed?
             pod.save
             puts "#{handle}"
             Podcast.podcast_logger.info("#{handle}")
