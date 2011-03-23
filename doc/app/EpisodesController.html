@@ -314,7 +314,7 @@ GET /episodes GET /episodes.xml
  6:     
  7:     <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:reload</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;true&quot;</span>
  8:       <span class="ruby-comment cmt"># Fetch new episodes in a background task</span>
- 9:       <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">delay</span>.<span class="ruby-identifier">fetch_podcast_episodes</span>(<span class="ruby-ivar">@podcast</span>)
+ 9:       <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">delay</span>.<span class="ruby-identifier">fetch_podcast_episodes</span>(<span class="ruby-ivar">@podcast</span>, <span class="ruby-value">:comet</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
 10:     <span class="ruby-keyword kw">end</span>
 11:     
 12:     <span class="ruby-comment cmt"># Find all podcast episodes and sort by date descending</span>

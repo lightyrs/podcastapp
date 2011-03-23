@@ -196,7 +196,7 @@ Define a custom logger.
 				<div class="method-heading">
 				
 					<span class="method-name">fetch_podcast_episodes</span><span
-						class="method-args">(podcast)</span>
+						class="method-args">(podcast, options = {})</span>
 					<span class="method-click-advice">click to toggle source</span>
 				
 				</div>
@@ -213,124 +213,134 @@ Fetch the latest episodes for the podcast.
 						id="fetch-podcast-episodes-source">
 <pre>
      <span class="ruby-comment cmt"># File app/models/episode.rb, line 22</span>
- 22:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fetch_podcast_episodes</span>(<span class="ruby-identifier">podcast</span>)   
- 23:     <span class="ruby-ivar">@podcast</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">podcast</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id, name, feedurl'</span>)
- 24:     <span class="ruby-ivar">@feed</span> = <span class="ruby-ivar">@podcast</span>.<span class="ruby-identifier">feedurl</span>
- 25:     <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{@feed}&quot;</span>
- 26:     
- 27:     <span class="ruby-ivar">@podcast</span>.<span class="ruby-identifier">update_attributes</span> <span class="ruby-value">:episode_update_status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'started'</span>
- 28:     
- 29:     <span class="ruby-keyword kw">begin</span>
- 30:       <span class="ruby-ivar">@doc</span> = <span class="ruby-constant">Nokogiri</span>.<span class="ruby-constant">XML</span>(<span class="ruby-constant">HTTParty</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@feed</span>, <span class="ruby-value str">'User-Agent'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'ruby'</span>, <span class="ruby-value">:format</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:html</span>, <span class="ruby-value">:timeout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">15</span>, <span class="ruby-value">:limit</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">10</span>)).<span class="ruby-identifier">remove_namespaces!</span>
- 31:       <span class="ruby-ivar">@episodes</span> = <span class="ruby-ivar">@doc</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;//item&quot;</span>)
- 32:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
- 33:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{ex.class}:#{ex.message}&quot;</span>
- 34:     <span class="ruby-keyword kw">end</span>
- 35:     
- 36:     <span class="ruby-ivar">@episodes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">episode</span><span class="ruby-operator">|</span>
- 37:       <span class="ruby-keyword kw">begin</span>
- 38:         <span class="ruby-comment cmt"># Grab the episode title</span>
- 39:         <span class="ruby-identifier">episode_title</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./title&quot;</span>))
- 40:     
- 41:         <span class="ruby-comment cmt"># Let's grab the most robust shownotes we can find</span>
- 42:         <span class="ruby-identifier">episode_shownotes_summary</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./summary&quot;</span>))
- 43:         <span class="ruby-identifier">episode_shownotes_description</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./description&quot;</span>))
- 44:         <span class="ruby-identifier">episode_shownotes_subtitle</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./subtitle&quot;</span>))
- 45:     
- 46:         <span class="ruby-identifier">length</span> = {}
- 47:         <span class="ruby-identifier">length</span>[<span class="ruby-value str">&quot;summary&quot;</span>] = <span class="ruby-identifier">episode_shownotes_summary</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/[\w-][\w.]+/</span>).<span class="ruby-identifier">size</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">episode_shownotes_summary</span>.<span class="ruby-identifier">nil?</span>
- 48:         <span class="ruby-identifier">length</span>[<span class="ruby-value str">&quot;description&quot;</span>] = <span class="ruby-identifier">episode_shownotes_description</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/[\w-][\w.]+/</span>).<span class="ruby-identifier">size</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">episode_shownotes_description</span>.<span class="ruby-identifier">nil?</span>
- 49:         <span class="ruby-identifier">length</span>[<span class="ruby-value str">&quot;subtitle&quot;</span>] = <span class="ruby-identifier">episode_shownotes_subtitle</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/[\w-][\w.]+/</span>).<span class="ruby-identifier">size</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">episode_shownotes_subtitle</span>.<span class="ruby-identifier">nil?</span>
- 50:     
- 51:         <span class="ruby-identifier">max_length</span> = <span class="ruby-identifier">length</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">max</span>
- 52:         <span class="ruby-identifier">shownotes</span> = <span class="ruby-identifier">length</span>.<span class="ruby-identifier">key</span>(<span class="ruby-identifier">max_length</span>)
- 53: 
- 54:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">shownotes</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;summary&quot;</span>
- 55:           <span class="ruby-identifier">episode_shownotes</span> = <span class="ruby-identifier">episode_shownotes_summary</span>
- 56:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">shownotes</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;description&quot;</span>
- 57:           <span class="ruby-identifier">episode_shownotes</span> = <span class="ruby-identifier">episode_shownotes_description</span>
- 58:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">shownotes</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;subtitle&quot;</span>
- 59:           <span class="ruby-identifier">episode_shownotes</span> = <span class="ruby-identifier">episode_shownotes_subtitle</span>
- 60:         <span class="ruby-keyword kw">end</span>
- 61: 
- 62:         <span class="ruby-comment cmt"># Episode publish date</span>
- 63:         <span class="ruby-identifier">episode_pub_date</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./pubDate&quot;</span>))
+ 22:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fetch_podcast_episodes</span>(<span class="ruby-identifier">podcast</span>, <span class="ruby-identifier">options</span> = {})
+ 23:     <span class="ruby-keyword kw">begin</span>
+ 24:       <span class="ruby-identifier">comet</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:comet</span>] <span class="ruby-operator">||</span> <span class="ruby-keyword kw">false</span>
+ 25:       
+ 26:       <span class="ruby-ivar">@podcast</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">podcast</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id, name, feedurl'</span>)
+ 27:       <span class="ruby-ivar">@feed</span> = <span class="ruby-ivar">@podcast</span>.<span class="ruby-identifier">feedurl</span>
+ 28:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{@feed}&quot;</span>
+ 29: 
+ 30:       <span class="ruby-ivar">@podcast</span>.<span class="ruby-identifier">update_attributes</span> <span class="ruby-value">:episode_update_status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'started'</span>
+ 31: 
+ 32:       <span class="ruby-keyword kw">begin</span>
+ 33:         <span class="ruby-ivar">@doc</span> = <span class="ruby-constant">Nokogiri</span>.<span class="ruby-constant">XML</span>(<span class="ruby-constant">HTTParty</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@feed</span>, <span class="ruby-value str">'User-Agent'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'ruby'</span>, <span class="ruby-value">:format</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:html</span>, <span class="ruby-value">:timeout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">15</span>, <span class="ruby-value">:limit</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">10</span>)).<span class="ruby-identifier">remove_namespaces!</span>
+ 34:         <span class="ruby-ivar">@episodes</span> = <span class="ruby-ivar">@doc</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">&quot;//item&quot;</span>)
+ 35:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+ 36:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{ex.class}:#{ex.message}&quot;</span>
+ 37:       <span class="ruby-keyword kw">end</span>
+ 38:     
+ 39:       <span class="ruby-ivar">@episodes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">episode</span><span class="ruby-operator">|</span>
+ 40:         <span class="ruby-keyword kw">begin</span>
+ 41:           <span class="ruby-comment cmt"># Grab the episode title</span>
+ 42:           <span class="ruby-identifier">episode_title</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./title&quot;</span>))
+ 43:     
+ 44:           <span class="ruby-comment cmt"># Let's grab the most robust shownotes we can find</span>
+ 45:           <span class="ruby-identifier">episode_shownotes_summary</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./summary&quot;</span>))
+ 46:           <span class="ruby-identifier">episode_shownotes_description</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./description&quot;</span>))
+ 47:           <span class="ruby-identifier">episode_shownotes_subtitle</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./subtitle&quot;</span>))
+ 48:     
+ 49:           <span class="ruby-identifier">length</span> = {}
+ 50:           <span class="ruby-identifier">length</span>[<span class="ruby-value str">&quot;summary&quot;</span>] = <span class="ruby-identifier">episode_shownotes_summary</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/[\w-][\w.]+/</span>).<span class="ruby-identifier">size</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">episode_shownotes_summary</span>.<span class="ruby-identifier">nil?</span>
+ 51:           <span class="ruby-identifier">length</span>[<span class="ruby-value str">&quot;description&quot;</span>] = <span class="ruby-identifier">episode_shownotes_description</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/[\w-][\w.]+/</span>).<span class="ruby-identifier">size</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">episode_shownotes_description</span>.<span class="ruby-identifier">nil?</span>
+ 52:           <span class="ruby-identifier">length</span>[<span class="ruby-value str">&quot;subtitle&quot;</span>] = <span class="ruby-identifier">episode_shownotes_subtitle</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/[\w-][\w.]+/</span>).<span class="ruby-identifier">size</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">episode_shownotes_subtitle</span>.<span class="ruby-identifier">nil?</span>
+ 53:     
+ 54:           <span class="ruby-identifier">max_length</span> = <span class="ruby-identifier">length</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">max</span>
+ 55:           <span class="ruby-identifier">shownotes</span> = <span class="ruby-identifier">length</span>.<span class="ruby-identifier">key</span>(<span class="ruby-identifier">max_length</span>)
+ 56: 
+ 57:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">shownotes</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;summary&quot;</span>
+ 58:             <span class="ruby-identifier">episode_shownotes</span> = <span class="ruby-identifier">episode_shownotes_summary</span>
+ 59:           <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">shownotes</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;description&quot;</span>
+ 60:             <span class="ruby-identifier">episode_shownotes</span> = <span class="ruby-identifier">episode_shownotes_description</span>
+ 61:           <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">shownotes</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;subtitle&quot;</span>
+ 62:             <span class="ruby-identifier">episode_shownotes</span> = <span class="ruby-identifier">episode_shownotes_subtitle</span>
+ 63:           <span class="ruby-keyword kw">end</span>
  64: 
- 65:         <span class="ruby-comment cmt"># Episode url</span>
- 66:         <span class="ruby-identifier">episode_url</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./enclosure/@url&quot;</span>))
- 67:         
- 68:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">episode_url</span>.<span class="ruby-identifier">nil?</span>
- 69:           <span class="ruby-identifier">episode_url</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./content/@url&quot;</span>))
- 70:         <span class="ruby-keyword kw">end</span>
- 71: 
- 72:         <span class="ruby-comment cmt"># Episode file type</span>
- 73:         <span class="ruby-identifier">episode_file_type</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./enclosure/@type&quot;</span>))
- 74:         
- 75:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">episode_file_type</span>.<span class="ruby-identifier">nil?</span>
- 76:           <span class="ruby-identifier">episode_file_type</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./content/@type&quot;</span>))
- 77:         <span class="ruby-keyword kw">end</span>        
- 78: 
- 79:         <span class="ruby-comment cmt"># Episode file size</span>
- 80:         <span class="ruby-identifier">episode_file_size</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./enclosure/@length&quot;</span>))
- 81:         
- 82:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">episode_file_size</span>.<span class="ruby-identifier">nil?</span>
- 83:           <span class="ruby-identifier">episode_file_size</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./content/@filesize&quot;</span>))
- 84:         <span class="ruby-keyword kw">end</span>        
- 85:         
- 86:         <span class="ruby-identifier">episode_file_size</span> = (<span class="ruby-identifier">episode_file_size</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">/</span> <span class="ruby-value">1048576.0</span>).<span class="ruby-identifier">round</span>(<span class="ruby-value">1</span>).<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; MB&quot;</span>
- 87: 
- 88:         <span class="ruby-comment cmt"># Episode Duration</span>
- 89:         <span class="ruby-identifier">episode_duration</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./duration&quot;</span>))
- 90:     
- 91:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">episode_duration</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">episode_duration</span>.<span class="ruby-identifier">include?</span> <span class="ruby-value str">&quot;:&quot;</span>
- 92:           <span class="ruby-identifier">episode_duration</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">at</span>(<span class="ruby-identifier">episode_duration</span>.<span class="ruby-identifier">to_i</span>).<span class="ruby-identifier">gmtime</span>.<span class="ruby-identifier">strftime</span>(<span class="ruby-value str">&quot;%R:%S&quot;</span>)
- 93:         <span class="ruby-keyword kw">end</span>
- 94:         
- 95:         <span class="ruby-identifier">episode</span> = <span class="ruby-ivar">@podcast</span>.<span class="ruby-identifier">episodes</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_title</span>})
- 96:         
- 97:         <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">episode</span> <span class="ruby-operator">==</span> [])
- 98:           <span class="ruby-keyword kw">begin</span>
- 99:             <span class="ruby-identifier">episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">create</span>(
-100:               <span class="ruby-value">:podcast_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@podcast</span>.<span class="ruby-identifier">id</span>,
-101:               <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_title</span>,
-102:               <span class="ruby-value">:shownotes</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_shownotes</span>,
-103:               <span class="ruby-value">:date_published</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_pub_date</span>,
-104:               <span class="ruby-value">:url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_url</span>,
-105:               <span class="ruby-value">:filetype</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_file_type</span>,
-106:               <span class="ruby-value">:size</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_file_size</span>,
-107:               <span class="ruby-value">:duration</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_duration</span>
-108:             )
-109:             <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;New Episode: #{episode.title}&quot;</span>
-110:             <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">episode_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;New Episode: #{episode.title}&quot;</span>)
-111:           <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
-112:             <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;An error of type #{ex.class} happened, message is #{ex.message}&quot;</span>
-113:           <span class="ruby-keyword kw">end</span>     
-114:         <span class="ruby-keyword kw">elsif</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">episode</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">title</span>.<span class="ruby-identifier">nil?</span>)
-115:           <span class="ruby-keyword kw">begin</span>
-116:             <span class="ruby-identifier">ep</span> = <span class="ruby-identifier">episode</span>[<span class="ruby-value">0</span>]
-117:             <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">shownotes</span> = <span class="ruby-identifier">episode_shownotes</span>
-118:             <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">date_published</span> = <span class="ruby-identifier">episode_pub_date</span>
-119:             <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">url</span> = <span class="ruby-identifier">episode_url</span>
-120:             <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">filetype</span> = <span class="ruby-identifier">episode_file_type</span>
-121:             <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">size</span> = <span class="ruby-identifier">episode_file_size</span>
-122:             <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">duration</span> = <span class="ruby-identifier">episode_duration</span>
-123:             
-124:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">url_changed?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">shownotes_changed?</span>
-125:               <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">save</span>      
-126:               <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Update Episode: #{episode[0].title}&quot;</span>
-127:               <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">episode_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;Update Episode: #{episode[0].title}&quot;</span>)
-128:             <span class="ruby-keyword kw">end</span>
-129:           <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
-130:             <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;An error of type #{ex.class} happened, message is #{ex.message}&quot;</span>
-131:           <span class="ruby-keyword kw">end</span>          
-132:         <span class="ruby-keyword kw">end</span>
-133:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
-134:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{ex.class}:#{ex.message}&quot;</span>
-135:         <span class="ruby-ivar">@podcast</span>.<span class="ruby-identifier">update_attributes</span> <span class="ruby-value">:episode_update_status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'error'</span>
-136:       <span class="ruby-keyword kw">end</span>
-137:     <span class="ruby-keyword kw">end</span>
-138:     <span class="ruby-ivar">@podcast</span>.<span class="ruby-identifier">update_attributes</span> <span class="ruby-value">:episode_update_status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'success'</span>
-139:   <span class="ruby-keyword kw">end</span></pre>
+ 65:           <span class="ruby-comment cmt"># Episode publish date</span>
+ 66:           <span class="ruby-identifier">episode_pub_date</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./pubDate&quot;</span>))
+ 67: 
+ 68:           <span class="ruby-comment cmt"># Episode url</span>
+ 69:           <span class="ruby-identifier">episode_url</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./enclosure/@url&quot;</span>))
+ 70:         
+ 71:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">episode_url</span>.<span class="ruby-identifier">nil?</span>
+ 72:             <span class="ruby-identifier">episode_url</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./content/@url&quot;</span>))
+ 73:           <span class="ruby-keyword kw">end</span>
+ 74: 
+ 75:           <span class="ruby-comment cmt"># Episode file type</span>
+ 76:           <span class="ruby-identifier">episode_file_type</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./enclosure/@type&quot;</span>))
+ 77:         
+ 78:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">episode_file_type</span>.<span class="ruby-identifier">nil?</span>
+ 79:             <span class="ruby-identifier">episode_file_type</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./content/@type&quot;</span>))
+ 80:           <span class="ruby-keyword kw">end</span>        
+ 81: 
+ 82:           <span class="ruby-comment cmt"># Episode file size</span>
+ 83:           <span class="ruby-identifier">episode_file_size</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./enclosure/@length&quot;</span>))
+ 84:         
+ 85:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">episode_file_size</span>.<span class="ruby-identifier">nil?</span>
+ 86:             <span class="ruby-identifier">episode_file_size</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./content/@filesize&quot;</span>))
+ 87:           <span class="ruby-keyword kw">end</span>        
+ 88:         
+ 89:           <span class="ruby-identifier">episode_file_size</span> = (<span class="ruby-identifier">episode_file_size</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">/</span> <span class="ruby-value">1048576.0</span>).<span class="ruby-identifier">round</span>(<span class="ruby-value">1</span>).<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; MB&quot;</span>
+ 90: 
+ 91:           <span class="ruby-comment cmt"># Episode Duration</span>
+ 92:           <span class="ruby-identifier">episode_duration</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">episode</span>.<span class="ruby-identifier">at_xpath</span>(<span class="ruby-value str">&quot;./duration&quot;</span>))
+ 93:     
+ 94:           <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">episode_duration</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">episode_duration</span>.<span class="ruby-identifier">include?</span> <span class="ruby-value str">&quot;:&quot;</span>
+ 95:             <span class="ruby-identifier">episode_duration</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">at</span>(<span class="ruby-identifier">episode_duration</span>.<span class="ruby-identifier">to_i</span>).<span class="ruby-identifier">gmtime</span>.<span class="ruby-identifier">strftime</span>(<span class="ruby-value str">&quot;%R:%S&quot;</span>)
+ 96:           <span class="ruby-keyword kw">end</span>
+ 97:         
+ 98:           <span class="ruby-identifier">episode</span> = <span class="ruby-ivar">@podcast</span>.<span class="ruby-identifier">episodes</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_title</span>})
+ 99:         
+100:           <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">episode</span> <span class="ruby-operator">==</span> [])
+101:             <span class="ruby-keyword kw">begin</span>
+102:               <span class="ruby-identifier">episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">create</span>(
+103:                 <span class="ruby-value">:podcast_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@podcast</span>.<span class="ruby-identifier">id</span>,
+104:                 <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_title</span>,
+105:                 <span class="ruby-value">:shownotes</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_shownotes</span>,
+106:                 <span class="ruby-value">:date_published</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_pub_date</span>,
+107:                 <span class="ruby-value">:url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_url</span>,
+108:                 <span class="ruby-value">:filetype</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_file_type</span>,
+109:                 <span class="ruby-value">:size</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_file_size</span>,
+110:                 <span class="ruby-value">:duration</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">episode_duration</span>
+111:               )
+112:               <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;New Episode: #{episode.title}&quot;</span>
+113:               <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">episode_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;New Episode: #{episode.title}&quot;</span>)
+114:             <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+115:               <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;An error of type #{ex.class} happened, message is #{ex.message}&quot;</span>
+116:             <span class="ruby-keyword kw">end</span>     
+117:           <span class="ruby-keyword kw">elsif</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">episode</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">title</span>.<span class="ruby-identifier">nil?</span>)
+118:             <span class="ruby-keyword kw">begin</span>
+119:               <span class="ruby-identifier">ep</span> = <span class="ruby-identifier">episode</span>[<span class="ruby-value">0</span>]
+120:               <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">shownotes</span> = <span class="ruby-identifier">episode_shownotes</span>
+121:               <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">date_published</span> = <span class="ruby-identifier">episode_pub_date</span>
+122:               <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">url</span> = <span class="ruby-identifier">episode_url</span>
+123:               <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">filetype</span> = <span class="ruby-identifier">episode_file_type</span>
+124:               <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">size</span> = <span class="ruby-identifier">episode_file_size</span>
+125:               <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">duration</span> = <span class="ruby-identifier">episode_duration</span>
+126:             
+127:               <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">url_changed?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">shownotes_changed?</span>
+128:                 <span class="ruby-identifier">ep</span>.<span class="ruby-identifier">save</span>      
+129:                 <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Update Episode: #{episode[0].title}&quot;</span>
+130:                 <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">episode_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;Update Episode: #{episode[0].title}&quot;</span>)
+131:               <span class="ruby-keyword kw">end</span>
+132:             <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+133:               <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;An error of type #{ex.class} happened, message is #{ex.message}&quot;</span>
+134:             <span class="ruby-keyword kw">end</span>          
+135:           <span class="ruby-keyword kw">end</span>
+136:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+137:           <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{ex.class}: #{ex.message}&quot;</span>
+138:           <span class="ruby-ivar">@podcast</span>.<span class="ruby-identifier">update_attributes</span> <span class="ruby-value">:episode_update_status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'error'</span>
+139:         <span class="ruby-keyword kw">end</span>
+140:       <span class="ruby-keyword kw">end</span>
+141:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+142:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{ex.class}: #{ex.message}&quot;</span>
+143:     <span class="ruby-keyword kw">ensure</span>
+144:       <span class="ruby-ivar">@podcast</span>.<span class="ruby-identifier">update_attributes</span> <span class="ruby-value">:episode_update_status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'success'</span>
+145:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">comet</span>
+146:         <span class="ruby-ivar">@podcast</span>.<span class="ruby-identifier">update_attributes</span> <span class="ruby-value">:episode_update_status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'reset'</span>
+147:       <span class="ruby-keyword kw">end</span>
+148:     <span class="ruby-keyword kw">end</span>
+149:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -363,11 +373,11 @@ Return the text of the xpath result.
 					<div class="method-source-code"
 						id="parse-nodes-source">
 <pre>
-     <span class="ruby-comment cmt"># File app/models/episode.rb, line 142</span>
-142:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">xpath</span>)
-143:     <span class="ruby-identifier">node_value</span> = <span class="ruby-identifier">xpath</span>.<span class="ruby-identifier">text</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">xpath</span>.<span class="ruby-identifier">nil?</span>
-144:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">node_value</span>
-145:   <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File app/models/episode.rb, line 152</span>
+152:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parse_nodes</span>(<span class="ruby-identifier">xpath</span>)
+153:     <span class="ruby-identifier">node_value</span> = <span class="ruby-identifier">xpath</span>.<span class="ruby-identifier">text</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">xpath</span>.<span class="ruby-identifier">nil?</span>
+154:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">node_value</span>
+155:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
