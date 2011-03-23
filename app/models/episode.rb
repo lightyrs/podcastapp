@@ -19,123 +19,127 @@ class Episode < ActiveRecord::Base
   end
   
   # Fetch the latest episodes for the podcast.
-  def self.fetch_podcast_episodes(podcast)   
-    @podcast = Podcast.find(podcast, :select => 'id, name, feedurl')
-    @feed = @podcast.feedurl
-    puts "#{@feed}"
+  def self.fetch_podcast_episodes(podcast)
+    begin 
+      @podcast = Podcast.find(podcast, :select => 'id, name, feedurl')
+      @feed = @podcast.feedurl
+      puts "#{@feed}"
     
-    @podcast.update_attributes :episode_update_status => 'started'
+      @podcast.update_attributes :episode_update_status => 'started'
     
-    begin
-      @doc = Nokogiri.XML(HTTParty.get(@feed, 'User-Agent' => 'ruby', :format => :html, :timeout => 15, :limit => 10)).remove_namespaces!
-      @episodes = @doc.xpath("//item")
-    rescue StandardError => ex
-      puts "#{ex.class}:#{ex.message}"
-    end
-    
-    @episodes.each do |episode|
       begin
-        # Grab the episode title
-        episode_title = Episode.parse_nodes(episode.at_xpath("./title"))
-    
-        # Let's grab the most robust shownotes we can find
-        episode_shownotes_summary = Episode.parse_nodes(episode.at_xpath("./summary"))
-        episode_shownotes_description = Episode.parse_nodes(episode.at_xpath("./description"))
-        episode_shownotes_subtitle = Episode.parse_nodes(episode.at_xpath("./subtitle"))
-    
-        length = {}
-        length["summary"] = episode_shownotes_summary.scan(/[\w-][\w.]+/).size unless episode_shownotes_summary.nil?
-        length["description"] = episode_shownotes_description.scan(/[\w-][\w.]+/).size unless episode_shownotes_description.nil?
-        length["subtitle"] = episode_shownotes_subtitle.scan(/[\w-][\w.]+/).size unless episode_shownotes_subtitle.nil?
-    
-        max_length = length.values.max
-        shownotes = length.key(max_length)
-
-        if shownotes == "summary"
-          episode_shownotes = episode_shownotes_summary
-        elsif shownotes == "description"
-          episode_shownotes = episode_shownotes_description
-        elsif shownotes == "subtitle"
-          episode_shownotes = episode_shownotes_subtitle
-        end
-
-        # Episode publish date
-        episode_pub_date = Episode.parse_nodes(episode.at_xpath("./pubDate"))
-
-        # Episode url
-        episode_url = Episode.parse_nodes(episode.at_xpath("./enclosure/@url"))
-        
-        if episode_url.nil?
-          episode_url = Episode.parse_nodes(episode.at_xpath("./content/@url"))
-        end
-
-        # Episode file type
-        episode_file_type = Episode.parse_nodes(episode.at_xpath("./enclosure/@type"))
-        
-        if episode_file_type.nil?
-          episode_file_type = Episode.parse_nodes(episode.at_xpath("./content/@type"))
-        end        
-
-        # Episode file size
-        episode_file_size = Episode.parse_nodes(episode.at_xpath("./enclosure/@length"))
-        
-        if episode_file_size.nil?
-          episode_file_size = Episode.parse_nodes(episode.at_xpath("./content/@filesize"))
-        end        
-        
-        episode_file_size = (episode_file_size.to_f / 1048576.0).round(1).to_s + " MB"
-
-        # Episode Duration
-        episode_duration = Episode.parse_nodes(episode.at_xpath("./duration"))
-    
-        unless episode_duration.nil? or episode_duration.include? ":"
-          episode_duration = Time.at(episode_duration.to_i).gmtime.strftime("%R:%S")
-        end
-        
-        episode = @podcast.episodes.find(:all, :conditions => {:title => episode_title})
-        
-        if (episode == [])
-          begin
-            episode = Episode.create(
-              :podcast_id => @podcast.id,
-              :title => episode_title,
-              :shownotes => episode_shownotes,
-              :date_published => episode_pub_date,
-              :url => episode_url,
-              :filetype => episode_file_type,
-              :size => episode_file_size,
-              :duration => episode_duration
-            )
-            puts "New Episode: #{episode.title}"
-            Episode.episode_logger.info("New Episode: #{episode.title}")
-          rescue StandardError => ex
-            puts "An error of type #{ex.class} happened, message is #{ex.message}"
-          end     
-        elsif (!episode[0].title.nil?)
-          begin
-            ep = episode[0]
-            ep.shownotes = episode_shownotes
-            ep.date_published = episode_pub_date
-            ep.url = episode_url
-            ep.filetype = episode_file_type
-            ep.size = episode_file_size
-            ep.duration = episode_duration
-            
-            if ep.url_changed? or ep.shownotes_changed?
-              ep.save      
-              puts "Update Episode: #{episode[0].title}"
-              Episode.episode_logger.info("Update Episode: #{episode[0].title}")
-            end
-          rescue StandardError => ex
-            puts "An error of type #{ex.class} happened, message is #{ex.message}"
-          end          
-        end
+        @doc = Nokogiri.XML(HTTParty.get(@feed, 'User-Agent' => 'ruby', :format => :html, :timeout => 15, :limit => 10)).remove_namespaces!
+        @episodes = @doc.xpath("//item")
       rescue StandardError => ex
         puts "#{ex.class}:#{ex.message}"
-        @podcast.update_attributes :episode_update_status => 'error'
       end
+    
+      @episodes.each do |episode|
+        begin
+          # Grab the episode title
+          episode_title = Episode.parse_nodes(episode.at_xpath("./title"))
+    
+          # Let's grab the most robust shownotes we can find
+          episode_shownotes_summary = Episode.parse_nodes(episode.at_xpath("./summary"))
+          episode_shownotes_description = Episode.parse_nodes(episode.at_xpath("./description"))
+          episode_shownotes_subtitle = Episode.parse_nodes(episode.at_xpath("./subtitle"))
+    
+          length = {}
+          length["summary"] = episode_shownotes_summary.scan(/[\w-][\w.]+/).size unless episode_shownotes_summary.nil?
+          length["description"] = episode_shownotes_description.scan(/[\w-][\w.]+/).size unless episode_shownotes_description.nil?
+          length["subtitle"] = episode_shownotes_subtitle.scan(/[\w-][\w.]+/).size unless episode_shownotes_subtitle.nil?
+    
+          max_length = length.values.max
+          shownotes = length.key(max_length)
+
+          if shownotes == "summary"
+            episode_shownotes = episode_shownotes_summary
+          elsif shownotes == "description"
+            episode_shownotes = episode_shownotes_description
+          elsif shownotes == "subtitle"
+            episode_shownotes = episode_shownotes_subtitle
+          end
+
+          # Episode publish date
+          episode_pub_date = Episode.parse_nodes(episode.at_xpath("./pubDate"))
+
+          # Episode url
+          episode_url = Episode.parse_nodes(episode.at_xpath("./enclosure/@url"))
+        
+          if episode_url.nil?
+            episode_url = Episode.parse_nodes(episode.at_xpath("./content/@url"))
+          end
+
+          # Episode file type
+          episode_file_type = Episode.parse_nodes(episode.at_xpath("./enclosure/@type"))
+        
+          if episode_file_type.nil?
+            episode_file_type = Episode.parse_nodes(episode.at_xpath("./content/@type"))
+          end        
+
+          # Episode file size
+          episode_file_size = Episode.parse_nodes(episode.at_xpath("./enclosure/@length"))
+        
+          if episode_file_size.nil?
+            episode_file_size = Episode.parse_nodes(episode.at_xpath("./content/@filesize"))
+          end        
+        
+          episode_file_size = (episode_file_size.to_f / 1048576.0).round(1).to_s + " MB"
+
+          # Episode Duration
+          episode_duration = Episode.parse_nodes(episode.at_xpath("./duration"))
+    
+          unless episode_duration.nil? or episode_duration.include? ":"
+            episode_duration = Time.at(episode_duration.to_i).gmtime.strftime("%R:%S")
+          end
+        
+          episode = @podcast.episodes.find(:all, :conditions => {:title => episode_title})
+        
+          if (episode == [])
+            begin
+              episode = Episode.create(
+                :podcast_id => @podcast.id,
+                :title => episode_title,
+                :shownotes => episode_shownotes,
+                :date_published => episode_pub_date,
+                :url => episode_url,
+                :filetype => episode_file_type,
+                :size => episode_file_size,
+                :duration => episode_duration
+              )
+              puts "New Episode: #{episode.title}"
+              Episode.episode_logger.info("New Episode: #{episode.title}")
+            rescue StandardError => ex
+              puts "An error of type #{ex.class} happened, message is #{ex.message}"
+            end     
+          elsif (!episode[0].title.nil?)
+            begin
+              ep = episode[0]
+              ep.shownotes = episode_shownotes
+              ep.date_published = episode_pub_date
+              ep.url = episode_url
+              ep.filetype = episode_file_type
+              ep.size = episode_file_size
+              ep.duration = episode_duration
+            
+              if ep.url_changed? or ep.shownotes_changed?
+                ep.save      
+                puts "Update Episode: #{episode[0].title}"
+                Episode.episode_logger.info("Update Episode: #{episode[0].title}")
+              end
+            rescue StandardError => ex
+              puts "An error of type #{ex.class} happened, message is #{ex.message}"
+            end          
+          end
+        rescue StandardError => ex
+          puts "#{ex.class}: #{ex.message}"
+          @podcast.update_attributes :episode_update_status => 'error'
+        end
+      end
+      @podcast.update_attributes :episode_update_status => 'success'
+    rescue StandardError => ex
+      puts "#{ex.class}: #{ex.message}"
     end
-    @podcast.update_attributes :episode_update_status => 'success'
   end
   
   # Return the text of the xpath result.
