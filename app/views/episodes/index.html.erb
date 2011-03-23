@@ -56,7 +56,9 @@
           if (data == "success") {
             $("#episodes").load("<%= DOMAIN_NAME %>/podcasts/" + podcast + "/episodes?reload=true #episodes table", function(){
               $("#status").html("<p>Episodes Updated</p>");
-							$.get("<%= DOMAIN_NAME %>/podcasts/" + podcast + "/reset_update_status");
+							$.get("<%= DOMAIN_NAME %>/podcasts/" + podcast + "/reset_update_status", function(data){
+								console.log(data);
+							});
             });
           } else {
             fetch_new_episodes();

@@ -6,7 +6,7 @@ class EpisodesController < ApplicationController
     
     unless params[:reload] == "true"
       # Fetch new episodes in a background task
-      Episode.delay.fetch_podcast_episodes(@podcast)
+      Episode.delay.fetch_podcast_episodes(@podcast, :comet => true)
     end
     
     # Find all podcast episodes and sort by date descending
