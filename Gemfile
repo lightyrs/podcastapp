@@ -2,8 +2,8 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.0.1'
 
-# SQLite
-gem 'sqlite3-ruby', :require => 'sqlite3'
+# MySQL
+gem 'mysql'
 
 # irb Enhancements
 gem 'awesome_print'

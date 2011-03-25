@@ -27,12 +27,27 @@ every 1.day, :at => '11:00 pm' do
   rake 'maintenance:daily &> /dev/null'
 end
 
-# Scrape podcasts but only update new podcasts (and don't send local mail)
+# Scrape new podcasts and fetch site and feed URLs
 every [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday], :at => '12:30 am' do
   rake 'podcast:generate_inventory["new"] &> /dev/null'
 end
 
-# Scrape and update all podcasts (and don't send local mail)
+# Discover new podcasts' social urls and twitter handles
+every [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday], :at => '12:40 am' do
+  rake 'podcast:socialize["new"] &> /dev/null'
+end
+
+# Fetch podcast episodes
+every 1.day, :at => '12:50 am' do
+  rake 'podcast:fetch_episodes &> /dev/null'
+end
+
+# Scrape and update all podcasts
 every :sunday, :at => '12:30 am' do
   rake "podcast:generate_inventory &> /dev/null" 
+end
+
+# Discover all podcasts' social urls and twitter handles
+every :sunday, :at => '12:40 am' do
+  rake 'podcast:socialize &> /dev/null'
 end
