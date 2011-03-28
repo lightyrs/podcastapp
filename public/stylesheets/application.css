@@ -1,13 +1,718 @@
 body {
 	background-color: #DADADA;
+  color: #222;
+  font-size: 13px;
+  font-family: "helvetica neue", arial, helvetica, "lucida grande", sans-serif;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  color: #111;
+  font-family: "helvetica neue", Helvetica, arial, sans-serif;
+}
+
+/* Success, error & notice boxes for messages and errors. */
+div.error, div.notice, div.success,
+#flash_failure, #flash_success, #flash_notice {
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 1em;
+  padding: 0.8em;
+}
+
+div.error,
+#flash_failure {
+  background: #FBE3E4;
+  border-color: #FBC2C4;
+  color: #D12F19;
+}
+
+div.error a,
+#flash_failure a {
+  color: #D12F19;
+}
+
+div.notice,
+#flash_notice {
+  background: #FFF6BF;
+  border-color: #FFD324;
+  color: #817134;
+}
+
+div.notice a,
+#flash_notice a {
+  color: #817134;
+}
+
+div.success,
+#flash_success {
+  background: #E6EFC2;
+  border-color: #C6D880;
+  color: #529214;
+}
+
+div.success a,
+#flash_success a {
+  color: #529214;
+}
+
+/* Misc classes and elements */
+/* Use a .box to create a padded box inside a column.  */
+.box {
+  background: #eee;
+  margin-bottom: 1.5em;
+  padding: 1.5em;
+}
+
+/* Use this to create a horizontal ruler across a column. */
+hr {
+  background: #ddd;
+  border: none;
+  clear: both;
+  color: #ddd;
+  float: none;
+  height: 1px;
+  margin: 0 0 1.4em;
+  width: 100%;
+}
+
+hr.space {
+  background: #fff;
+  color: #fff;
+}
+
+/* for image replacement */
+.ir {
+  background-repeat: no-repeat;
+  direction: ltr;
+  display: block;
+  overflow: hidden;
+  text-align: left;
+  text-indent: -999em;
+}
+
+/* Hide for both screenreaders and browsers
+   css-discuss.incutio.com/wiki/Screenreader_Visibility */
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+/* Hide only visually, but have it available for screenreaders
+   www.webaim.org/techniques/css/invisiblecontent/  &  j.mp/visuallyhidden  */
+.visuallyhidden {
+  clip: rect(1px 1px 1px 1px);
+  /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px);
+  position: absolute !important;
+}
+
+/* Hide visually and from screenreaders, but maintain layout */
+.invisible {
+  visibility: hidden;
+}
+
+/* >> The Magnificent CLEARFIX: Updated to prevent margin-collapsing on child elements << j.mp/bestclearfix */
+.clearfix:before,
+.clearfix:after {
+  content: "\0020";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+/* Fix clearfix: blueprintcss.lighthouseapp.com/projects/15318/tickets/5-extra-margin-padding-bottom-of-page */
+.clearfix {
+  zoom: 1;
+}
+
+.ie7 img {
+  -ms-interpolation-mode: bicubic;
+}
+
+@media print {
+  * {
+    background: transparent !important;
+    color: #444 !important;
+    text-shadow: none !important;
+	}
+
+  a, a:visited {
+    color: #444 !important;
+    text-decoration: underline;
+	}
+
+  a:after {
+    content: " (" attr(href) ")";
+	}
+
+  abbr:after {
+    content: " (" attr(title) ")";
+	}
+
+  .ir a:after {
+    content: "";
+	}
+
+  /* Don't show links for images */
+  pre, blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid; 
+	}
+
+  thead {
+    display: table-header-group; 
+	}
+
+  /* css-discuss.incutio.com/wiki/Printing_Tables */
+  tr, img {
+    page-break-inside: avoid; 
+	}
+
+  @page {
+    margin: 0.5cm; 
+	}
+
+  p, h2, h3 {
+    orphans: 3;
+    widows: 3; 
+	}
+
+  h2, h3 {
+    page-break-after: avoid;
+	}
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 2.2em;
+  line-height: 1;
+  margin-bottom: 0.25em;
+}
+
+h2 {
+  font-size: 1.6em;
+  line-height: 1.1;
+  margin-bottom: 0.25em;
+}
+
+h3 {
+  font-size: 1.3em;
+  line-height: 1;
+  margin-bottom: 0.25em;
+}
+
+h4 {
+  font-size: 1.1em;
+  line-height: 1.25;
+  margin-bottom: 0.25em;
+}
+
+h5 {
+  font-size: 1em;
+  margin-bottom: 0.25em;
+}
+
+h6 {
+  font-size: 1em;
+  margin-bottom: 0.25em;
+}
+
+/* Text elements */
+p {
+  margin-bottom: 0.5em;
+}
+
+p.last {
+  margin-bottom: 0;
+}
+
+p img {
+  float: left;
+  margin: 1.5em 1.5em 1.5em 0;
+  padding: 0;
+}
+
+/* Use this if the image is at the top of the <p>. */
+p img.top {
+  margin-top: 0;
+}
+
+img {
+  margin: 0;
+}
+
+abbr, acronym {
+  border-bottom: 1px dotted #666;
+  cursor: help;
+}
+
+address {
+  font-style: italic;
+  margin-top: 1.5em;
+}
+
+del {
+  color: #666;
+}
+
+a, a:link {
+  color: #1a4882;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #1a4882;
+}
+
+a:hover {
+  color: #052246;
+}
+
+a:active,
+a:focus {
+  color: #1a4882;
+}
+
+blockquote {
+  border-left: 4px solid #d1d1d1;
+  color: #666;
+  font-style: italic;
+  margin: 1.5em 0;
+  padding-left: 1em;
+}
+
+strong {
+  font-weight: bold;
+}
+
+em,
+dfn {
+  font-style: italic;
+}
+
+dfn {
+  font-weight: bold;
+}
+
+pre, code {
+  margin: 1.5em 0;
+  white-space: pre;
+  /* CSS2 */
+  white-space: pre-wrap;
+  /* CSS 2.1 */
+  word-wrap: break-word;
+  /* IE */
+}
+
+pre, code, tt {
+  font: 1em 'andale mono', 'monotype.com', 'lucida console', monospace;
+  line-height: 1.5;
+}
+
+pre.code {
+  background: #000;
+  color: #fff;
+  padding: 20px;
+}
+
+tt {
+  display: block;
+  line-height: 1.5;
+  margin: 1.5em 0;
+}
+
+/* Forms */
+/*removes dotted outline on submit buttons when clicking in firefox */
+input[type="submit"]::-moz-focus-inner {
+  border: none;
+}
+
+form ol {
+  list-style: none;
+  margin: 0 0 1em 0;
+}
+
+form ol ol {
+  margin-left: 0;
+}
+
+form ol li {
+  list-style-position: outside;
+  margin: 0 0 1em 0;
+}
+
+/*list-style-position fixes IE label margin bug*/
+form ol ol li {
+  list-style-position: outside;
+  margin: 0 0 .25em 0;
+}
+
+form ol li.error input {
+  background: #FBE3E4;
+}
+
+p.inline-errors {
+  color: #D12F19;
+}
+
+form ol li.file {
+  background: #e1e1e1;
+  border: 1px solid #c8c8c8;
+  padding: 10px;
+}
+
+form abbr {
+  border-bottom: 0;
+}
+
+label {
+  display: block;
+}
+
+.required label {
+  font-weight: bold;
+}
+
+.checkbox_field label,
+.radio_field label {
+  font-weight: normal;
+}
+
+a.cancel {
+  color: #7d0d0d;
+}
+
+.inline-hints {
+  color: #666;
+  font-size: 0.8em;
+  margin-bottom: 0.25em;
+}
+
+/* Fieldsets */
+fieldset {
+  background: #f1f1f1;
+  border: 1px solid #e3e3e3;
+  margin: 0 0 1.5em 0;
+  padding: 1.5em 1.5em 1em 1.5em;
+}
+
+fieldset fieldset,
+fieldset fieldset fieldset {
+  border: 0;
+  padding: 0;
+}
+
+legend {
+  font-weight: bold;
+}
+
+.ie6 legend, .ie7 legend {
+  margin-left: -7px;
+}
+
+fieldset.buttons {
+  background: inherit;
+  border: 0;
+  padding: 0;
+}
+
+fieldset.buttons li {
+  display: inline;
+}
+
+.radio fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+/* Text fields */
+input {
+	outline: none;
+}
+
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="range"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"] {
+  font-size: inherit;
+  padding: 3px 2px;
+  width: 300px;
+}
+
+.ie6 input {
+  vertical-align: text-bottom;
+}
+
+input[disabled='disabled'] {
+  background-color: #fcfcfc;
+  cursor: default;
+}
+
+input[type="checkbox"] {
+  margin: 0 3px 0 0;
+  position: relative;
+  top: -2px;
+  vertical-align: middle;
+}
+
+.ie7 input[type="checkbox"] {
+  vertical-align: baseline;
+}
+
+input[type="radio"] {
+  margin: 0 3px 0 0;
+  position: relative;
+  top: -2px;
+  vertical-align: middle;
+}
+
+.check_boxes label {
+  display: inline;
+  padding: 0;
+  vertical-align: middle;
+}
+
+.radio label {
+  padding: 0;
+}
+
+/* Textareas */
+textarea {
+  font-size: inherit;
+  height: 200px;
+  margin: 0 0.5em 0.5em 0;
+  padding: 5px;
+  width: 440px;
+  overflow: auto;
+}
+
+/* Select fields */
+fieldset .select select {
+  width: 200px;
+  font-size: 0.9em;
+}
+
+optgroup {
+  margin: 0 0 .5em 0;
+}
+
+/* Date & Time */
+form ol li.date ol li,
+form ol li.time ol li {
+  display: inline;
+}
+
+form ol li.datetime ol li {
+  display: inline-block;
+}
+
+form ol li.datetime select,
+form ol li.date select,
+form ol li.time select {
+  display: inline;
+  width: auto;
+}
+
+form ol li.date label,
+form ol li.time label {
+  display: none;
+}
+
+/* Tables */
+table {
+  margin-bottom: 2em;
+  width: 100%;
+}
+
+th {
+  border-bottom: 2px solid #ccc;
+  font-weight: bold;
+  text-align: left;
+}
+
+td {
+  border-bottom: 1px solid #ddd;
+}
+
+caption, th, td {
+  padding: 4px 10px 4px 0;
+}
+
+caption {
+  background: #f1f1f1;
+  margin-bottom: 1em;
+  padding: 10px 0;
+}
+
+tr, td, th {
+  vertical-align: middle;
+}
+
+/* Use this if you use span-x classes on th/td. */
+table .last {
+  padding-right: 0;
+}
+
+/* Lists */
+ul, ol {
+  list-style-position: inside;
+  margin-bottom: 1.5em;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+dl {
+  line-height: 1.4;
+  margin-bottom: 1.5em;
+}
+
+dl dt {
+  font-weight: bold;
+  margin-top: 0.5em;
+}
+
+dl dd {
+  margin-bottom: 0em;
+}
+
+dd {
+  margin-left: 0.5em;
+}
+
+li {
+  line-height: 1.4;
+}
+
+ol ol, ol ul, ul ul, ul ol {
+  margin-left: 1em;
+}
+
+/* Basic Application Layout Styles */
 
 #container {
 	background: white;
-	border-radius: 24px 24px;
-	-moz-border-radius: 24px 24px;
-	-webkit-border-radius: 24px 24px;
-	margin: 40px auto;
-	padding: 40px;
+	margin: 40px auto 20px;
+	padding: 30px 40px 30px;
 	width: 880px;
+}
+
+#container a {
+	text-decoration: none;
+}
+
+#header {
+	height: 60px;
+}
+
+#logo {
+	float: left;
+}
+
+#logo a {
+	color: #111;
+	text-decoration: none;
+}
+
+#logo a:hover {
+	text-decoration: none;
+}
+
+#header span.username {
+	display: block;
+	float: right;
+}
+
+.results {
+	margin-bottom: 40px;
+}
+
+ul.ui-autocomplete {
+	z-index: 100;
+	background: #fff;
+	padding: 10px;
+	border-right: 1px solid #DADADA;
+	border-left: 1px solid #DADADA;
+	border-bottom: 1px solid #DADADA;
+	width: 280px;
+	list-style: none;
+}
+
+ul.ui-autocomplete li {
+	cursor: pointer;
+}
+
+.pagination-wrapper {
+	width: 100%;
+	text-align: center;
+	font-size: 16px;
+	padding: 10px 0;
+}
+
+.pagination .previous_page {
+	padding-right: 10px;
+}
+
+.pagination .previous_page.disabled {
+	display: none;
+}
+
+.pagination .next_page {
+	padding-left: 10px;
+}
+
+.pagination .next_page.disabled {
+	display: none;
+}
+
+.pagination a { display: inline-block; padding: 7px 9px; font-size: 12px; line-height:1; color: #3C3C3D; text-shadow: 1px 1px 0 #FFFFFF; background: #ECECEC url('../../images/css3buttons/css3buttons_backgrounds.png') 0 0 no-repeat; white-space: nowrap; overflow: visible; cursor: pointer; text-decoration: none; border: 1px solid #CACACA; -webkit-border-radius: 2px; -moz-border-radius: 2px; -webkit-background-clip: padding-box; border-radius: 2px; outline: none; position: relative; zoom: 1; *display: inline; }
+
+.pagination em { display: inline-block; padding: 7px 9px; font-size: 12px; line-height:1; color: #FFFFFF; text-shadow: -1px -1px 0 rgba(0,0,0,0.3); background: #2D7DC5 url('../../images/css3buttons/css3buttons_backgrounds.png') 0 -40px no-repeat; white-space: nowrap; overflow: visible; cursor: default; text-decoration: none; border: 1px solid #388AD4; -webkit-border-radius: 2px; -moz-border-radius: 2px; -webkit-background-clip: padding-box; border-radius: 2px; outline: none; position: relative; zoom: 1; *display: inline; }
+
+.pagination span { display: inline-block; padding: 7px 9px; font-size: 12px; line-height:1; color: #3C3C3D; white-space: nowrap; text-decoration: none; outline: none; position: relative; zoom: 1; *display: inline; cursor: default; }
+
+.pagination a:hover { color: #FFFFFF; border-color: #388AD4; text-decoration: none; text-shadow: -1px -1px 0 rgba(0,0,0,0.3); background-position: 0 -40px; background-color: #2D7DC5; }
+.pagination a.active { background-position: 0 -81px; border-color: #347BBA; background-color: #0F5EA2; color: #FFFFFF; text-shadow: none; }
+.pagination a:active { top: 1px }
+
+#footer {
+	width: 960px;
+	margin: 0 auto;
+	padding: 25px 0 35px;
+}
+
+#footer .credits {
+	width: 100%;
+	text-align: center;
+	font-weight: bold;
+}
+
+#footer a {
+	color: #222;
+	text-decoration: none;
 }

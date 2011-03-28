@@ -8,7 +8,7 @@ javascripts:
 
 stylesheets:
   common:
+    - public/stylesheets/reset.css
     - public/stylesheets/application.css
-    - public/flutie/stylesheets/flutie.css
     - public/stylesheets/css3buttons/css3buttons.css
     - public/stylesheets/podcast.css

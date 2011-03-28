@@ -51,6 +51,7 @@ class PodcastsController < ApplicationController
   # GET /podcasts/1.xml
   def show
     @podcast = Podcast.find(params[:id])
+    @pod_name = Podcast.find(@podcast).name
 
     respond_to do |format|
       format.html # show.html.erb

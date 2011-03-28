@@ -139,6 +139,8 @@
 				
 					<li><a href="./PodcastsHelper.html">PodcastsHelper</a></li>
 				
+					<li><a href="./User.html">User</a></li>
+				
 				</ul>
 				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
 			</div>
@@ -236,10 +238,10 @@ Fetch twitter handle from twitter url
 227:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fetch_twitter_handle</span>(<span class="ruby-identifier">options</span> = {})
 228:     <span class="ruby-identifier">new_podcasts_only</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:new_podcasts_only</span>] <span class="ruby-operator">||</span> <span class="ruby-keyword kw">false</span>
 229:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">new_podcasts_only</span>
-230:       <span class="ruby-identifier">podcast</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id, twitter, name'</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">'created_at &gt; ? AND twitter IS NOT ?'</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-value">24</span>.<span class="ruby-identifier">hours</span>, <span class="ruby-value str">''</span>])
+230:       <span class="ruby-identifier">podcast</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id, twitter, name'</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">'created_at &gt; ? AND twitter IS NOT ? AND twitter != ?'</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-value">24</span>.<span class="ruby-identifier">hours</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-value str">''</span>])
 231:       <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">podcast_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;#{podcast.count}&quot;</span>)
 232:     <span class="ruby-keyword kw">else</span>
-233:       <span class="ruby-identifier">podcast</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id, twitter, name'</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">'twitter IS NOT ?'</span>, <span class="ruby-value str">''</span>])
+233:       <span class="ruby-identifier">podcast</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id, twitter, name'</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">'twitter IS NOT ? AND twitter != ?'</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-value str">''</span>])
 234:     <span class="ruby-keyword kw">end</span>
 235:     
 236:     <span class="ruby-identifier">podcast</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">pod</span> <span class="ruby-operator">|</span>

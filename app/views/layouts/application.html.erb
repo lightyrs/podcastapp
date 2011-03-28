@@ -7,8 +7,11 @@
 	<%= csrf_meta_tag %>
 </head>
 <body class="<%= controller.controller_name %> <%= controller.action_name %>">
-	<div id="container">
+	<div id="container" class="clearfix">
+		<%= render "layouts/header" %>
+		<%= render "layouts/flash" %>
 		<%= yield %>
 	</div>
+	<%= render "layouts/footer" %>
 </body>
 </html>

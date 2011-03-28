@@ -1,4 +1,12 @@
 Podcastapp::Application.routes.draw do
+ 
+  authenticate :user do
+    root :to => "application#index"
+  end
+
+  root :to => "devise/sessions#new"
+
+  devise_for :users
 
   resources :episodes
 

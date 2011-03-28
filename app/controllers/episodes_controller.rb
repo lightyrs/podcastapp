@@ -3,6 +3,7 @@ class EpisodesController < ApplicationController
   # GET /episodes.xml
   def index
     @podcast = params[:podcast_id]
+    @pod_name = Podcast.find(@podcast).name
     
     unless params[:reload] == "true"
       # Fetch new episodes in a background task

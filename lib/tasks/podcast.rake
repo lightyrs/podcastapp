@@ -65,7 +65,11 @@ namespace :podcast do
   desc "Fetch the podcast episodes"
   task :fetch_episodes, [:scope] => :environment do |t,args|
     Episode.episode_logger.info("BEGIN: #{Time.now}")
-    Podcast.fetch_episodes
+    if args[:scope] == "new"
+      Podcast.fetch_episodes(:new_podcasts_only => true)
+    else
+      Podcast.fetch_episodes
+    end
     Episode.episode_logger.info("END: #{Time.now}")
   end
 end

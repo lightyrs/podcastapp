@@ -41,5 +41,8 @@ module Podcastapp
     
     # Configure jammit gem
     config.gem "jammit"
+    
+    # A Rails 3 autoloading gotcha (http://goo.gl/Ij4k5)
+    config.autoload_paths += %W(#{config.root}/lib)
   end
 end

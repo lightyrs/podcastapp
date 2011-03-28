@@ -1,9 +1,15 @@
-.pagination {
+.podcast {
 	margin-bottom: 40px;
 }
 
-.podcast {
-	margin-bottom: 40px;
+h2.name {
+	height: 40px;
+}
+
+.meta-wrapper {
+	float: left;
+	padding-left: 30px;
+	width: 550px;
 }
 
 .buttons {
@@ -20,7 +26,6 @@
 	float: left;
 }
 
-body.show .buttons,
-body.edit .buttons {
+.buttons {
 	padding-top: 25px;
 }

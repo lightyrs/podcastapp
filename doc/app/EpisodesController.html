@@ -135,6 +135,8 @@
 				
 					<li><a href="./PodcastsHelper.html">PodcastsHelper</a></li>
 				
+					<li><a href="./User.html">User</a></li>
+				
 				</ul>
 				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
 			</div>
@@ -184,20 +186,20 @@ POST /episodes POST /episodes.xml
 					<div class="method-source-code"
 						id="create-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/controllers/episodes_controller.rb, line 57</span>
-57:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>
-58:     <span class="ruby-ivar">@episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:episode</span>])
-59: 
-60:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
-61:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@episode</span>.<span class="ruby-identifier">save</span>
-62:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@episode</span>, <span class="ruby-value">:notice</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Episode was successfully created.'</span>) }
-63:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-value">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episode</span>, <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:created</span>, <span class="ruby-value">:location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episode</span> }
-64:       <span class="ruby-keyword kw">else</span>
-65:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new&quot;</span> }
-66:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-value">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episode</span>.<span class="ruby-identifier">errors</span>, <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:unprocessable_entity</span> }
-67:       <span class="ruby-keyword kw">end</span>
-68:     <span class="ruby-keyword kw">end</span>
-69:   <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File app/controllers/episodes_controller.rb, line 58</span>
+58:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>
+59:     <span class="ruby-ivar">@episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:episode</span>])
+60: 
+61:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+62:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@episode</span>.<span class="ruby-identifier">save</span>
+63:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@episode</span>, <span class="ruby-value">:notice</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Episode was successfully created.'</span>) }
+64:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-value">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episode</span>, <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:created</span>, <span class="ruby-value">:location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episode</span> }
+65:       <span class="ruby-keyword kw">else</span>
+66:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new&quot;</span> }
+67:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-value">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episode</span>.<span class="ruby-identifier">errors</span>, <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:unprocessable_entity</span> }
+68:       <span class="ruby-keyword kw">end</span>
+69:     <span class="ruby-keyword kw">end</span>
+70:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -230,16 +232,16 @@ DELETE /episodes/1 DELETE /episodes/1.xml
 					<div class="method-source-code"
 						id="destroy-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/controllers/episodes_controller.rb, line 89</span>
-89:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy</span>
-90:     <span class="ruby-ivar">@episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
-91:     <span class="ruby-ivar">@episode</span>.<span class="ruby-identifier">destroy</span>
-92: 
-93:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
-94:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">episodes_url</span>) }
-95:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">head</span> <span class="ruby-value">:ok</span> }
-96:     <span class="ruby-keyword kw">end</span>
-97:   <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File app/controllers/episodes_controller.rb, line 90</span>
+90:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy</span>
+91:     <span class="ruby-ivar">@episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+92:     <span class="ruby-ivar">@episode</span>.<span class="ruby-identifier">destroy</span>
+93: 
+94:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+95:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">episodes_url</span>) }
+96:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">head</span> <span class="ruby-value">:ok</span> }
+97:     <span class="ruby-keyword kw">end</span>
+98:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -272,10 +274,10 @@ GET /episodes/1/edit
 					<div class="method-source-code"
 						id="edit-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/controllers/episodes_controller.rb, line 51</span>
-51:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">edit</span>
-52:     <span class="ruby-ivar">@episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
-53:   <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File app/controllers/episodes_controller.rb, line 52</span>
+52:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">edit</span>
+53:     <span class="ruby-ivar">@episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+54:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -311,27 +313,28 @@ GET /episodes GET /episodes.xml
     <span class="ruby-comment cmt"># File app/controllers/episodes_controller.rb, line 4</span>
  4:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>
  5:     <span class="ruby-ivar">@podcast</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:podcast_id</span>]
- 6:     
- 7:     <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:reload</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;true&quot;</span>
- 8:       <span class="ruby-comment cmt"># Fetch new episodes in a background task</span>
- 9:       <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">delay</span>.<span class="ruby-identifier">fetch_podcast_episodes</span>(<span class="ruby-ivar">@podcast</span>, <span class="ruby-value">:comet</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-10:     <span class="ruby-keyword kw">end</span>
-11:     
-12:     <span class="ruby-comment cmt"># Find all podcast episodes and sort by date descending</span>
-13:     <span class="ruby-ivar">@episodes</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-ivar">@podcast</span>).<span class="ruby-identifier">episodes</span>.<span class="ruby-identifier">all</span>.<span class="ruby-identifier">sort</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span>
-14:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">date_published</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">date_published</span>.<span class="ruby-identifier">nil?</span>
-15:         <span class="ruby-identifier">b</span>.<span class="ruby-identifier">date_published</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">date_published</span>
-16:       <span class="ruby-keyword kw">else</span>
-17:         <span class="ruby-identifier">b</span>.<span class="ruby-identifier">date_published</span>.<span class="ruby-identifier">to_time</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">date_published</span>.<span class="ruby-identifier">to_time</span>
-18:       <span class="ruby-keyword kw">end</span>
-19:     }
-20: 
-21:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
-22:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-comment cmt"># index.html.erb</span>
-23:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-value">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episodes</span> }
-24:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span> { <span class="ruby-identifier">render</span> <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span> }
-25:     <span class="ruby-keyword kw">end</span>
-26:   <span class="ruby-keyword kw">end</span></pre>
+ 6:     <span class="ruby-ivar">@pod_name</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-ivar">@podcast</span>).<span class="ruby-identifier">name</span>
+ 7:     
+ 8:     <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:reload</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;true&quot;</span>
+ 9:       <span class="ruby-comment cmt"># Fetch new episodes in a background task</span>
+10:       <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">delay</span>.<span class="ruby-identifier">fetch_podcast_episodes</span>(<span class="ruby-ivar">@podcast</span>, <span class="ruby-value">:comet</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
+11:     <span class="ruby-keyword kw">end</span>
+12:     
+13:     <span class="ruby-comment cmt"># Find all podcast episodes and sort by date descending</span>
+14:     <span class="ruby-ivar">@episodes</span> = <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-ivar">@podcast</span>).<span class="ruby-identifier">episodes</span>.<span class="ruby-identifier">all</span>.<span class="ruby-identifier">sort</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span>
+15:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">date_published</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">date_published</span>.<span class="ruby-identifier">nil?</span>
+16:         <span class="ruby-identifier">b</span>.<span class="ruby-identifier">date_published</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">date_published</span>
+17:       <span class="ruby-keyword kw">else</span>
+18:         <span class="ruby-identifier">b</span>.<span class="ruby-identifier">date_published</span>.<span class="ruby-identifier">to_time</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">date_published</span>.<span class="ruby-identifier">to_time</span>
+19:       <span class="ruby-keyword kw">end</span>
+20:     }
+21: 
+22:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+23:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-comment cmt"># index.html.erb</span>
+24:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-value">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episodes</span> }
+25:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span> { <span class="ruby-identifier">render</span> <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span> }
+26:     <span class="ruby-keyword kw">end</span>
+27:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -364,15 +367,15 @@ GET /episodes/new GET /episodes/new.xml
 					<div class="method-source-code"
 						id="new-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/controllers/episodes_controller.rb, line 41</span>
-41:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new</span>
-42:     <span class="ruby-ivar">@episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">new</span>
-43: 
-44:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
-45:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-comment cmt"># new.html.erb</span>
-46:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-value">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episode</span> }
-47:     <span class="ruby-keyword kw">end</span>
-48:   <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File app/controllers/episodes_controller.rb, line 42</span>
+42:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new</span>
+43:     <span class="ruby-ivar">@episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">new</span>
+44: 
+45:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+46:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-comment cmt"># new.html.erb</span>
+47:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-value">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episode</span> }
+48:     <span class="ruby-keyword kw">end</span>
+49:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -405,15 +408,15 @@ GET /episodes/1 GET /episodes/1.xml
 					<div class="method-source-code"
 						id="show-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/controllers/episodes_controller.rb, line 30</span>
-30:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show</span>
-31:     <span class="ruby-ivar">@episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
-32: 
-33:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
-34:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-comment cmt"># show.html.erb</span>
-35:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-value">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episode</span> }
-36:     <span class="ruby-keyword kw">end</span>
-37:   <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File app/controllers/episodes_controller.rb, line 31</span>
+31:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show</span>
+32:     <span class="ruby-ivar">@episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+33: 
+34:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+35:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-comment cmt"># show.html.erb</span>
+36:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-value">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episode</span> }
+37:     <span class="ruby-keyword kw">end</span>
+38:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -446,20 +449,20 @@ PUT /episodes/1 PUT /episodes/1.xml
 					<div class="method-source-code"
 						id="update-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/controllers/episodes_controller.rb, line 73</span>
-73:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>
-74:     <span class="ruby-ivar">@episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
-75: 
-76:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
-77:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@episode</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:episode</span>])
-78:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@episode</span>, <span class="ruby-value">:notice</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Episode was successfully updated.'</span>) }
-79:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">head</span> <span class="ruby-value">:ok</span> }
-80:       <span class="ruby-keyword kw">else</span>
-81:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;edit&quot;</span> }
-82:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-value">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episode</span>.<span class="ruby-identifier">errors</span>, <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:unprocessable_entity</span> }
-83:       <span class="ruby-keyword kw">end</span>
-84:     <span class="ruby-keyword kw">end</span>
-85:   <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File app/controllers/episodes_controller.rb, line 74</span>
+74:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>
+75:     <span class="ruby-ivar">@episode</span> = <span class="ruby-constant">Episode</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+76: 
+77:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+78:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@episode</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:episode</span>])
+79:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@episode</span>, <span class="ruby-value">:notice</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Episode was successfully updated.'</span>) }
+80:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">head</span> <span class="ruby-value">:ok</span> }
+81:       <span class="ruby-keyword kw">else</span>
+82:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;edit&quot;</span> }
+83:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-value">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@episode</span>.<span class="ruby-identifier">errors</span>, <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:unprocessable_entity</span> }
+84:       <span class="ruby-keyword kw">end</span>
+85:     <span class="ruby-keyword kw">end</span>
+86:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>

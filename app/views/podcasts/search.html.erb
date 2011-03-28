@@ -7,7 +7,6 @@
 </div>
 
 <h1>Searching podcasts (<%= @result_count %>)</h1>
-<%= will_paginate(@search.hits) %>
 
 <div class="results">
   <% @search.each_hit_with_result do |hit, podcast| -%>
@@ -15,4 +14,8 @@
       <h4><%= link_to podcast.name, podcast %></h4>
     </div>
   <% end -%>
+</div>
+
+<div class="pagination-wrapper">
+	<%= will_paginate @search.hits %>
 </div>

@@ -20,9 +20,6 @@ gem 'rails3-jquery-autocomplete'
 # Form Helpers
 gem 'formtastic'
 
-# Style Defaults
-gem 'flutie'
-
 # Scheduled Jobs
 gem 'whenever'
 
@@ -39,6 +36,9 @@ gem 'httparty'
 # HTML/XML/JSON Parsing
 gem 'nokogiri'
 gem 'imasquerade', :git => 'git://github.com/lightyrs/imasquerade.git'
+
+# Authentication
+gem 'devise', '1.1.2'
 
 # Pagination
 gem 'will_paginate', '3.0.pre2'

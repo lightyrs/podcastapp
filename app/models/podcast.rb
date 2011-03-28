@@ -227,10 +227,10 @@ class Podcast < ActiveRecord::Base
   def self.fetch_twitter_handle(options = {})
     new_podcasts_only = options[:new_podcasts_only] || false
     if new_podcasts_only
-      podcast = Podcast.find(:all, :select => 'id, twitter, name', :conditions => ['created_at > ? AND twitter IS NOT ?', Time.now - 24.hours, ''])
+      podcast = Podcast.find(:all, :select => 'id, twitter, name', :conditions => ['created_at > ? AND twitter IS NOT ? AND twitter != ?', Time.now - 24.hours, nil, ''])
       Podcast.podcast_logger.info("#{podcast.count}")
     else
-      podcast = Podcast.find(:all, :select => 'id, twitter, name', :conditions => ['twitter IS NOT ?', ''])
+      podcast = Podcast.find(:all, :select => 'id, twitter, name', :conditions => ['twitter IS NOT ? AND twitter != ?', nil, ''])
     end
     
     podcast.each do | pod |
