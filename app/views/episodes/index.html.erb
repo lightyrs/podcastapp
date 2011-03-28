@@ -1,4 +1,4 @@
-<h2><%= @pod_name %></h2>
+<h2><%= @podcast.name %></h2>
 
 <div id="status"></div>
 
@@ -32,40 +32,40 @@
   </table>
 </div>
 
-<br />
+<div class="pagination-wrapper"><%= will_paginate @episodes %></div>
 
-<%= link_to 'New Episode', new_episode_path %>
-
-<%= javascript_tag do %>
-  $(function(){
-    podcast = <%= @podcast %>
+<% unless @dont_bother %>
+	<%= javascript_tag do %>
+	  $(function(){
+	    podcast = <%= @podcast.id %>
  
-    // Suppress useless ReferenceErrors
-    started = ""
-    success = ""
-    error = ""
-		reset = ""
+	    // Suppress useless ReferenceErrors
+	    started = ""
+	    success = ""
+	    error = ""
+			reset = ""
  
-    // Fetch new episodes on page load with ajax polling
-    function fetch_new_episodes() {
-      $("#status").html("<p>Fetching New Episodes</p>");
-      $.ajax({
-        type: "GET",
-        url: "<%= DOMAIN_NAME %>/podcasts/" + podcast + "/get_update_status",
-        success: function(data){
-          if (data == "success") {
-            $("#episodes").load("<%= DOMAIN_NAME %>/podcasts/" + podcast + "/episodes?reload=true #episodes table", function(){
-              $("#status").html("<p>Episodes Updated</p>");
-							$.get("<%= DOMAIN_NAME %>/podcasts/" + podcast + "/reset_update_status", function(data){
-								console.log(data);
-							});
-            });
-          } else {
-            fetch_new_episodes();
-          }
-        }
-      });      
-    }
-	  fetch_new_episodes();
-  });
+	    // Fetch new episodes on page load with ajax polling
+	    function fetch_new_episodes() {
+	      $("#status").html("<p>Fetching New Episodes</p>");
+	      $.ajax({
+	        type: "GET",
+	        url: "<%= DOMAIN_NAME %>/podcasts/" + podcast + "/get_update_status",
+	        success: function(data){
+	          if (data == "success") {
+	            $("#episodes").load("<%= DOMAIN_NAME %>/podcasts/" + podcast + "/episodes?reload=true #episodes table", function(){
+	              $("#status").html("<p>Episodes Updated</p>");
+								$.get("<%= DOMAIN_NAME %>/podcasts/" + podcast + "/reset_update_status", function(data){
+									console.log(data);
+								});
+	            });
+	          } else {
+	            fetch_new_episodes();
+	          }
+	        }
+	      });      
+	    }
+		  fetch_new_episodes();
+	  });
+	<% end %>
 <% end %>

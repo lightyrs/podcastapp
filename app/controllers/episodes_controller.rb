@@ -2,22 +2,24 @@ class EpisodesController < ApplicationController
   # GET /episodes
   # GET /episodes.xml
   def index
-    @podcast = params[:podcast_id]
-    @pod_name = Podcast.find(@podcast).name
+    @podcast = Podcast.find(params[:podcast_id])
     
-    unless params[:reload] == "true"
+    # Don't bother fetching new episodes if we just did or if we're calling #index with comet
+    @dont_bother = @podcast.updated_at > Time.now - 5.minutes || params[:reload] == "true"
+    
+    unless @dont_bother
       # Fetch new episodes in a background task
       Episode.delay.fetch_podcast_episodes(@podcast, :comet => true)
     end
     
     # Find all podcast episodes and sort by date descending
-    @episodes = Podcast.find(@podcast).episodes.all.sort {|a, b|
+    @episodes = @podcast.episodes.all.sort {|a, b|
       if a.date_published.nil? or b.date_published.nil?
         b.date_published <=> a.date_published
       else
         b.date_published.to_time <=> a.date_published.to_time
       end
-    }
+    }.paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
