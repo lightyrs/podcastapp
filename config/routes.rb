@@ -1,12 +1,18 @@
 Podcastapp::Application.routes.draw do
  
+  resources :authentications
+  
+  match '/auth/:provider/callback' => 'authentications#create'
+
   authenticate :user do
-    root :to => "application#index"
+    root :to => "podcasts#index"
   end
 
   root :to => "devise/sessions#new"
 
-  devise_for :users
+  devise_for :users,
+             :singular => :user,
+             :controllers => {:registrations => 'registrations'}
 
   resources :episodes
 

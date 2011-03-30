@@ -5,8 +5,14 @@ gem 'rails', '3.0.1'
 # MySQL
 gem 'mysql'
 
+# Mongrels
+gem 'mongrel', '1.2.0.pre2'
+
 # irb Enhancements
 gem 'awesome_print'
+
+# Generators
+gem "nifty-generators", :group => :development
 
 # Asset Packager
 gem 'jammit'
@@ -39,6 +45,7 @@ gem 'imasquerade', :git => 'git://github.com/lightyrs/imasquerade.git'
 
 # Authentication
 gem 'devise', '1.1.2'
+gem 'omniauth'
 
 # Pagination
 gem 'will_paginate', '3.0.pre2'
@@ -78,3 +85,4 @@ gem 'twitter'
 # group :development, :test do
 #   gem 'webrat'
 # end
+gem "mocha", :group => :test

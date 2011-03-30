@@ -5,7 +5,7 @@ class EpisodesController < ApplicationController
     @podcast = Podcast.find(params[:podcast_id])
     
     # Don't bother fetching new episodes if we just did or if we're calling #index with comet
-    @dont_bother = @podcast.updated_at > Time.now - 5.minutes || params[:reload] == "true"
+    @dont_bother = @podcast.updated_at > Time.now - 10.minutes || params[:reload] == "true"
     
     unless @dont_bother
       # Fetch new episodes in a background task
