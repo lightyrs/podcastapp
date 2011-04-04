@@ -1,19 +1,19 @@
-<h2><%= @pod_name %></h2>
+<h2><%= link_to @pod_name, podcast_path(@podcast) %></h2>
 
 <div class="meta">
 	<p>
 	  <b>Siteurl:</b>
-	  <%= @podcast.siteurl %>
+	  <%= link_to @podcast.siteurl, @podcast.siteurl %>
 	</p>
 
 	<p>
 	  <b>Itunesurl:</b>
-	  <%= @podcast.itunesurl %>
+	  <%= link_to @podcast.itunesurl, @podcast.itunesurl %>
 	</p>
 
 	<p>
 	  <b>Feedurl:</b>
-	  <%= @podcast.feedurl %>
+	  <%= link_to @podcast.feedurl, @podcast.feedurl %>
 	</p>
 
 	<p>
@@ -28,12 +28,12 @@
 
 	<p>
 	  <b>Twitter:</b>
-	  <%= @podcast.twitter %>
+	  <%= link_to @podcast.twitter, @podcast.twitter %>
 	</p>
 
 	<p>
 	  <b>Facebook:</b>
-	  <%= @podcast.facebook %>
+	  <%= link_to @podcast.facebook, @podcast.facebook %>
 	</p>
 
 	<p>
@@ -42,7 +42,7 @@
 	</p>
 </div>
 
-<img class="artwork" src="<%= @podcast.artwork %>" alt="<%= @podcast.name %>" />
+<%= link_to image_tag(@podcast.artwork, :class => "artwork", :alt => @pod_name, :border=>0), podcast_path(@podcast) %>
 
 <div class="buttons">
 	<%= link_to 'Episodes', podcast_episodes_path(@podcast), {:class => "button"} %>

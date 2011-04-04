@@ -179,6 +179,8 @@ GEM
     ruby-openid-apps-discovery (1.2.0)
       ruby-openid (>= 2.1.7)
     rubyntlm (0.1.1)
+    sanitize (2.0.1)
+      nokogiri (~> 1.4.4)
     simple_oauth (0.1.4)
     sunspot (1.2.0)
       escape (= 0.0.4)
@@ -228,6 +230,7 @@ DEPENDENCIES
   omniauth
   rails (= 3.0.1)
   rails3-jquery-autocomplete
+  sanitize (= 2.0.1)
   sunspot_rails (= 1.2)
   twitter
   whenever

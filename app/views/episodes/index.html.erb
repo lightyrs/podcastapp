@@ -1,35 +1,26 @@
-<h2><%= @podcast.name %></h2>
+<h2><%= link_to @podcast.name, podcast_path(@podcast) %></h2>
 
 <div id="status"></div>
 
 <div id="episodes">
-  <table>
-    <tr>
-      <th>Title</th>
-      <th>Shownotes</th>
-      <th>Url</th>
-      <th>Filetype</th>
-      <th>Size</th>
-      <th>Duration</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
 
   <% @episodes.each do |episode| %>
-    <tr>
-      <td><%= episode.title %></td>
-      <td><%= episode.shownotes %></td>
-      <td><%= episode.url %></td>
-      <td><%= episode.filetype %></td>
-      <td><%= episode.size %></td>
-      <td><%= episode.duration %></td>
-      <td><%= link_to 'Show', episode %></td>
-      <td><%= link_to 'Edit', edit_episode_path(episode) %></td>
-      <td><%= link_to 'Destroy', episode, :confirm => 'Are you sure?', :method => :delete %></td>
-    </tr>
+			<div class="podcast-episode">
+	      <h3 class="episode-title"><%= link_to episode.title, episode.url %></h3>
+				<div class="episode-meta clearfix">
+					<span class="filetype"><%= episode.filetype %></span>
+		      <span class="filesize"><%= episode.size unless episode.size == "0.0 MB" %></span>
+		      <span class="duration"><%= episode.duration %></span>
+				</div>
+	      <div class="shownotes"><%= clean_shownotes(episode.shownotes) %></div>
+				<div class="buttons">
+	      	<%= link_to 'Show', episode, {:class => "button"} %>
+	      	<%= link_to 'Edit', edit_episode_path(episode), {:class => "button"} %>
+	      	<%= link_to 'Destroy', episode, :confirm => 'Are you sure?', :method => :delete, :class => "button negative" %>
+				</div>
+			</div>
   <% end %>
-  </table>
+
 </div>
 
 <div class="pagination-wrapper"><%= will_paginate @episodes %></div>
@@ -53,7 +44,7 @@
 	        url: "<%= DOMAIN_NAME %>/podcasts/" + podcast + "/get_update_status",
 	        success: function(data){
 	          if (data == "success") {
-	            $("#episodes").load("<%= DOMAIN_NAME %>/podcasts/" + podcast + "/episodes?reload=true #episodes table", function(){
+	            $("#episodes").load("<%= DOMAIN_NAME %>/podcasts/" + podcast + "/episodes?reload=true #episodes", function(){
 	              $("#status").html("<p>Episodes Updated</p>");
 								$.get("<%= DOMAIN_NAME %>/podcasts/" + podcast + "/reset_update_status", function(data){
 									console.log(data);

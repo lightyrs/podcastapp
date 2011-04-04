@@ -1,8 +1,12 @@
 class EpisodesController < ApplicationController
+  
+  before_filter :get_required_assets 
+  
   # GET /episodes
   # GET /episodes.xml
   def index
     @podcast = Podcast.find(params[:podcast_id])
+    @page_title = @podcast.name + " &raquo; Episodes"
     
     # Don't bother fetching new episodes if we just did or if we're calling #index with comet
     @dont_bother = @podcast.updated_at > Time.now - 10.minutes || params[:reload] == "true"
@@ -97,5 +101,9 @@ class EpisodesController < ApplicationController
       format.html { redirect_to(episodes_url) }
       format.xml  { head :ok }
     end
+  end
+  
+  def get_required_assets
+    @asset_group_css = :episodes 
   end
 end

@@ -5,6 +5,7 @@ class PodcastsController < ApplicationController
   # GET /podcasts
   # GET /podcasts.xml
   def index
+    @page_title = false
     @podcasts = Podcast.paginate :page => params[:page], :per_page => 50
     
     respond_to do |format|
@@ -15,6 +16,7 @@ class PodcastsController < ApplicationController
   
   # Search podcasts
   def search
+    @page_title = "Search"
     @search = Sunspot.search(Podcast) do
       keywords(params[:q])
       paginate(:page => params[:page])
@@ -52,6 +54,7 @@ class PodcastsController < ApplicationController
   def show
     @podcast = Podcast.find(params[:id])
     @pod_name = Podcast.find(@podcast).name
+    @page_title = @pod_name
 
     respond_to do |format|
       format.html # show.html.erb

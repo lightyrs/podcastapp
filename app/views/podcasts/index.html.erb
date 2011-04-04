@@ -1,7 +1,7 @@
 <% @podcasts.each do |podcast| %>
 	<div class="podcast">
-		<h2 class="name"><%= podcast.name %></h2>
-		<img class="artwork" src="<%= podcast.artwork %>" />
+		<h2 class="name"><%= link_to podcast.name, podcast_path(podcast) %></h2>
+		<%= link_to image_tag(podcast.artwork, :border=>0), podcast_path(podcast), :class => "artwork" %>
 		<div class="meta-wrapper">
 			<a class="siteurl" href="<%= podcast.siteurl %>"><%= podcast.siteurl %></a><br />
 			<a class="itunesurl" href="<%= podcast.itunesurl %>"><%= podcast.itunesurl %></a><br />

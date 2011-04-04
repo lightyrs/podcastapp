@@ -12,3 +12,6 @@ stylesheets:
     - public/stylesheets/application.css
     - public/stylesheets/css3buttons/css3buttons.css
     - public/stylesheets/podcast.css
+
+  episodes:
+    - public/stylesheets/episode.css

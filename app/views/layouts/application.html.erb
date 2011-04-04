@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Podcastapp</title>
-	<%= include_stylesheets :common %>
-	<%= include_javascripts :common %>
+	<title>podcastapp <%= get_page_title(controller.controller_name) %></title>
+	<%= include_stylesheets :common, get_asset_group_css %>
+	<%= include_javascripts :common, get_asset_group_js %>
 	<%= csrf_meta_tag %>
 </head>
 <body class="<%= controller.controller_name %> <%= controller.action_name %>">

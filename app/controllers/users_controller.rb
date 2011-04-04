@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
 	
-	def index
-	  @user = current_user
+	def show
+	  @user = User.find(params[:id])
+    @page_title = @user.email
 
 	  respond_to do |format|
 	    format.html # index.html.erb

@@ -1,0 +1,7 @@
+<h2><%= @user.email %></h2>
+
+<ul class="user-podcasts">
+	<% @user.podcasts.each do |pod| %>
+		<li><%= link_to pod.name, pod %></li>
+	<% end %>
+</ul>

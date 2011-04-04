@@ -1,0 +1,17 @@
+.podcast-episode {
+	margin-bottom: 40px;
+}
+
+body.episodes .buttons {
+	padding-top: 0;
+}
+
+.episode-meta {
+	padding: 10px 0;
+}
+
+.episode-meta span {
+	display: block;
+	float: left;
+	padding: 0 15px 0 0;
+}
