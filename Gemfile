@@ -44,7 +44,7 @@ gem 'nokogiri'
 gem 'imasquerade', :git => 'git://github.com/lightyrs/imasquerade.git'
 
 # Authentication
-gem 'devise', '1.1.2'
+gem 'devise', '1.2'
 gem 'omniauth'
 
 # Pagination

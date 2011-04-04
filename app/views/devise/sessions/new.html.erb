@@ -3,20 +3,25 @@
 <%= semantic_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |form| %>
 
 	<% form.inputs do %>
-		<div class="clearfix">
+		<div class="omniauth clearfix">
 			<%= render :partial => "authentications/index" %>
 		</div>
-		<%= form.input :username, :required => true %>	
-	  <%= form.input :email, :as => :email %>
-	  <%= form.input :password, :as => :password %>
-		<% if devise_mapping.rememberable? -%>
-	    <%= form.input :remember_me, :as => :boolean %>
-	  <% end -%>
-		<% form.buttons do %>
-		  <%= form.commit_button :label => "Sign In" %>
-		<% end %>
+		<div class="login clearfix">
+		  <%= form.input :email, :as => :email, :required => true %>
+		  <%= form.input :password, :as => :password, :required => true %>
+			<% if devise_mapping.rememberable? -%>
+		    <%= form.input :remember_me, :as => :boolean %>
+		  <% end -%>
+			<% form.buttons do %>
+			  <%= form.commit_button :label => "Sign In" %>
+			<% end %>
+		</div>
 	<% end %>
 
 <% end %>
+
+<div class="signup clearfix">
+	<%= render :partial => "registrations/new" %>
+</div>
 
 <%= render :partial => "devise/shared/links" %>

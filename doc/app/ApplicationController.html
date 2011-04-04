@@ -69,6 +69,8 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
+					<li><a href="#method-i-after_sign_in_path_for">#after_sign_in_path_for</a></li>
+					
 					<li><a href="#method-i-index">#index</a></li>
 					
 				</ul>
@@ -162,6 +164,46 @@
 			<h3 class="section-header">Public Instance Methods</h3>
 
 		
+			<div id="after-sign-in-path-for-method" class="method-detail ">
+				<a name="method-i-after_sign_in_path_for"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">after_sign_in_path_for</span><span
+						class="method-args">(resource)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Granular control over devise sign in paths
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="after-sign-in-path-for-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 9</span>
+ 9:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_sign_in_path_for</span>(<span class="ruby-identifier">resource</span>)
+10:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>)
+11:       <span class="ruby-identifier">root_path</span>
+12:     <span class="ruby-keyword kw">else</span>
+13:       <span class="ruby-identifier">root_path</span>      
+14:     <span class="ruby-keyword kw">end</span>
+15:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
 			<div id="index-method" class="method-detail ">
 				<a name="method-i-index"></a>
 
@@ -184,7 +226,7 @@
 <pre>
    <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 4</span>
 4:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>
-5:     <span class="ruby-comment cmt"># Root</span>
+5:     <span class="ruby-comment cmt"># Website Root</span>
 6:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					

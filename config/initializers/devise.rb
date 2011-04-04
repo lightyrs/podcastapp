@@ -39,11 +39,12 @@ Devise.setup do |config|
   # using other encryptors, it sets how many times you want the password re-encrypted.
   config.stretches = 10
 
+  # DEPRECATED in 1.2
   # Define which will be the encryption algorithm. Devise also supports encryptors
   # from others authentication tools as :clearance_sha1, :authlogic_sha512 (then
   # you should set stretches above to 20 for default behavior) and :restful_authentication_sha1
   # (then you should set stretches to 10, and copy REST_AUTH_SITE_KEY to pepper)
-  config.encryptor = :bcrypt
+  # config.encryptor = :bcrypt
 
   # Setup a pepper to generate the encrypted password.
   config.pepper = "9d4656f2641375eef59a2e442c150ef106b71f6d04b58d29606f8461d7eb7dec4bb71808f2bc988223118c092a72da2881e5bc64ccf9061ca46f432ebd4cf452"

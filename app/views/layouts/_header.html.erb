@@ -1,6 +1,6 @@
 <div id="header" class="clearfix">
 	<h1 id="logo"><%= link_to "podcastapp", root_path %></h1>
 	<% if current_user %>
-		<span class="username"><strong><%= current_user.username %></strong></span>
+		<span class="username"><strong><%= current_user.email %></strong></span>
 	<% end %>
 </div>
