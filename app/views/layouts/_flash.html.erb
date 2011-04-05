@@ -1,2 +1,25 @@
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
+<% if notice %>
+	<div class="flash notice">
+		<p class="notice"><%= notice %></p>
+	</div>
+<% end %>
+<% if alert %>
+	<div class="flash alert">
+		<p class="alert"><%= alert %></p>
+	</div>
+<% end %>
+
+<% javascript_tag do %>
+	$(function(){
+		$(".flash").fadeIn(400, function(){
+			var $self = $(this);
+			delay_flash = setTimeout(function(){
+				$self.fadeOut(2400);
+			}, 2200);
+		});
+		$(window).scroll(function(){
+			clearTimeout(delay_flash);
+			$(".flash").fadeOut(1200);
+		});
+	});
+<% end %>

@@ -36,6 +36,8 @@ class EpisodesController < ApplicationController
   # GET /episodes/1.xml
   def show
     @episode = Episode.find(params[:id])
+    @page_title = @episode.podcast.name + " &raquo; " + Iconv.iconv('ascii//translit', 'utf-8', @episode.title).join("").truncate(35)
+
 
     respond_to do |format|
       format.html # show.html.erb

@@ -1,8 +1,8 @@
 <div class="search">
-	<%= form_tag(search_path, :method => "get") do |f| %>
+	<%= form_tag(search_path, :method => "get", :id => "podcast_search") do |f| %>
 	  <%= label_tag(:q, "Search for:") %>
 	  <%= autocomplete_field_tag 'q', '', autocomplete_podcast_name_podcasts_path, :size => 50 %>
-	  <%= submit_tag("Search") %>
+	  <%= submit_tag("Search", :class => "submit") %>
 	<% end %>
 </div>
 
@@ -19,3 +19,11 @@
 <div class="pagination-wrapper">
 	<%= will_paginate @search.hits %>
 </div>
+
+<%= javascript_tag do %>
+	$(function(){
+		$("ul.ui-autocomplete li a").click(function(){
+			$("#podcast_search").submit();
+		});
+	});
+<% end %>

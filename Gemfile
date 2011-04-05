@@ -12,7 +12,7 @@ gem 'mongrel', '1.2.0.pre2'
 gem 'awesome_print'
 
 # Generators
-gem "nifty-generators", :group => :development
+gem 'nifty-generators', :group => :development
 
 # Asset Packager
 gem 'jammit'

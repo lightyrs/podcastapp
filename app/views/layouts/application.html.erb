@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>podcastapp <%= get_page_title(controller.controller_name) %></title>
 	<%= include_stylesheets :common, get_asset_group_css %>
 	<%= include_javascripts :common, get_asset_group_js %>
@@ -8,8 +9,10 @@
 </head>
 <body class="<%= controller.controller_name %> <%= controller.action_name %>">
 	<div id="container" class="clearfix">
+		<% if flash %>
+			<%= render "layouts/flash" %>
+		<% end %>
 		<%= render "layouts/header" %>
-		<%= render "layouts/flash" %>
 		<%= yield %>
 	</div>
 	<%= render "layouts/footer" %>

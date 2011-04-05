@@ -1,35 +1,13 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <b>Title:</b>
-  <%= @episode.title %>
-</p>
-
-<p>
-  <b>Shownotes:</b>
-  <%= @episode.shownotes %>
-</p>
-
-<p>
-  <b>Url:</b>
-  <%= @episode.url %>
-</p>
-
-<p>
-  <b>Filetype:</b>
-  <%= @episode.filetype %>
-</p>
-
-<p>
-  <b>Size:</b>
-  <%= @episode.size %>
-</p>
-
-<p>
-  <b>Duration:</b>
-  <%= @episode.duration %>
-</p>
-
-
-<%= link_to 'Edit', edit_episode_path(@episode) %> |
-<%= link_to 'Back', :back %>
+<div class="podcast-episode">
+  <h3 class="episode-title"><%= link_to @episode.title, @episode.url %></h3>
+	<div class="episode-meta clearfix">
+		<span class="filetype"><%= @episode.filetype %></span>
+    <span class="filesize"><%= @episode.size unless @episode.size == "0.0 MB" %></span>
+    <span class="duration"><%= @episode.duration %></span>
+	</div>
+  <div class="shownotes"><%= clean_shownotes(@episode.shownotes) %></div>
+	<div class="buttons">
+		<%= link_to 'Edit', edit_episode_path(@episode), {:class => "button"} %>
+		<%= link_to 'Back', :back, {:class => "button"} %>
+	</div>
+</div>

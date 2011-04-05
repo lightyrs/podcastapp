@@ -58,6 +58,19 @@
 
 			<!-- Method Quickref -->
 			
+			<div id="method-list-section" class="section">
+				<h3 class="section-header">Methods</h3>
+				<ul class="link-list">
+					
+					<li><a href="#method-i-get_asset_group_css">#get_asset_group_css</a></li>
+					
+					<li><a href="#method-i-get_asset_group_js">#get_asset_group_js</a></li>
+					
+					<li><a href="#method-i-get_page_title">#get_page_title</a></li>
+					
+				</ul>
+			</div>
+			
 
 			<!-- Included Modules -->
 			
@@ -119,6 +132,8 @@
 				
 					<li><a href="./User.html">User</a></li>
 				
+					<li><a href="./UsersController.html">UsersController</a></li>
+				
 				</ul>
 				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
 			</div>
@@ -142,6 +157,125 @@
 
 		<!-- Methods -->
 		
+		<div id="public-instance-method-details" class="method-section section">
+			<h3 class="section-header">Public Instance Methods</h3>
+
+		
+			<div id="get-asset-group-css-method" class="method-detail ">
+				<a name="method-i-get_asset_group_css"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_asset_group_css</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Dynamic Asset Packaging : CSS
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="get-asset-group-css-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/helpers/application_helper.rb, line 13</span>
+13:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_asset_group_css</span>
+14:     <span class="ruby-ivar">@asset_group_css</span> = <span class="ruby-ivar">@asset_group_css</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-value">:common</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@asset_group_css</span>
+15:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-asset-group-js-method" class="method-detail ">
+				<a name="method-i-get_asset_group_js"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_asset_group_js</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Dynamic Asset Packaging : JS
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="get-asset-group-js-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/helpers/application_helper.rb, line 18</span>
+18:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_asset_group_js</span>
+19:     <span class="ruby-ivar">@asset_group_js</span> = <span class="ruby-ivar">@asset_group_js</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-value">:common</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@asset_group_js</span>
+20:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-page-title-method" class="method-detail ">
+				<a name="method-i-get_page_title"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_page_title</span><span
+						class="method-args">(controller)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+If we&#8217;ve defined a page title, use it, otherwise do something generic
+yet informative
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="get-page-title-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/helpers/application_helper.rb, line 4</span>
+ 4:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_page_title</span>(<span class="ruby-identifier">controller</span>)
+ 5:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@page_title</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">false</span>
+ 6:       <span class="ruby-ivar">@page_title</span> = <span class="ruby-value str">&quot;&quot;</span>
+ 7:     <span class="ruby-keyword kw">else</span>
+ 8:       <span class="ruby-ivar">@page_title</span> = <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-node">&quot;&amp;raquo; #{controller}&quot;</span>.<span class="ruby-identifier">html_safe</span> <span class="ruby-operator">:</span> <span class="ruby-node">&quot;&amp;raquo; #{@page_title}&quot;</span>.<span class="ruby-identifier">html_safe</span>
+ 9:     <span class="ruby-keyword kw">end</span>
+10:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+		</div>
+	
 
 	</div>
 

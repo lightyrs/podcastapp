@@ -69,7 +69,11 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
+					<li><a href="#method-i-apply_facebook">#apply_facebook</a></li>
+					
 					<li><a href="#method-i-apply_omniauth">#apply_omniauth</a></li>
+					
+					<li><a href="#method-i-facebook">#facebook</a></li>
 					
 					<li><a href="#method-i-password_required%3F">#password_required?</a></li>
 					
@@ -137,6 +141,8 @@
 				
 					<li><a href="./User.html">User</a></li>
 				
+					<li><a href="./UsersController.html">UsersController</a></li>
+				
 				</ul>
 				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
 			</div>
@@ -184,11 +190,49 @@
 					<div class="method-source-code"
 						id="apply-omniauth-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/models/user.rb, line 9</span>
- 9:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">apply_omniauth</span>(<span class="ruby-identifier">omniauth</span>)
-10:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">email</span> = <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'user_info'</span>][<span class="ruby-value str">'email'</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">email</span>.<span class="ruby-identifier">blank?</span>
-11:     <span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">build</span>(<span class="ruby-value">:provider</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'provider'</span>], <span class="ruby-value">:uid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'uid'</span>])
-12:   <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File app/models/user.rb, line 10</span>
+10:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">apply_omniauth</span>(<span class="ruby-identifier">omniauth</span>)
+11:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'provider'</span>]
+12:     <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'facebook'</span>
+13:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">apply_facebook</span>(<span class="ruby-identifier">omniauth</span>)
+14:       <span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">build</span>(<span class="ruby-value">:provider</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'provider'</span>], <span class="ruby-value">:uid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'uid'</span>], <span class="ruby-value">:token</span> =<span class="ruby-operator">&gt;</span>(<span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'credentials'</span>][<span class="ruby-value str">'token'</span>] <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span>))
+15:     <span class="ruby-keyword kw">end</span>
+16:     <span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">build</span>(<span class="ruby-value">:provider</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'provider'</span>], <span class="ruby-value">:uid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'uid'</span>])
+17:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="facebook-method" class="method-detail ">
+				<a name="method-i-facebook"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">facebook</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="facebook-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/user.rb, line 23</span>
+23:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">facebook</span>
+24:     <span class="ruby-ivar">@fb_user</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">FbGraph</span><span class="ruby-operator">::</span><span class="ruby-constant">User</span>.<span class="ruby-identifier">me</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">find_by_provider</span>(<span class="ruby-value str">'facebook'</span>).<span class="ruby-identifier">token</span>)
+25:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -219,10 +263,52 @@
 					<div class="method-source-code"
 						id="password-required--source">
 <pre>
-    <span class="ruby-comment cmt"># File app/models/user.rb, line 14</span>
-14:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">password_required?</span>
-15:     (<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">||</span> <span class="ruby-operator">!</span><span class="ruby-identifier">password</span>.<span class="ruby-identifier">blank?</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword kw">super</span>
-16:   <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File app/models/user.rb, line 19</span>
+19:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">password_required?</span>
+20:     (<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">||</span> <span class="ruby-operator">!</span><span class="ruby-identifier">password</span>.<span class="ruby-identifier">blank?</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword kw">super</span>
+21:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+		</div>
+	
+		<div id="protected-instance-method-details" class="method-section section">
+			<h3 class="section-header">Protected Instance Methods</h3>
+
+		
+			<div id="apply-facebook-method" class="method-detail ">
+				<a name="method-i-apply_facebook"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">apply_facebook</span><span
+						class="method-args">(omniauth)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="apply-facebook-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/user.rb, line 30</span>
+30:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">apply_facebook</span>(<span class="ruby-identifier">omniauth</span>)
+31:     <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">extra</span> = <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'extra'</span>][<span class="ruby-value str">'user_hash'</span>] <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">false</span>)
+32:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">email</span> = (<span class="ruby-identifier">extra</span>[<span class="ruby-value str">'email'</span>] <span class="ruby-keyword kw">rescue</span> <span class="ruby-value str">''</span>)
+33:     <span class="ruby-keyword kw">end</span>
+34:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>

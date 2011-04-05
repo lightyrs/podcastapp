@@ -13,6 +13,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Success, error & notice boxes for messages and errors. */
 div.error, div.notice, div.success,
 #flash_failure, #flash_success, #flash_notice {
+	border-radius: 8px;
   -moz-border-radius: 8px;
   -webkit-border-radius: 8px;
   border: 1px solid #ddd;
@@ -56,7 +57,8 @@ div.success a,
   color: #529214;
 }
 
-/* Misc classes and elements */
+/* Non-Semantic Helper Classes */
+
 /* Use a .box to create a padded box inside a column.  */
 .box {
   background: #eee;
@@ -132,6 +134,14 @@ hr.space {
 
 .ie7 img {
   -ms-interpolation-mode: bicubic;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
 }
 
 @media print {
@@ -619,16 +629,12 @@ ol ol, ol ul, ul ul, ul ol {
 #container {
 	background: white;
 	margin: 40px auto 20px;
-	padding: 30px 40px 30px;
+	padding: 30px 40px 35px;
 	width: 880px;
 }
 
 #container a {
 	text-decoration: none;
-}
-
-#header {
-	height: 60px;
 }
 
 #logo {
@@ -644,9 +650,17 @@ ol ol, ol ul, ul ul, ul ol {
 	text-decoration: none;
 }
 
-#header span.username {
-	display: block;
+.user-panel {
 	float: right;
+	text-align: right;
+}
+
+.user-panel span {
+	display: block;
+}
+
+.user-panel .username {
+	padding-bottom: 5px;
 }
 
 .results {
@@ -814,4 +828,19 @@ ul.ui-autocomplete li {
   margin-right: 20px;
   text-align: center;
   margin-bottom: 10px;
+}
+
+/* Flash Notices/Alerts */
+
+.flash {
+	display: none;
+	position: fixed;
+	z-index: 100;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.flash p {
+	margin-bottom: 0;
 }

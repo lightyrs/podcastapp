@@ -1,6 +1,13 @@
 <div id="header" class="clearfix">
 	<h1 id="logo"><%= link_to "podcastapp", root_path %></h1>
 	<% if current_user %>
-		<span class="username"><strong><%= link_to current_user.email, user_path(current_user) %></strong></span>
+		<div class="signed-in user-panel">
+			<span class="username"><strong><%= link_to current_user.email, user_path(current_user) %></strong></span>
+			<%= link_to "Sign Out", destroy_user_session_path %>
+		</div>
+	<% else %>
+		<div class="logged-out user-panel">
+			<%= link_to "Sign In / Sign Up", user_session_path %>
+		</div>
 	<% end %>
 </div>

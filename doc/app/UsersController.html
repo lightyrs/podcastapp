@@ -5,7 +5,7 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-	<title>Class: RegistrationsController</title>
+	<title>Class: UsersController</title>
 
 	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
 
@@ -38,8 +38,8 @@
 				<div class="section-body">
 					<ul>
 					
-						<li><a href="./app/controllers/registrations_controller_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
-							class="thickbox" title="app/controllers/registrations_controller.rb">app/controllers/registrations_controller.rb</a></li>
+						<li><a href="./app/controllers/users_controller_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="app/controllers/users_controller.rb">app/controllers/users_controller.rb</a></li>
 					
 					</ul>
 				</div>
@@ -55,7 +55,7 @@
 			<div id="parent-class-section" class="section">
 				<h3 class="section-header">Parent</h3>
 				
-				<p class="link">Devise::RegistrationsController</p>
+				<p class="link"><a href="ApplicationController.html">ApplicationController</a></p>
 				
 			</div>
 			
@@ -69,9 +69,7 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
-					<li><a href="#method-i-build_resource">#build_resource</a></li>
-					
-					<li><a href="#method-i-create">#create</a></li>
+					<li><a href="#method-i-show">#show</a></li>
 					
 				</ul>
 			</div>
@@ -148,7 +146,7 @@
 	</div>
 
 	<div id="documentation">
-		<h1 class="class">RegistrationsController</h1>
+		<h1 class="class">UsersController</h1>
 
 		<div id="description">
 			
@@ -166,12 +164,12 @@
 			<h3 class="section-header">Public Instance Methods</h3>
 
 		
-			<div id="create-method" class="method-detail ">
-				<a name="method-i-create"></a>
+			<div id="show-method" class="method-detail ">
+				<a name="method-i-show"></a>
 
 				<div class="method-heading">
 				
-					<span class="method-name">create</span><span
+					<span class="method-name">show</span><span
 						class="method-args">()</span>
 					<span class="method-click-advice">click to toggle source</span>
 				
@@ -184,57 +182,17 @@
 
 					
 					<div class="method-source-code"
-						id="create-source">
+						id="show-source">
 <pre>
-   <span class="ruby-comment cmt"># File app/controllers/registrations_controller.rb, line 2</span>
-2:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>
-3:     <span class="ruby-keyword kw">super</span>
-4:     <span class="ruby-identifier">session</span>[<span class="ruby-value">:omniauth</span>] = <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">new_record?</span>
-5:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-		<div id="private-instance-method-details" class="method-section section">
-			<h3 class="section-header">Private Instance Methods</h3>
-
-		
-			<div id="build-resource-method" class="method-detail ">
-				<a name="method-i-build_resource"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">build_resource</span><span
-						class="method-args">(*args)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="build-resource-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/registrations_controller.rb, line 9</span>
- 9:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build_resource</span>(*<span class="ruby-identifier">args</span>)
-10:     <span class="ruby-keyword kw">super</span>
-11:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:omniauth</span>]
-12:       <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">apply_omniauth</span>(<span class="ruby-identifier">session</span>[<span class="ruby-value">:omniauth</span>])
-13:       <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">valid?</span>
-14:     <span class="ruby-keyword kw">end</span>
-15:   <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File app/controllers/users_controller.rb, line 3</span>
+ 3:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show</span>
+ 4:           <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+ 5:     <span class="ruby-ivar">@page_title</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">email</span>
+ 6: 
+ 7:           <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+ 8:             <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-comment cmt"># index.html.erb</span>
+ 9:           <span class="ruby-keyword kw">end</span>
+10:         <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>

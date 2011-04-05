@@ -139,6 +139,8 @@
 				
 					<li><a href="./User.html">User</a></li>
 				
+					<li><a href="./UsersController.html">UsersController</a></li>
+				
 				</ul>
 				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
 			</div>
@@ -194,21 +196,30 @@
 10:       <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-value str">&quot;Signed in successfully.&quot;</span>
 11:       <span class="ruby-identifier">sign_in_and_redirect</span>(<span class="ruby-value">:user</span>, <span class="ruby-identifier">authentication</span>.<span class="ruby-identifier">user</span>)
 12:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">current_user</span>
-13:       <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">create!</span>(<span class="ruby-value">:provider</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'provider'</span>], <span class="ruby-value">:uid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'uid'</span>])
-14:       <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-value str">&quot;Authentication successful.&quot;</span>
-15:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">authentications_url</span>
-16:     <span class="ruby-keyword kw">else</span>
-17:       <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">new</span>
-18:       <span class="ruby-identifier">user</span>.<span class="ruby-identifier">apply_omniauth</span>(<span class="ruby-identifier">omniauth</span>)
-19:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">save</span>
-20:         <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-value str">&quot;Signed in successfully.&quot;</span>
-21:         <span class="ruby-identifier">sign_in_and_redirect</span>(<span class="ruby-value">:user</span>, <span class="ruby-identifier">user</span>)
-22:       <span class="ruby-keyword kw">else</span>
-23:         <span class="ruby-identifier">session</span>[<span class="ruby-value">:omniauth</span>] = <span class="ruby-identifier">omniauth</span>.<span class="ruby-identifier">except</span>(<span class="ruby-value str">'extra'</span>)
-24:         <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">new_user_registration_url</span>
-25:       <span class="ruby-keyword kw">end</span>
-26:     <span class="ruby-keyword kw">end</span>
-27:   <span class="ruby-keyword kw">end</span></pre>
+13:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'provider'</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">provider</span>
+14:         <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-node">&quot;You are already signed in with #{omniauth['provider']}&quot;</span>
+15:       <span class="ruby-keyword kw">else</span>
+16:         <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">create!</span>(<span class="ruby-value">:provider</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'provider'</span>], <span class="ruby-value">:uid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'uid'</span>])
+17:         <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-value str">&quot;Authentication successful.&quot;</span>
+18:         <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">new_user_session_url</span>
+19:       <span class="ruby-keyword kw">end</span>
+20:     <span class="ruby-keyword kw">else</span>
+21:       <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">new</span>
+22:       <span class="ruby-identifier">user</span>.<span class="ruby-identifier">apply_omniauth</span>(<span class="ruby-identifier">omniauth</span>)
+23:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">save</span>
+24:         <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-value str">&quot;Signed in successfully.&quot;</span>
+25:         <span class="ruby-identifier">sign_in_and_redirect</span>(<span class="ruby-value">:user</span>, <span class="ruby-identifier">user</span>)
+26:       <span class="ruby-keyword kw">else</span>
+27:         <span class="ruby-comment cmt"># We need some extra info from facebook (token)</span>
+28:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">omniauth</span>[<span class="ruby-value str">'provider'</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">'facebook'</span>
+29:           <span class="ruby-identifier">session</span>[<span class="ruby-value">:omniauth</span>] = <span class="ruby-identifier">omniauth</span>
+30:         <span class="ruby-keyword kw">else</span>
+31:           <span class="ruby-identifier">session</span>[<span class="ruby-value">:omniauth</span>] = <span class="ruby-identifier">omniauth</span>.<span class="ruby-identifier">except</span>(<span class="ruby-value str">'extra'</span>)
+32:         <span class="ruby-keyword kw">end</span>
+33:         <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">new_user_registration_url</span>
+34:       <span class="ruby-keyword kw">end</span>
+35:     <span class="ruby-keyword kw">end</span>
+36:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -239,13 +250,13 @@
 					<div class="method-source-code"
 						id="destroy-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/controllers/authentications_controller.rb, line 29</span>
-29:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy</span>
-30:     <span class="ruby-ivar">@authentication</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
-31:     <span class="ruby-ivar">@authentication</span>.<span class="ruby-identifier">destroy</span>
-32:     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-value str">&quot;Successfully destroyed authentication.&quot;</span>
-33:     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">authentications_url</span>
-34:   <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File app/controllers/authentications_controller.rb, line 38</span>
+38:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy</span>
+39:     <span class="ruby-ivar">@authentication</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">authentications</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+40:     <span class="ruby-ivar">@authentication</span>.<span class="ruby-identifier">destroy</span>
+41:     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-value str">&quot;Successfully destroyed authentication.&quot;</span>
+42:     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">authentications_url</span>
+43:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>

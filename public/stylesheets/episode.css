@@ -2,8 +2,8 @@
 	margin-bottom: 40px;
 }
 
-body.episodes .buttons {
-	padding-top: 0;
+body.episodes.index .buttons {
+	padding-top: 15px;
 }
 
 .episode-meta {
@@ -14,4 +14,9 @@ body.episodes .buttons {
 	display: block;
 	float: left;
 	padding: 0 15px 0 0;
+}
+
+div.shownotes {
+	text-align: justify;
+	width: 600px;
 }

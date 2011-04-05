@@ -15,7 +15,7 @@ Podcastapp::Application.configure do
   config.action_controller.perform_caching = false
 
   # Default URL Options for Devise
-  config.action_mailer.default_url_options = { :host => 'podcastapp' }
+  config.action_mailer.default_url_options = { :host => 'podcastapp.com' }
   
   config.action_mailer.delivery_method = :smtp
 
