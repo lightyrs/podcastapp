@@ -23,8 +23,10 @@ Podcastapp::Application.routes.draw do
     get :autocomplete_podcast_name, :on => :collection
   end
   
-  # named route for podcast search
+  # named routes
   match 'search', :to => 'podcasts#search'
+  match 'podcasts/:id/subscribe', :to => 'users#subscribe', :as => 'subscription'
+
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

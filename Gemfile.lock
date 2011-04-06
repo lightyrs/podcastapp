@@ -163,8 +163,9 @@ GEM
       activesupport (= 3.0.1)
       bundler (~> 1.0.0)
       railties (= 3.0.1)
-    rails3-jquery-autocomplete (0.6.2)
+    rails3-jquery-autocomplete (0.6.5)
       rails (~> 3.0.0)
+      yajl-ruby
     railties (3.0.1)
       actionpack (= 3.0.1)
       activesupport (= 3.0.1)
@@ -196,13 +197,14 @@ GEM
       multi_json (~> 0.0.5)
       multi_xml (~> 0.2.0)
       simple_oauth (~> 0.1.4)
-    tzinfo (0.3.25)
+    tzinfo (0.3.26)
     warden (1.0.3)
       rack (>= 1.0.0)
     whenever (0.6.7)
       aaronh-chronic (>= 0.3.9)
       activesupport (>= 2.3.4)
     will_paginate (3.0.pre2)
+    yajl-ruby (0.8.2)
     yui-compressor (0.9.4)
 
 PLATFORMS

@@ -22,8 +22,8 @@
 
 <%= javascript_tag do %>
 	$(function(){
-		$("ul.ui-autocomplete li a").click(function(){
-			$("#podcast_search").submit();
+		$('#q').bind('railsAutocomplete.select', function(){
+			alert("yes");
 		});
 	});
 <% end %>

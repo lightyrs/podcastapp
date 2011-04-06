@@ -408,6 +408,10 @@ a.cancel {
   margin-bottom: 0.25em;
 }
 
+span.button.disabled { display: inline-block; padding: 7px 9px; font-size: 12px; line-height:1; color: #3C3C3D; text-shadow: 1px 1px 0 #FFFFFF; background: #ECECEC url('../../images/css3buttons/css3buttons_backgrounds.png') 0 0 no-repeat; white-space: nowrap; overflow: visible; cursor: default; text-decoration: none; border: 1px solid #CACACA; -webkit-border-radius: 2px; -moz-border-radius: 2px; -webkit-background-clip: padding-box; border-radius: 2px; outline: none; position: relative; zoom: 1; *display: inline; }
+
+span.button.big.disabled { font-size: 16px; padding: 7px 16px; }
+
 /* Fieldsets */
 fieldset {
   background: #f1f1f1;

@@ -16,10 +16,10 @@
 			delay_flash = setTimeout(function(){
 				$self.fadeOut(2400);
 			}, 2200);
-		});
-		$(window).scroll(function(){
-			clearTimeout(delay_flash);
-			$(".flash").fadeOut(1200);
+			$(window).scroll(function(){
+				clearTimeout(delay_flash);
+				$(".flash").fadeOut(1200);
+			});
 		});
 	});
 <% end %>

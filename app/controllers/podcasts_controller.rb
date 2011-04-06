@@ -55,6 +55,12 @@ class PodcastsController < ApplicationController
     @podcast = Podcast.find(params[:id])
     @pod_name = Podcast.find(@podcast).name
     @page_title = @pod_name
+    
+    if current_user && current_user.podcasts.include?(@podcast)
+      @subscribed = true
+    else
+      @subscribed = false
+    end
 
     respond_to do |format|
       format.html # show.html.erb

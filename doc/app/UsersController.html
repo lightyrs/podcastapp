@@ -71,6 +71,8 @@
 					
 					<li><a href="#method-i-show">#show</a></li>
 					
+					<li><a href="#method-i-subscribe">#subscribe</a></li>
+					
 				</ul>
 			</div>
 			
@@ -193,6 +195,44 @@
  8:             <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-comment cmt"># index.html.erb</span>
  9:           <span class="ruby-keyword kw">end</span>
 10:         <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="subscribe-method" class="method-detail ">
+				<a name="method-i-subscribe"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">subscribe</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="subscribe-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/users_controller.rb, line 12</span>
+12:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">subscribe</span>
+13:           <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">podcasts</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Podcast</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+14:           
+15:           <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+16:             <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span> { <span class="ruby-identifier">render</span> <span class="ruby-value">:json</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;success&quot;</span> }
+17:           <span class="ruby-keyword kw">end</span>
+18:         <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
